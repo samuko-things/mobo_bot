@@ -39,7 +39,7 @@ def generate_launch_description():
     )
 
 
-    rviz_config_file_path = os.path.join(pkg_path,'config','mobo_bot_config.rviz')
+    rviz_config_file_path = os.path.join(pkg_path,'config','mobo_bot_config1.rviz')
     rviz2_node = Node(
             package='rviz2',
             namespace='',
@@ -54,7 +54,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
             'use_sim_time',
-            default_value='True',
+            default_value='False',
             description='Use sim time if true'),
 
         node_robot_state_publisher,

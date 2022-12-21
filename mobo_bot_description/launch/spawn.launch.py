@@ -2,9 +2,9 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 
+
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler
-from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch.actions import DeclareLaunchArgument
@@ -22,8 +22,8 @@ def generate_launch_description():
     robot_description_doc = xacro.parse(open(xacro_file))
     xacro.process_doc(robot_description_doc)
 
-    # world_file_name = 'race_track.world'
-    # world_path = os.path.join(pkg_path, 'world', world_file_name)
+    world_file_name = 'test_world.world'
+    world_path = os.path.join(pkg_path, 'world', world_file_name)
 
 
 
@@ -34,15 +34,6 @@ def generate_launch_description():
         output='screen',
         parameters=[params]
     )
-
-
-
-    # # Include the Gazebo launch file, provided by the gazebo_ros package
-    gazebo = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')]),
-             )
-
 
 
     # Run the spawner node from the gazebo_ros package. The entity name doesn't really matter if you only have a single robot.
@@ -67,8 +58,6 @@ def generate_launch_description():
 
 
 
-
-
     # Launch them all!
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -76,14 +65,17 @@ def generate_launch_description():
             default_value='True',
             description='Use sim time if true'),
         
-        # DeclareLaunchArgument(
-        #     'world',
-        #     default_value=world_path,
-        #     description='SDF world file',
-        # ),
+        DeclareLaunchArgument(
+            'world',
+            default_value=world_path,
+            description='SDF world file',
+        ),
+
+        # ExecuteProcess(cmd=['gazebo', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so'], output='screen'),
+        ExecuteProcess(cmd=['gazebo', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', world_path], output='screen'),
+
         
 
         node_robot_state_publisher,
-        gazebo,
         spawn_entity,
     ])

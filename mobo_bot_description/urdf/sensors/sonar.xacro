@@ -12,7 +12,7 @@
     <joint name="sonar_joint" type="fixed">
         <parent link="base_chassis_link"/>
         <child link="sonar_link"/>
-        <origin xyz="0.15 0 ${base_chassis_height/2}" rpy="0 0 0"/>
+        <origin xyz="0.16 0 ${base_chassis_height/2}" rpy="0 0 0"/>
         <axis xyz="0 0 0"/>
     </joint>
 
@@ -20,7 +20,7 @@
         <visual>
             <origin xyz="-0.005 0 0" rpy="0 ${pi/2} 0"/>
             <geometry>
-                <cylinder radius="0.01" length="0.01" />
+                <cylinder radius="0.015" length="0.01" />
             </geometry>
             <material name="blue"/>
         </visual>
@@ -28,7 +28,7 @@
         <collision>
             <origin xyz="-0.005 0 0" rpy="0 ${pi/2} 0"/>
             <geometry>
-                <cylinder radius="0.01" length="0.01" />
+                <cylinder radius="0.015" length="0.01" />
             </geometry>
         </collision>
         

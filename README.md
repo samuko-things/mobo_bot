@@ -2,7 +2,7 @@
 
 ---
 
-![obot](https://github.com/samuko-things/mobo_bot/blob/main/mobo_bot_pics1.png)
+![obot](https://github.com/samuko-things/mobo_bot/blob/main/mobo_bot_pics2.png)
 
 ```
 clone (git clone git@github.com:samuko-things/mobo_bot.git) or Download

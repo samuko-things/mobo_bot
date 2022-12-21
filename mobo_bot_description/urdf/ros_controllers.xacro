@@ -38,12 +38,12 @@
                 <right_joint>right_wheel_joint</right_joint>
 
                 <!-- kinematics -->
-                <wheel_separation>0.34</wheel_separation>
+                <wheel_separation>0.4</wheel_separation>
                 <wheel_diameter>0.1</wheel_diameter>
 
                 <!-- limits -->
                 <max_wheel_torque>100</max_wheel_torque>
-                <max_wheel_acceleration>5.0</max_wheel_acceleration>
+                <max_wheel_acceleration>4.0</max_wheel_acceleration>
 
                 <command_topic>cmd_vel</command_topic>
 
