@@ -1,5 +1,3 @@
-
-https://github.com/user-attachments/assets/be125dfd-3f3a-4888-9cd6-f6ecc7ea5950
 ### mobo_bot
 This is an educational differential drive mobile robot created by Samuel Obiagba (samuko-things) for learning mobile robotics in ROS2 and micro-ros. It uses the [SMC l298N pid motor driver](http://samukothings.com/smc-l298n-pid-motor-driver-system-user-documentation/) and the [SIC MPU9250 IMU](http://samukothings.com/sic-mpu9250-imu-system-user-documentation/) for its base control. It also has a simulation in Gazebo Classic.
 
