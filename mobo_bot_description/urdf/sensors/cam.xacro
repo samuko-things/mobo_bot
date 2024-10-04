@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-    <xacro:macro name="insert_camera" params="base_name parent_name x y z mass width height min_range max_range tilt_angle visualize">
+    <xacro:macro name="insert_camera" params="base_name parent_name x y z mass tilt_angle color">
         <joint name="${base_name}_joint" type="fixed">
             <parent link="${parent_name}"/>
             <child link="${base_name}"/>
@@ -10,29 +10,28 @@
 
         <link name="${base_name}">
             <visual>
-                <origin xyz="-0.02 0 0" rpy="0 ${-pi/2} 0"/>
+                <origin xyz="-0.005 0 0" rpy="0 ${-pi/2} 0"/>
                 <geometry>
-                    <cylinder radius="0.015" length="0.04"/>
+                    <cylinder radius="0.007" length="0.01"/>
                 </geometry>
-                <material name="grey"/>
+                <material name="${color}"/>
             </visual>
             <visual>
-                <origin xyz="-0.03 0 0" rpy="0 ${-pi/2} 0"/>
+                <origin xyz="-0.01 0 0" rpy="0 ${-pi/2} 0"/>
                 <geometry>
-                    <!-- <cylinder radius="0.03" length="0.02"/> -->
-                    <box size="0.04 0.06 0.02"/>
+                    <box size="0.02 0.03 0.01"/>
                 </geometry>
-                <material name="grey"/>
+                <material name="${color}"/>
             </visual>
 
             <collision>
-                <origin xyz="-0.02 0 0" rpy="0 ${-pi/2} 0"/>
+                <origin xyz="-0.005 0 0" rpy="0 ${-pi/2} 0"/>
                 <geometry>
-                    <cylinder radius="0.02" length="0.04"/>
+                    <cylinder radius="0.01" length="0.01"/>
                 </geometry>
             </collision>
-            <xacro:inertial_cylinder mass="${mass}" radius="0.02" length="0.04">
-                <origin xyz="-0.02 0 0" rpy="0 ${-pi/2} 0"/>
+            <xacro:inertial_cylinder mass="${mass}" radius="0.01" length="0.01">
+                <origin xyz="-0.005 0 0" rpy="0 ${-pi/2} 0"/>
             </xacro:inertial_cylinder>
         </link>
 
@@ -43,34 +42,6 @@
         </joint>
 
         <link name="${base_name}_optical_link"/>
-
-
-
-        <gazebo reference="${base_name}">
-          <material>Gazebo/DarkGrey</material>
-
-          <sensor name="${base_name}" type="camera">
-            <pose> 0 0 0 0 0 0 </pose>
-            <visualize>${visualize}</visualize>
-            <update_rate>20</update_rate>
-            <camera>
-                <!-- <horizontal_fov>1.089</horizontal_fov> -->
-                <horizontal_fov>1.46608</horizontal_fov>
-                <image>
-                    <format>R8G8B8</format>
-                    <width>${width}</width>
-                    <height>${height}</height>
-                </image>
-                <clip>
-                    <near>${min_range}</near>
-                    <far>${max_range}</far>
-                </clip>
-            </camera>
-            <plugin name="${base_name}_plugin" filename="libgazebo_ros_camera.so">
-                <frame_name>${base_name}_optical_link</frame_name>
-            </plugin>
-          </sensor>
-        </gazebo>
 
     </xacro:macro>
         

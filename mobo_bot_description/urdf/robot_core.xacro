@@ -11,12 +11,12 @@
     <!-- <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/imu.xacro"/> -->
     <!-- <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/cam.xacro"/> -->
 
-    <xacro:property name="chassis_length" value="0.24"/>
-    <xacro:property name="chassis_width" value="0.23"/>
+    <xacro:property name="chassis_length" value="0.21"/>
+    <xacro:property name="chassis_width" value="0.21"/>
     <xacro:property name="chassis_height" value="0.06"/>
-    <xacro:property name="chassis_mass" value="3.0"/>
+    <xacro:property name="chassis_mass" value="2.0"/>
 
-    <xacro:property name="wheel_seperation" value="0.25"/>
+    <xacro:property name="wheel_seperation" value="0.23"/>
     <xacro:property name="wheel_radius" value="0.034"/>
     <xacro:property name="wheel_width" value="0.014"/>
     <xacro:property name="wheel_mass" value="0.08"/>
@@ -51,9 +51,9 @@
     </joint>
 
     <link name="chassis">
-        <xacro:insert_box_with_fillet x="-0.02" y="0" z="${chassis_height/2}" 
+        <xacro:insert_box_with_fillet x="-0.025" y="0" z="${chassis_height/2}" 
             size_x="${chassis_length}" size_y="${chassis_width}" size_z="${chassis_height}" 
-            fillet_radius="0.05" material="white"/>
+            fillet_radius="0.05" color="orange"/>
         <collision>
            <origin xyz="-0.02 0 ${chassis_height/2}" rpy="0 0 0"/>
             <geometry>
@@ -64,9 +64,13 @@
             <origin xyz="-0.04 0 ${chassis_height/2}" rpy="0 0 0"/>
         </xacro:inertial_box>
     </link>
-    <gazebo reference="chassis">
-        <material>Gazebo/White</material>
-    </gazebo>
+
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="chassis">
+            <material>Gazebo/Orange</material>
+        </gazebo>
+    </xacro:if>
+    
 
     <!--  ########################### -->
 
@@ -87,15 +91,35 @@
         x="0" y="${wheel_seperation/2}" z="${wheel_radius}"
         mass="${wheel_mass}"
         radius="${wheel_radius}"
-        thickness="${wheel_width}"/>
-  
+        thickness="${wheel_width}"
+        color="black"/>
+
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="left_wheel">
+            <mu1>1.0</mu1>
+            <mu2>1.0</mu2>
+            <!-- <kp>1000000</kp> -->
+            <!-- <kd>0.001</kd> -->
+            <minDepth>0.005</minDepth>
+            <!-- <fdir1>${fdir}</fdir1> -->
+            <material>Gazebo/FlatBlack</material>
+        </gazebo>
+    </xacro:if>
+
+
     <xacro:insert_drive_wheel_rim
         base_name="left_rim" 
         parent_name="left_wheel" 
-        x="0" y="0" z="0.001"
         radius="${wheel_radius}"
         thickness="${wheel_width}"
-        spoke_width="0.005"/>
+        spoke_width="0.005"
+        color="red"/>
+
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="left_rim">
+            <material>Gazebo/Red</material>
+        </gazebo>
+    </xacro:if>
 
     <!-- ############################# -->
 
@@ -114,15 +138,35 @@
         x="0" y="${-wheel_seperation/2}" z="${wheel_radius}"
         mass="${wheel_mass}"
         radius="${wheel_radius}"
-        thickness="${wheel_width}"/>
+        thickness="${wheel_width}"
+        color="black"/>
+    
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="right_wheel">
+            <mu1>1.0</mu1>
+            <mu2>1.0</mu2>
+            <!-- <kp>1000000</kp> -->
+            <!-- <kd>0.001</kd> -->
+            <minDepth>0.005</minDepth>
+            <!-- <fdir1>${fdir}</fdir1> -->
+            <material>Gazebo/FlatBlack</material>
+        </gazebo>
+    </xacro:if>
+
 
     <xacro:insert_drive_wheel_rim
         base_name="right_rim" 
         parent_name="right_wheel" 
-        x="0" y="0" z="-0.001"
         radius="${wheel_radius}"
         thickness="${wheel_width}"
-        spoke_width="0.005"/>
+        spoke_width="0.005"
+        color="red"/>
+
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="right_rim">
+            <material>Gazebo/Red</material>
+        </gazebo>
+    </xacro:if>
 
     <!-- ############################# -->
 
@@ -139,7 +183,7 @@
     <joint name="castor_wheel_joint" type="fixed">
         <parent link="base_link"/>
         <child link="castor_wheel"/>
-        <origin xyz="-0.1 0 ${castor_wheel_radius}"/>
+        <origin xyz="-0.095 0 ${castor_wheel_radius}"/>
     </joint>
 
 
@@ -162,15 +206,17 @@
         </xacro:inertial_sphere>
     </link>
 
-    <gazebo reference="castor_wheel">
-        <mu1>0.001</mu1>
-        <mu2>0.001</mu2>
-        <!-- <kp>1000000.0</kp> -->
-        <!-- <kd>1.0</kd> -->
-        <!-- <fdir1>1 0 0</fdir1> -->
-        <!-- <minDepth>0.01</minDepth> -->
-        <material>Gazebo/Grey</material>
-    </gazebo>
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="castor_wheel">
+            <mu1>0.001</mu1>
+            <mu2>0.001</mu2>
+            <!-- <kp>1000000.0</kp> -->
+            <!-- <kd>1.0</kd> -->
+            <!-- <fdir1>1 0 0</fdir1> -->
+            <!-- <minDepth>0.01</minDepth> -->
+            <material>Gazebo/Grey</material>
+        </gazebo>
+    </xacro:if>
 
     <!--  ########################### -->
 
@@ -186,10 +232,55 @@
     <xacro:insert_sonar
         base_name="sonar" 
         parent_name="chassis" 
-        x="0.1" y="0" z="${chassis_height/2}"
-        mass="0.005"
-        min_range="0.02" max_range="3.0"
-        resolution="0.01" visualize="false"/>
+        x="0.0825" y="0" z="${chassis_height/2}"
+        mass="0.005" color="blue"/>
+
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="sonar">
+            <material>Gazebo/Blue</material>
+
+            <sensor name="sonar" type="ray">
+                <always_on>true</always_on>
+                <visualize>false</visualize>
+                <pose>0.0 0 0.0 0 0 0</pose>
+                <update_rate>10</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>20</samples>
+                            <resolution>1</resolution> 
+                            <min_angle>${-pi/90}</min_angle>
+                            <max_angle>${pi/90}</max_angle>
+                        </horizontal>
+                        <vertical>
+                            <samples>20</samples>
+                            <resolution>1</resolution> 
+                            <min_angle>${-pi/150}</min_angle>
+                            <max_angle>${pi/150}</max_angle>
+                        </vertical>
+                    </scan>
+                    <range>
+                        <min>0.01</min>
+                        <max>0.4</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                </ray>
+        
+                <plugin name="sonar_plugin" filename="libgazebo_ros_ray_sensor.so">
+                    <ros>
+                        <namespace>sonar</namespace>
+                        <remapping>~/out:=range</remapping>
+                    </ros>
+                    <output_type>sensor_msgs/Range</output_type>
+                    <radiation_type>ultrasound</radiation_type>
+                    <frame_name>sonar</frame_name>
+                </plugin>
+            </sensor>
+        </gazebo>
+    </xacro:if>
+        
+
+
 
     
      <!--  lidar -->
@@ -197,11 +288,45 @@
     <xacro:insert_lidar 
         base_name="lidar" 
         parent_name="chassis" 
-        x="0.02" y="0" z="${chassis_height+lidar_z_offset}"
-        mass="0.1" samples="360"
-        min_angle="${-pi*2}" max_angle="${pi*2}"
-        min_range="0.1" max_range="10"
-        visualize="false"/>
+        x="0.01" y="0" z="${chassis_height+lidar_z_offset}"
+        mass="0.1" color="grey"/>
+
+
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="right_rim">
+            <material>Gazebo/Red</material>
+        </gazebo>
+    </xacro:if>
+    <gazebo reference="lidar">
+        <material>Gazebo/DarkGrey</material>
+
+        <sensor name="lidar" type="ray">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>false</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <min_angle>${-pi*2}</min_angle>
+                        <max_angle>${pi*2}</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.1</min>
+                    <max>10.0</max>
+                </range>
+            </ray>
+            <plugin name="lidar_plugin" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <namespace>lidar</namespace>
+                    <remapping>~/out:=scan</remapping>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>lidar</frame_name>
+            </plugin>
+        </sensor>
+    </gazebo>
 
     
 
@@ -209,21 +334,107 @@
     <!-- <xacro:insert_imu
         base_name="imu" 
         parent_name="chassis" 
-        x="0" y="0" z="${chassis_height}"/> -->
+        x="0" y="0" z="${chassis_height}"/>
+
+
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="imu">
+            <sensor name="imu" type="imu">
+                <always_on>true</always_on>
+                <update_rate>30</update_rate>
+                <visualize>true</visualize>
+                <imu>
+                    <angular_velocity>
+                        <x>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>2e-4</stddev>
+                            </noise>
+                        </x>
+                        <y>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>2e-4</stddev>
+                            </noise>
+                        </y>
+                        <z>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>2e-4</stddev>
+                            </noise>
+                        </z>
+                    </angular_velocity>
+                    <linear_acceleration>
+                        <x>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>1.7e-2</stddev>
+                            </noise>
+                        </x>
+                        <y>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>1.7e-2</stddev>
+                            </noise>
+                        </y>
+                        <z>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>1.7e-2</stddev>
+                            </noise>
+                        </z>
+                    </linear_acceleration>
+                </imu>
+                <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+                    <ros>
+                        <namespace>imu</namespace>
+                        <remapping>~/out:=data</remapping>
+                    </ros>
+                    <initial_orientation_as_reference>false</initial_orientation_as_reference>
+                    <frame_name>imu</frame_name>
+                </plugin>
+            </sensor>
+        </gazebo>        
+    </xacro:if> -->
 
 
 
     <!-- camera -->
-    <!-- <xacro:property name="cam_x_offset" value="0.04"/>
-    <xacro:property name="cam_z_offset" value="0.02"/>
+    <!-- <xacro:property name="cam_x_offset" value="0.015"/>
+    <xacro:property name="cam_z_offset" value="0.01"/>
     <xacro:insert_camera
         base_name="camera" 
         parent_name="chassis" 
-        x="${(chassis_length*0.375)+cam_x_offset}" y="0" z="${chassis_height+cam_z_offset}"
-        mass="0.005"
-        width="320" height="240"
-        min_range="0.02" max_range="5.0"
-        tilt_angle="0"
-        visualize="true"/> -->
+        x="${0.08+cam_x_offset}" y="0" z="${chassis_height+cam_z_offset}"
+        mass="0.005" tilt_angle="0" color="grey"/>
+
+        
+
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="camera">
+          <material>Gazebo/DarkGrey</material>
+
+          <sensor name="camera" type="camera">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>false</visualize>
+            <update_rate>20</update_rate>
+            <camera>
+                <horizontal_fov>1.46608</horizontal_fov>
+                <image>
+                    <format>R8G8B8</format>
+                    <width>320</width>
+                    <height>240</height>
+                </image>
+                <clip>
+                    <near>0.02</near>
+                    <far>5.0</far>
+                </clip>
+            </camera>
+            <plugin name="camera_plugin" filename="libgazebo_ros_camera.so">
+                <frame_name>camera_optical_link</frame_name>
+            </plugin>
+          </sensor>
+        </gazebo>
+    </xacro:if> -->
 
 </robot>

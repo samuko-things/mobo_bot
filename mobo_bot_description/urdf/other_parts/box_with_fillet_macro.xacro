@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-    <xacro:macro name="insert_box_with_fillet" params="x y z size_x size_y size_z fillet_radius material">
+    <xacro:macro name="insert_box_with_fillet" params="x y z size_x size_y size_z fillet_radius color">
             <!-- logitudinal box -->
             <visual>
                 <origin xyz="${x} ${y} ${z}" rpy="0 0 0"/>
                 <geometry>
                     <box size="${size_x} ${size_y-(2*fillet_radius)} ${size_z}"/>
                 </geometry>
-                <material name="${material}"/>
+                <material name="${color}"/>
             </visual>
             <!-- lateral box -->
             <visual>
@@ -16,7 +16,7 @@
                 <geometry>
                     <box size="${size_x-(2*fillet_radius)} ${size_y} ${size_z}"/>
                 </geometry>
-                <material name="${material}"/>
+                <material name="${color}"/>
             </visual>
             <!-- cylinder1 -->
             <visual>
@@ -24,7 +24,7 @@
                 <geometry>
                     <cylinder length="${size_z}" radius="${fillet_radius}"/>
                 </geometry>
-                <material name="${material}"/>
+                <material name="${color}"/>
             </visual>
             <!-- cylinder2 -->
             <visual>
@@ -32,7 +32,7 @@
                 <geometry>
                     <cylinder length="${size_z}" radius="${fillet_radius}"/>
                 </geometry>
-                <material name="${material}"/>
+                <material name="${color}"/>
             </visual>
             <!-- cylinder3 -->
             <visual>
@@ -40,7 +40,7 @@
                 <geometry>
                     <cylinder length="${size_z}" radius="${fillet_radius}"/>
                 </geometry>
-                <material name="${material}"/>
+                <material name="${color}"/>
             </visual>
             <!-- cylinder4 -->
             <visual>
@@ -48,7 +48,7 @@
                 <geometry>
                     <cylinder length="${size_z}" radius="${fillet_radius}"/>
                 </geometry>
-                <material name="${material}"/>
+                <material name="${color}"/>
             </visual>
     </xacro:macro>
     

@@ -19,24 +19,7 @@
     </xacro:macro>
 
 
-     <!-- GAZEBO WHEEL PARAMETERS -->
-    <xacro:macro name="gazebo_wheel_settings" params="name">
-        <gazebo reference="${name}">
-            <mu1>1.0</mu1>
-            <mu2>1.0</mu2>
-            <!-- <kp>1000000</kp> -->
-            <!-- <kd>0.001</kd> -->
-            <minDepth>0.005</minDepth>
-            <!-- <fdir1>${fdir}</fdir1> -->
-            <material>Gazebo/FlatBlack</material>
-        </gazebo>
-    </xacro:macro>
-    <!--  ########################### -->
-
-
-
-
-    <xacro:macro name="insert_drive_wheel" params="base_name parent_name x y z mass radius thickness">
+    <xacro:macro name="insert_drive_wheel" params="base_name parent_name x y z mass radius thickness color">
         <joint name="${base_name}_joint" type="continuous">
             <parent link="${parent_name}"/>
             <child link="${base_name}"/>
@@ -50,7 +33,7 @@
                 <geometry>
                     <cylinder radius="${radius}" length="${thickness}"/>
                 </geometry>
-                <xacro:material_black/>
+                <material name="${color}"/>
             </visual>
             <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -63,8 +46,6 @@
                 <origin xyz="0 0 0" rpy="0 0 0"/>
             </xacro:inertial_cylinder>
         </link>
-
-        <xacro:gazebo_wheel_settings name="${base_name}"/>
 
     </xacro:macro>
 
