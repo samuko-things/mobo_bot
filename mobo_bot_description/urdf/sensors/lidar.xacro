@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+    <xacro:macro name="insert_lidar" params="base_name parent_name x y z mass samples min_angle max_angle min_range max_range visualize">
+        <joint name="${base_name}_joint" type="fixed">
+            <parent link="${parent_name}"/>
+            <child link="${base_name}"/>
+            <origin xyz="${x} ${y} ${z}" rpy="0 0 0"/>
+        </joint>
+
+        <link name="${base_name}">
+            <visual>
+                <origin xyz="0 0 -0.02"/>
+                <geometry>
+                    <cylinder radius="0.03" length="0.04"/>
+                </geometry>
+                <material name="grey"/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 -0.02"/>
+                <geometry>
+                    <cylinder radius="0.03" length="0.04"/>
+                </geometry>
+            </collision>
+            <xacro:inertial_cylinder mass="${mass}" length="0.04" radius="0.03">
+                <origin xyz="0 0 -0.02" rpy="0 0 0"/>
+            </xacro:inertial_cylinder>
+        </link>
+
+        <gazebo reference="${base_name}">
+            <material>Gazebo/DarkGrey</material>
+
+            <sensor name="${base_name}" type="ray">
+                <pose> 0 0 0 0 0 0 </pose>
+                <visualize>${visualize}</visualize>
+                <update_rate>10</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>${samples}</samples>
+                            <min_angle>${min_angle}</min_angle>
+                            <max_angle>${max_angle}</max_angle>
+                        </horizontal>
+                    </scan>
+                    <range>
+                        <min>${min_range}</min>
+                        <max>${max_range}</max>
+                    </range>
+                </ray>
+                <plugin name="${base_name}_plugin" filename="libgazebo_ros_ray_sensor.so">
+                    <ros>
+                        <namespace>${base_name}</namespace>
+                        <remapping>~/out:=scan</remapping>
+                        <!-- <argument>~/out:=scan</argument> -->
+                    </ros>
+                    <output_type>sensor_msgs/LaserScan</output_type>
+                    <frame_name>${base_name}</frame_name>
+                </plugin>
+            </sensor>
+        </gazebo>
+    </xacro:macro>
+        
+
+</robot>
