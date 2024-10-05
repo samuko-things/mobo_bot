@@ -14,7 +14,7 @@ import xacro
 def generate_launch_description():
     
     # Process the URDF file
-    description_pkg_path = os.path.join(get_package_share_directory('mobo_bot_description'))
+    description_pkg_path = get_package_share_directory('mobo_bot_description')
     xacro_file = os.path.join(description_pkg_path,'urdf','robot_urdf.xacro')
 
     # Check if we're told to use sim time

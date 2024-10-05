@@ -14,7 +14,7 @@ def generate_launch_description():
   gazebo_pkg = get_package_share_directory('gazebo_ros')
    
   # Set the path to this package.
-  description_pkg_path = os.path.join(get_package_share_directory('mobo_bot_description'))
+  description_pkg_path = get_package_share_directory('mobo_bot_description')
   rviz_pkg_path = get_package_share_directory('mobo_bot_rviz')
   sim_pkg_path = get_package_share_directory('mobo_bot_sim')
  
@@ -22,13 +22,12 @@ def generate_launch_description():
   world_file_name = 'test_world.world'
   world_path = os.path.join(sim_pkg_path, 'world', world_file_name)
  
-  ########### YOU DO NOT NEED TO CHANGE ANYTHING BELOW THIS LINE ##############  
   # Launch configuration variables specific to simulation
   headless = LaunchConfiguration('headless')
   use_sim_time = LaunchConfiguration('use_sim_time')
   use_simulator = LaunchConfiguration('use_simulator')
   world = LaunchConfiguration('world')
-  use_rviz = LaunchConfiguration('use_rviz')
+  use_rviz_with_sim = LaunchConfiguration('use_rviz_with_sim')
  
   declare_headless_cmd = DeclareLaunchArgument(
     name='headless',
@@ -50,8 +49,8 @@ def generate_launch_description():
     default_value=world_path,
     description='Full path to the world model file to load')
   
-  declare_use_rviz_cmd = DeclareLaunchArgument(
-        'use_rviz',
+  declare_use_rviz_with_sim_cmd = DeclareLaunchArgument(
+        'use_rviz_with_sim',
         default_value= 'True',
         description='whether to run sim with rviz or not')
     
@@ -74,15 +73,11 @@ def generate_launch_description():
     launch_arguments={'use_sim_time': use_sim_time,
                       'use_simulation': 'True'}.items())
   
-  rviz_config_file = os.path.join(sim_pkg_path,'config','sim.rviz')
-  rviz_node = Node(
-      package='rviz2',
-      executable='rviz2',
-      arguments=['-d', rviz_config_file],
-      output='screen',
-      condition=IfCondition(use_rviz)
+
+  rviz_launch = IncludeLaunchDescription(
+    PythonLaunchDescriptionSource([os.path.join(rviz_pkg_path,'launch','sim.launch.py')]),
+    condition=IfCondition(use_rviz_with_sim)
   )
-  
 
   robot_name = 'mobo_bot'
   # initial spawn position
@@ -110,11 +105,11 @@ def generate_launch_description():
   ld.add_action(declare_use_sim_time_cmd)
   ld.add_action(declare_use_simulator_cmd)
   ld.add_action(declare_world_cmd)
-  ld.add_action(declare_use_rviz_cmd)
+  ld.add_action(declare_use_rviz_with_sim_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(rsp)
-  ld.add_action(rviz_node)
+  ld.add_action(rviz_launch)
   ld.add_action(start_gazebo_server_cmd)
   ld.add_action(start_gazebo_client_cmd)
   ld.add_action(spawn_entity)
