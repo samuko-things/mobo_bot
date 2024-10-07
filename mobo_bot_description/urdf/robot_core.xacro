@@ -219,65 +219,6 @@
     </xacro:if>
 
     <!--  ########################### -->
-
-
-
-
-
-
-
-
-
-    <!--  sonar -->
-    <xacro:insert_sonar
-        base_name="sonar" 
-        parent_name="chassis" 
-        x="0.0825" y="0" z="${chassis_height/2}"
-        mass="0.005" color="blue"/>
-
-    <!-- <xacro:if value="$(arg use_simulation)">
-        <gazebo reference="sonar">
-            <material>Gazebo/Blue</material>
-
-            <sensor name="sonar" type="ray">
-                <always_on>false</always_on>
-                <visualize>false</visualize>
-                <pose>0.0 0 0.0 0 0 0</pose>
-                <update_rate>10</update_rate>
-                <ray>
-                    <scan>
-                        <horizontal>
-                            <samples>20</samples>
-                            <resolution>1</resolution> 
-                            <min_angle>${-pi/90}</min_angle>
-                            <max_angle>${pi/90}</max_angle>
-                        </horizontal>
-                        <vertical>
-                            <samples>20</samples>
-                            <resolution>1</resolution> 
-                            <min_angle>${-pi/150}</min_angle>
-                            <max_angle>${pi/150}</max_angle>
-                        </vertical>
-                    </scan>
-                    <range>
-                        <min>0.01</min>
-                        <max>4.0</max>
-                        <resolution>0.01</resolution>
-                    </range>
-                </ray>
-        
-                <plugin name="sonar_plugin" filename="libgazebo_ros_ray_sensor.so">
-                    <ros>
-                        <namespace>sonar</namespace>
-                        <remapping>~/out:=range</remapping>
-                    </ros>
-                    <output_type>sensor_msgs/Range</output_type>
-                    <radiation_type>ultrasound</radiation_type>
-                    <frame_name>sonar</frame_name>
-                </plugin>
-            </sensor>
-        </gazebo>
-    </xacro:if> -->
         
 
 
@@ -337,7 +278,7 @@
         x="0" y="0" z="${chassis_height}"/>
 
 
-    <xacro:if value="$(arg use_simulation)">
+    <!-- <xacro:if value="$(arg use_simulation)">
         <gazebo reference="imu">
             <sensor name="imu" type="imu">
                 <always_on>true</always_on>
@@ -395,8 +336,60 @@
                 </plugin>
             </sensor>
         </gazebo>        
-    </xacro:if>
+    </xacro:if> -->
 
+
+
+    <!--  sonar -->
+    <xacro:insert_sonar
+        base_name="sonar" 
+        parent_name="chassis" 
+        x="0.0825" y="0" z="${chassis_height/2}"
+        mass="0.005" color="blue"/>
+
+    <!-- <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="sonar">
+            <material>Gazebo/Blue</material>
+
+            <sensor name="sonar" type="ray">
+                <always_on>false</always_on>
+                <visualize>false</visualize>
+                <pose>0.0 0 0.0 0 0 0</pose>
+                <update_rate>10</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>20</samples>
+                            <resolution>1</resolution> 
+                            <min_angle>${-pi/90}</min_angle>
+                            <max_angle>${pi/90}</max_angle>
+                        </horizontal>
+                        <vertical>
+                            <samples>20</samples>
+                            <resolution>1</resolution> 
+                            <min_angle>${-pi/150}</min_angle>
+                            <max_angle>${pi/150}</max_angle>
+                        </vertical>
+                    </scan>
+                    <range>
+                        <min>0.01</min>
+                        <max>4.0</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                </ray>
+        
+                <plugin name="sonar_plugin" filename="libgazebo_ros_ray_sensor.so">
+                    <ros>
+                        <namespace>sonar</namespace>
+                        <remapping>~/out:=range</remapping>
+                    </ros>
+                    <output_type>sensor_msgs/Range</output_type>
+                    <radiation_type>ultrasound</radiation_type>
+                    <frame_name>sonar</frame_name>
+                </plugin>
+            </sensor>
+        </gazebo>
+    </xacro:if> -->
 
 
     <!-- camera -->
@@ -406,11 +399,11 @@
         base_name="camera" 
         parent_name="chassis" 
         x="${0.08+cam_x_offset}" y="0" z="${chassis_height+cam_z_offset}"
-        mass="0.005" tilt_angle="0" color="grey"/>
+        mass="0.005" tilt_angle="0" color="grey"/> -->
 
         
 
-    <xacro:if value="$(arg use_simulation)">
+    <!-- <xacro:if value="$(arg use_simulation)">
         <gazebo reference="camera">
           <material>Gazebo/DarkGrey</material>
 
