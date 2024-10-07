@@ -8,7 +8,7 @@
     
     <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/sonar.xacro"/>
     <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/lidar.xacro"/>
-    <!-- <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/imu.xacro"/> -->
+    <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/imu.xacro"/>
     <!-- <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/cam.xacro"/> -->
 
     <xacro:property name="chassis_length" value="0.21"/>
@@ -331,7 +331,7 @@
     
 
     <!--  imu -->
-    <!-- <xacro:insert_imu
+    <xacro:insert_imu
         base_name="imu" 
         parent_name="chassis" 
         x="0" y="0" z="${chassis_height}"/>
@@ -341,7 +341,7 @@
         <gazebo reference="imu">
             <sensor name="imu" type="imu">
                 <always_on>true</always_on>
-                <update_rate>30</update_rate>
+                <update_rate>20</update_rate>
                 <visualize>true</visualize>
                 <imu>
                     <angular_velocity>
@@ -395,7 +395,7 @@
                 </plugin>
             </sensor>
         </gazebo>        
-    </xacro:if> -->
+    </xacro:if>
 
 
 

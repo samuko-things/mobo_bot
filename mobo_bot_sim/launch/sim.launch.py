@@ -68,7 +68,7 @@ def generate_launch_description():
     condition=IfCondition(PythonExpression([use_simulator, ' and not ', headless])))
  
 
-  rsp = IncludeLaunchDescription(
+  rsp_launch = IncludeLaunchDescription(
     PythonLaunchDescriptionSource([os.path.join(description_pkg_path,'launch','rsp.launch.py')]), 
     launch_arguments={'use_sim_time': use_sim_time,
                       'use_simulation': 'True'}.items())
@@ -108,7 +108,7 @@ def generate_launch_description():
   ld.add_action(declare_use_rviz_with_sim_cmd)
  
   # Add the nodes to the launch description
-  ld.add_action(rsp)
+  ld.add_action(rsp_launch)
   ld.add_action(rviz_launch)
   ld.add_action(start_gazebo_server_cmd)
   ld.add_action(start_gazebo_client_cmd)
