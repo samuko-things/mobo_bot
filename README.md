@@ -32,6 +32,6 @@ This package contains 2D navigation code implementation (based on the Nav2 ros p
 </br></br></br>
 
 ## LETS GET STARTED
-* To Simulate the **mobo_bot** on you **dev-PC** follow this [mobo_bot_sim tutorial]()
-</br></br>
-* to run the actual physical robot (which uses the Raspberry Pi 4), follow this [mobo_bot_base tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/ROBOT_SETUP_README.md)
+- To Simulate the **mobo_bot** on you **dev-PC** follow this [mobo_bot_sim tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/MOBO_BOT_SIM_README.md)
+
+- to run the actual physical **mobo_bot** robot (which uses the Raspberry Pi 4), follow this [mobo_bot_base tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/MOBO_BOT_BASE_README.md)
