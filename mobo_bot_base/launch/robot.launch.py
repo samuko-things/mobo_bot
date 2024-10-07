@@ -22,8 +22,8 @@ def generate_launch_description():
 
     declare_use_ekf_cmd = DeclareLaunchArgument(
       name='use_ekf',
-      default_value='True',
-      # default_value='False',
+      # default_value='True',
+      default_value='False',
       description='fuse odometry and imu data if true')
 
     declare_odom_topic_cmd = DeclareLaunchArgument(
