@@ -121,7 +121,7 @@
 
 
 
-### Run the mobo_bot_base on the Raspberry Pi
+### Run the mobo_bot_base
 
 - on the Raspberry Pi 4b, open a new terminal and start the mobo_bot_base
   ```shell
@@ -133,6 +133,13 @@
 >
 > if an error occoured, just ensure you are connected to the right port and run it again
 >
-> to run the with IMU sensor fusion (ekf), go to the robot.launch.py file and change the `use_ekf` launch configuration variable default value to `True`.
+> to run the with EIMU and sensor fusion (ekf), go to the robot.launch.py file and change the `use_ekf` launch configuration variable default value to `True`.
 >
 > the run the above ros2 launch command again.
+
+- on Your dev-PC, open a new terminal and start the mobo_bot_rviz by running
+  ```shell
+  source ~/<ros_ws>/install/setup.bash
+  ros2 launch mobo_bot_rviz robot.launch.py
+  ```
+> you should now see the robot visuals on your dev-PC
