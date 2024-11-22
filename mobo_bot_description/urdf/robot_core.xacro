@@ -9,12 +9,14 @@
     <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/sonar.xacro"/>
     <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/lidar.xacro"/>
     <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/imu.xacro"/>
-    <!-- <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/cam.xacro"/> -->
+    <xacro:include filename="$(find mobo_bot_description)/urdf/sensors/cam.xacro"/>
 
     <xacro:property name="chassis_length" value="0.21"/>
     <xacro:property name="chassis_width" value="0.21"/>
     <xacro:property name="chassis_height" value="0.06"/>
+    <xacro:property name="slab_height" value="0.005"/>
     <xacro:property name="chassis_mass" value="2.0"/>
+    <xacro:property name="chassis_color" value="orange"/>
 
     <xacro:property name="wheel_seperation" value="0.23"/>
     <xacro:property name="wheel_radius" value="0.034"/>
@@ -51,9 +53,43 @@
     </joint>
 
     <link name="chassis">
-        <xacro:insert_box_with_fillet x="-0.025" y="0" z="${chassis_height/2}" 
-            size_x="${chassis_length}" size_y="${chassis_width}" size_z="${chassis_height}" 
-            fillet_radius="0.05" color="orange"/>
+        <xacro:insert_box_with_fillet x="-0.025" y="0" z="0" 
+            size_x="${chassis_length}" size_y="${chassis_width}" size_z="${slab_height}" 
+            fillet_radius="0.04" color="${chassis_color}"/>
+        <xacro:insert_box_with_fillet x="-0.025" y="0" z="${chassis_height}" 
+            size_x="${chassis_length}" size_y="${chassis_width}" size_z="${slab_height}" 
+            fillet_radius="0.04" color="${chassis_color}"/>
+
+        <visual>
+            <origin xyz="0.05 0.08 ${chassis_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.005" length="${chassis_height}"/>
+            </geometry>
+            <material name="${chassis_color}"/>
+        </visual>
+        <visual>
+            <origin xyz="0.05 -0.08 ${chassis_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.005" length="${chassis_height}"/>
+            </geometry>
+            <material name="${chassis_color}"/>
+        </visual>
+
+        <visual>
+            <origin xyz="-0.1 0.08 ${chassis_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.005" length="${chassis_height}"/>
+            </geometry>
+            <material name="${chassis_color}"/>
+        </visual>
+        <visual>
+            <origin xyz="-0.1 -0.08 ${chassis_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.005" length="${chassis_height}"/>
+            </geometry>
+            <material name="${chassis_color}"/>
+        </visual>
+
         <collision>
            <origin xyz="-0.02 0 ${chassis_height/2}" rpy="0 0 0"/>
             <geometry>
@@ -183,7 +219,7 @@
     <joint name="castor_wheel_joint" type="fixed">
         <parent link="base_link"/>
         <child link="castor_wheel"/>
-        <origin xyz="-0.095 0 ${castor_wheel_radius}"/>
+        <origin xyz="-0.095 0 ${castor_wheel_radius/2}"/>
     </joint>
 
 
@@ -191,17 +227,17 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <sphere radius="${castor_wheel_radius}" />
+                <sphere radius="${castor_wheel_radius/2}" />
             </geometry>
             <material name="grey"/>
         </visual>
         <collision>
            <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <sphere radius="${castor_wheel_radius}" />
+                <sphere radius="${castor_wheel_radius/2}" />
             </geometry>
         </collision>
-        <xacro:inertial_sphere mass="${castor_wheel_mass}" radius="${castor_wheel_radius}">
+        <xacro:inertial_sphere mass="${castor_wheel_mass}" radius="${castor_wheel_radius/2}">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:inertial_sphere>
     </link>
@@ -232,15 +268,14 @@
         x="0.01" y="0" z="${chassis_height+lidar_z_offset}"
         mass="0.1" color="grey"/>
 
-
     <xacro:if value="$(arg use_simulation)">
-        <gazebo reference="right_rim">
-            <material>Gazebo/Red</material>
+        <gazebo reference="lidar">
+            <material>Gazebo/DarkGrey</material>
         </gazebo>
     </xacro:if>
-    <gazebo reference="lidar">
-        <material>Gazebo/DarkGrey</material>
 
+    <xacro:if value="$(arg use_simulation)">
+      <gazebo reference="lidar">
         <sensor name="lidar" type="ray">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>false</visualize>
@@ -267,7 +302,8 @@
                 <frame_name>lidar</frame_name>
             </plugin>
         </sensor>
-    </gazebo>
+      </gazebo>
+    </xacro:if>
 
     
 
@@ -276,7 +312,6 @@
         base_name="imu" 
         parent_name="chassis" 
         x="0" y="0" z="${chassis_height}"/>
-
 
     <!-- <xacro:if value="$(arg use_simulation)">
         <gazebo reference="imu">
@@ -344,13 +379,17 @@
     <xacro:insert_sonar
         base_name="sonar" 
         parent_name="chassis" 
-        x="0.0825" y="0" z="${chassis_height/2}"
+        x="0.0825" y="0" z="${chassis_height/6}"
         mass="0.005" color="blue"/>
 
-    <!-- <xacro:if value="$(arg use_simulation)">
+    <xacro:if value="$(arg use_simulation)">
         <gazebo reference="sonar">
             <material>Gazebo/Blue</material>
+        </gazebo>
+    </xacro:if>
 
+    <!-- <xacro:if value="$(arg use_simulation)">
+          <gazebo reference="sonar">
             <sensor name="sonar" type="ray">
                 <always_on>false</always_on>
                 <visualize>false</visualize>
@@ -393,20 +432,22 @@
 
 
     <!-- camera -->
-    <!-- <xacro:property name="cam_x_offset" value="0.015"/>
+    <xacro:property name="cam_x_offset" value="0.015"/>
     <xacro:property name="cam_z_offset" value="0.01"/>
     <xacro:insert_camera
         base_name="camera" 
         parent_name="chassis" 
-        x="${0.08+cam_x_offset}" y="0" z="${chassis_height+cam_z_offset}"
-        mass="0.005" tilt_angle="0" color="grey"/> -->
+        x="${0.08+cam_x_offset}" y="0" z="${chassis_height}"
+        mass="0.005" tilt_angle="0.00" color="grey"/>
 
-        
+    <xacro:if value="$(arg use_simulation)">
+        <gazebo reference="camera">
+            <material>Gazebo/DarkGrey</material>
+        </gazebo>
+    </xacro:if>   
 
     <!-- <xacro:if value="$(arg use_simulation)">
         <gazebo reference="camera">
-          <material>Gazebo/DarkGrey</material>
-
           <sensor name="camera" type="camera">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>false</visualize>

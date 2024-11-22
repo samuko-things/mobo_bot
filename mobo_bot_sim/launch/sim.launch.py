@@ -20,7 +20,7 @@ def generate_launch_description():
   x_pos = 0.0; y_pos = 0.0; yaw = 0.0
 
   # Set the path to the world file
-  world_file_name = 'test_world.world'
+  world_file_name = 'new_test_world.world'
   world_path = os.path.join(my_sim_pkg_path, 'world', world_file_name)
 
   # Set rviz config file
