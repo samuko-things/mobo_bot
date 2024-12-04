@@ -10,7 +10,7 @@
     <!-- <xacro:arg name="cam_visual"   default="false"/> -->
     <!-- ############################################### -->
 
-    <xacro:include filename="$(find mobo_bot_description)/urdf/color_macros.xacro" />
+    <!-- <xacro:include filename="$(find mobo_bot_description)/urdf/color_macros.xacro" /> -->
     <xacro:include filename="$(find mobo_bot_description)/urdf/inertia_macros.xacro" />
     <xacro:include filename="$(find mobo_bot_description)/urdf/robot_core.xacro" />
 

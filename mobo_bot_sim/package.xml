@@ -11,8 +11,19 @@
 
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
+
+  <depend>control_msgs</depend>
+  <depend>ros2controlcli</depend>
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+  <depend>imu_sensor_broadcaster</depend>
   
-  <depend>gazebo_ros_pkgs</depend>
+  <depend>ros_ign_gazebo</depend>
+  <depend>ros_gz_bridge</depend>
+  <depend>ign_ros2_control</depend>
+
+  <depend>topic_tools</depend>
+  <depend>robot_localization</depend>
   
   <buildtool_depend>ament_cmake</buildtool_depend>
 
