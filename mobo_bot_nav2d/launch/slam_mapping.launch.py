@@ -29,11 +29,11 @@ def generate_launch_description():
       description='Full path to the ROS2 navigation parameters file to use for all launched nodes')
         
     slam_mapping_node = Node(
-        package='slam_toolbox',
-        executable='async_slam_toolbox_node',
-        name='slam_toolbox',
-        output='screen',
-        parameters=[params_file],
+      package='slam_toolbox',
+      executable='async_slam_toolbox_node',
+      name='slam_toolbox',
+      output='screen',
+      parameters=[params_file],
     )
     
 

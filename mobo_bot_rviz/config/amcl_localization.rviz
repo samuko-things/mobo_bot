@@ -72,6 +72,15 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        camera:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        camera_optical_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         castor_wheel:
           Alpha: 1
           Show Axes: false
@@ -131,6 +140,10 @@ Visualization Manager:
         All Enabled: false
         base_link:
           Value: true
+        camera:
+          Value: true
+        camera_optical_link:
+          Value: true
         castor_wheel:
           Value: false
         chassis:
@@ -165,6 +178,9 @@ Visualization Manager:
               castor_wheel:
                 {}
               chassis:
+                camera:
+                  camera_optical_link:
+                    {}
                 imu:
                   {}
                 lidar:
@@ -328,7 +344,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -4.685002326965332
+      Angle: -1.5799983739852905
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -341,8 +357,8 @@ Visualization Manager:
       Scale: 110.83419799804688
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
-      X: 2.241766929626465
-      Y: 2.681020975112915
+      X: 0.42916738986968994
+      Y: 0.24257837235927582
     Saved: ~
 Window Geometry:
   Displays:
@@ -360,5 +376,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 73
-  Y: 57
+  X: 627
+  Y: 197

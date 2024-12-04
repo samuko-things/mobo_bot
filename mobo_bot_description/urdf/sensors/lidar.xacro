@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-    <xacro:macro name="insert_lidar" params="base_name parent_name x y z mass color">
+    <xacro:macro name="insert_lidar" params="base_name parent_name x y z mass">
         <joint name="${base_name}_joint" type="fixed">
             <parent link="${parent_name}"/>
             <child link="${base_name}"/>
@@ -14,7 +14,9 @@
                 <geometry>
                     <cylinder radius="0.03" length="0.04"/>
                 </geometry>
-                <material name="${color}"/>
+                <material name="grey">
+                    <color rgba="0.25 0.25 0.25 1"/>
+                </material>
             </visual>
             <collision>
                 <origin xyz="0 0 -0.02"/>

@@ -7,6 +7,8 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
+        - /Odometry1
+        - /Odometry1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 549
   - Class: rviz_common/Selection
@@ -70,6 +72,15 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        camera:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        camera_optical_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         castor_wheel:
           Alpha: 1
           Show Axes: false
@@ -80,6 +91,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        imu:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         left_rim:
           Alpha: 1
           Show Axes: false
@@ -125,10 +140,16 @@ Visualization Manager:
         All Enabled: false
         base_link:
           Value: true
+        camera:
+          Value: true
+        camera_optical_link:
+          Value: true
         castor_wheel:
           Value: false
         chassis:
           Value: false
+        imu:
+          Value: true
         left_rim:
           Value: false
         left_wheel:
@@ -154,6 +175,11 @@ Visualization Manager:
             castor_wheel:
               {}
             chassis:
+              camera:
+                camera_optical_link:
+                  {}
+              imu:
+                {}
               lidar:
                 {}
               sonar:
@@ -200,6 +226,45 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Angle Tolerance: 0.009999999776482582
+      Class: rviz_default_plugins/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 1
+      Name: Odometry
+      Position Tolerance: 0.009999999776482582
+      Shape:
+        Alpha: 0.6000000238418579
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 255; 25; 0
+        Head Length: 0.15000000596046448
+        Head Radius: 0.10000000149011612
+        Shaft Length: 0.4000000059604645
+        Shaft Radius: 0.05000000074505806
+        Value: Arrow
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /odom
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -245,26 +310,21 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz_default_plugins/Orbit
-      Distance: 4.579463481903076
+      Angle: -1.5949997901916504
+      Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Focal Point:
-        X: 0.2519334852695465
-        Y: -0.1263047158718109
-        Z: 0.12395597994327545
-      Focal Shape Fixed Size: true
-      Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7703974843025208
+      Scale: 126.39234924316406
       Target Frame: <Fixed Frame>
-      Value: Orbit (rviz)
-      Yaw: 0.6603957414627075
+      Value: TopDownOrtho (rviz_default_plugins)
+      X: 0.4453725516796112
+      Y: -0.1696365624666214
     Saved: ~
 Window Geometry:
   Displays:
@@ -282,5 +342,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 60
-  Y: 60
+  X: 710
+  Y: 94

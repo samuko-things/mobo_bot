@@ -7,7 +7,7 @@
     <xacro:property name="scan_angle" value="1"/> -->
 
 
-    <xacro:macro name="insert_sonar" params="base_name parent_name x y z mass color">
+    <xacro:macro name="insert_sonar" params="base_name parent_name x y z mass">
 
         <joint name="${base_name}_joint" type="fixed">
             <parent link="${parent_name}"/>
@@ -21,7 +21,9 @@
                 <geometry>
                     <cylinder radius="0.006" length="0.006"/>
                 </geometry>
-                <material name="${color}"/>
+                <material name="blue">
+                    <color rgba="0.2 0.2 1 1"/>
+                </material>
             </visual>
             <collision>
                 <origin xyz="0 0.01 0" rpy="0 ${pi/2} 0"/>
@@ -35,7 +37,9 @@
                 <geometry>
                     <cylinder radius="0.006" length="0.006"/>
                 </geometry>
-                <material name="${color}"/>
+                <material name="blue">
+                    <color rgba="0.2 0.2 1 1"/>
+                </material>
             </visual>
             <collision>
                 <origin xyz="0 -0.01 0" rpy="0 ${pi/2} 0"/>
