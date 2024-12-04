@@ -27,10 +27,11 @@ def generate_launch_description():
 
   # Set the path to the world file
   world_file_name = 'empty.sdf'
-  world_path = os.path.join(my_sim_pkg_path, 'world', world_file_name)
+  world_file_path = os.path.join(my_sim_pkg_path, 'world', world_file_name)
 
   # Set rviz config file
-  rviz_config_file = os.path.join(my_rviz_pkg_path,'config','sim.rviz')
+  rviz_file_name = 'sim.rviz'
+  rviz_file_path = os.path.join(my_rviz_pkg_path, 'config', rviz_file_name)
  
 
   # set some ignition environment variable
@@ -56,7 +57,8 @@ def generate_launch_description():
   # Launch configuration variables specific to simulation
   headless = LaunchConfiguration('headless')
   use_sim_time = LaunchConfiguration('use_sim_time')
-  world = LaunchConfiguration('world')
+  world_path = LaunchConfiguration('world_path')
+  rviz_path = LaunchConfiguration('rviz_path')
   use_rviz = LaunchConfiguration('use_rviz')
   gz_verbosity = LaunchConfiguration('gz_verbosity')
   use_ekf = LaunchConfiguration('use_ekf')
@@ -72,9 +74,14 @@ def generate_launch_description():
     default_value='True',
     description='Use simulation (Gazebo) clock if true')
  
-  declare_world_cmd = DeclareLaunchArgument(
-    name='world',
-    default_value=world_path,
+  declare_world_path_cmd = DeclareLaunchArgument(
+    name='world_path',
+    default_value=world_file_path,
+    description='Full path to the world model file to load')
+  
+  declare_rviz_path_cmd = DeclareLaunchArgument(
+    name='rviz_path',
+    default_value=rviz_file_path,
     description='Full path to the world model file to load')
   
   declare_use_rviz_cmd = DeclareLaunchArgument(
@@ -112,7 +119,7 @@ def generate_launch_description():
   rviz_node = Node(
         package='rviz2',
         executable='rviz2',
-        arguments=['-d', rviz_config_file],
+        arguments=['-d', rviz_path],
         output='screen',
         condition=IfCondition(use_rviz)
   )
@@ -120,7 +127,7 @@ def generate_launch_description():
 
   start_ign_gazebo = ExecuteProcess(
             condition=UnlessCondition(headless),
-            cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, world],
+            cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, world_path],
             output='screen',
             # shell=False,
         )
@@ -128,7 +135,7 @@ def generate_launch_description():
   
   start_ign_gazebo_headless = ExecuteProcess(
             condition=IfCondition(headless),
-            cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, '-s', '--headless-rendering', world],
+            cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, '-s', '--headless-rendering', world_path],
             output='screen',
             # shell=False,
         )
@@ -244,7 +251,8 @@ def generate_launch_description():
   # add the necessary declared launch arguments to the launch description
   ld.add_action(declare_headless_cmd)
   ld.add_action(declare_use_sim_time_cmd)
-  ld.add_action(declare_world_cmd)
+  ld.add_action(declare_world_path_cmd)
+  ld.add_action(declare_rviz_path_cmd)
   ld.add_action(declare_use_rviz_cmd)
   ld.add_action(declare_gz_verbosity_cmd)
   ld.add_action(declare_use_ekf_cmd)

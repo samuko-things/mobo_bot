@@ -28,7 +28,6 @@ endif()
 install(DIRECTORY
     config
     launch
-    maps
     DESTINATION share/${PROJECT_NAME}/
 )
 
