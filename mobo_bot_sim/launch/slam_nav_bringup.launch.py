@@ -29,7 +29,7 @@ def generate_launch_description():
   world_file_path = os.path.join(my_sim_pkg_path, 'world', world_file_name)
 
   # Set rviz config file
-  rviz_file_name = 'amcl_localization.rviz'
+  rviz_file_name = 'slam_nav.rviz'
   rviz_file_path = os.path.join(my_rviz_pkg_path, 'config', rviz_file_name)
  
   # Set the path to the map file
@@ -37,7 +37,7 @@ def generate_launch_description():
   map_yaml_path = os.path.join(my_sim_pkg_path, 'maps', map_file_name)
 
   # Set the path to the nav param file
-  nav_param_file_name = 'my_nav2_bringup_params.yaml'
+  nav_param_file_name = 'my_nav2_slam_bringup_params.yaml'
   nav_param_file_path = os.path.join(my_nav_pkg_path, 'config', nav_param_file_name)
  
 
@@ -138,7 +138,7 @@ def generate_launch_description():
   
   declare_slam_cmd = DeclareLaunchArgument(
         'slam',
-        default_value='False',
+        default_value='True',
         description='Whether run a SLAM')
 
   declare_map_yaml_file_cmd = DeclareLaunchArgument(
@@ -188,8 +188,7 @@ def generate_launch_description():
   nav_bringup_cmd_group = GroupAction([
       PushRosNamespace(
           condition=IfCondition(use_namespace),
-          namespace=namespace
-      ),
+          namespace=namespace),
 
       Node(
           condition=IfCondition(use_composition),
@@ -199,11 +198,19 @@ def generate_launch_description():
           parameters=[configured_params, {'autostart': autostart}],
           arguments=['--ros-args', '--log-level', log_level],
           remappings=remappings,
-          output='screen'
-      ),
+          output='screen'),
 
       IncludeLaunchDescription(
-          PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'amcl_localization.launch.py')),
+          PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'slam.launch.py')),
+          condition=IfCondition(slam),
+          launch_arguments={'namespace': namespace,
+                            'use_sim_time': use_sim_time,
+                            'autostart': autostart,
+                            'use_respawn': use_respawn,
+                            'params_file': params_file}.items()),
+
+      IncludeLaunchDescription(
+          PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'amcl.launch.py')),
           condition=IfCondition(PythonExpression(['not ', slam])),
           launch_arguments={'namespace': namespace,
                             'map_yaml_file': map_yaml_file,
@@ -212,8 +219,17 @@ def generate_launch_description():
                             'params_file': params_file,
                             'use_composition': use_composition,
                             'use_respawn': use_respawn,
-                            'container_name': 'nav2_container'}.items()
-      )
+                            'container_name': 'nav2_container'}.items()),
+
+      IncludeLaunchDescription(
+          PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'navigation.launch.py')),
+          launch_arguments={'namespace': namespace,
+                            'use_sim_time': use_sim_time,
+                            'autostart': autostart,
+                            'params_file': params_file,
+                            'use_composition': use_composition,
+                            'use_respawn': use_respawn,
+                            'container_name': 'nav2_container'}.items()),
   ])
 
 

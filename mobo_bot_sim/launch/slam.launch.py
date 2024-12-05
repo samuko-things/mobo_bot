@@ -29,15 +29,11 @@ def generate_launch_description():
   world_file_path = os.path.join(my_sim_pkg_path, 'world', world_file_name)
 
   # Set rviz config file
-  rviz_file_name = 'navigation.rviz'
+  rviz_file_name = 'slam_mapping.rviz'
   rviz_file_path = os.path.join(my_rviz_pkg_path, 'config', rviz_file_name)
- 
-  # Set the path to the map file
-  map_file_name = 'turtlebot_arena_map.yaml'
-  map_yaml_path = os.path.join(my_sim_pkg_path, 'maps', map_file_name)
 
   # Set the path to the nav param file
-  nav_param_file_name = 'my_nav2_bringup_params.yaml'
+  nav_param_file_name = 'my_nav2_slam_map_bringup_params.yaml'
   nav_param_file_path = os.path.join(my_nav_pkg_path, 'config', nav_param_file_name)
  
 
@@ -52,7 +48,6 @@ def generate_launch_description():
   namespace = LaunchConfiguration('namespace')
   use_namespace = LaunchConfiguration('use_namespace')
   slam = LaunchConfiguration('slam')
-  map_yaml_file = LaunchConfiguration('map_yaml_file')
   params_file = LaunchConfiguration('params_file')
   autostart = LaunchConfiguration('autostart')
   use_composition = LaunchConfiguration('use_composition')
@@ -103,8 +98,7 @@ def generate_launch_description():
 
   # Create our own temporary YAML files that include substitutions
   param_substitutions = {
-      'use_sim_time': use_sim_time,
-      'yaml_filename': map_yaml_file}
+        'use_sim_time': use_sim_time}
 
   # Only it applys when `use_namespace` is True.
   # '<robot_namespace>' keyword shall be replaced by 'namespace' launch argument
@@ -123,9 +117,6 @@ def generate_launch_description():
           convert_types=True),
       allow_substs=True)
 
-  stdout_linebuf_envvar = SetEnvironmentVariable(
-      'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
-
   declare_namespace_cmd = DeclareLaunchArgument(
       'namespace',
       default_value='',
@@ -138,13 +129,8 @@ def generate_launch_description():
   
   declare_slam_cmd = DeclareLaunchArgument(
         'slam',
-        default_value='False',
+        default_value='True',
         description='Whether run a SLAM')
-
-  declare_map_yaml_file_cmd = DeclareLaunchArgument(
-      'map_yaml_file',
-      default_value=map_yaml_path,
-      description='Full path to map yaml file to load')
 
   declare_params_file_cmd = DeclareLaunchArgument(
       'params_file',
@@ -186,51 +172,30 @@ def generate_launch_description():
 
   # navigation bringup
   nav_bringup_cmd_group = GroupAction([
-      PushRosNamespace(
-          condition=IfCondition(use_namespace),
-          namespace=namespace),
+        PushRosNamespace(
+            condition=IfCondition(use_namespace),
+            namespace=namespace),
 
-      Node(
-          condition=IfCondition(use_composition),
-          name='nav2_container',
-          package='rclcpp_components',
-          executable='component_container_isolated',
-          parameters=[configured_params, {'autostart': autostart}],
-          arguments=['--ros-args', '--log-level', log_level],
-          remappings=remappings,
-          output='screen'),
+        Node(
+            condition=IfCondition(use_composition),
+            name='nav2_container',
+            package='rclcpp_components',
+            executable='component_container_isolated',
+            parameters=[configured_params, {'autostart': autostart}],
+            arguments=['--ros-args', '--log-level', log_level],
+            remappings=remappings,
+            output='screen'),
 
-      IncludeLaunchDescription(
-          PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'slam.launch.py')),
-          condition=IfCondition(slam),
-          launch_arguments={'namespace': namespace,
-                            'use_sim_time': use_sim_time,
-                            'autostart': autostart,
-                            'use_respawn': use_respawn,
-                            'params_file': params_file}.items()),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'slam.launch.py')),
+            condition=IfCondition(slam),
+            launch_arguments={'namespace': namespace,
+                              'use_sim_time': use_sim_time,
+                              'autostart': autostart,
+                              'use_respawn': use_respawn,
+                              'params_file': params_file}.items()),
 
-      IncludeLaunchDescription(
-          PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'amcl.launch.py')),
-          condition=IfCondition(PythonExpression(['not ', slam])),
-          launch_arguments={'namespace': namespace,
-                            'map_yaml_file': map_yaml_file,
-                            'use_sim_time': use_sim_time,
-                            'autostart': autostart,
-                            'params_file': params_file,
-                            'use_composition': use_composition,
-                            'use_respawn': use_respawn,
-                            'container_name': 'nav2_container'}.items()),
-
-      IncludeLaunchDescription(
-          PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'navigation.launch.py')),
-          launch_arguments={'namespace': namespace,
-                            'use_sim_time': use_sim_time,
-                            'autostart': autostart,
-                            'params_file': params_file,
-                            'use_composition': use_composition,
-                            'use_respawn': use_respawn,
-                            'container_name': 'nav2_container'}.items()),
-  ])
+    ])
 
 
   # Create the launch description
@@ -247,7 +212,6 @@ def generate_launch_description():
   ld.add_action(declare_namespace_cmd)
   ld.add_action(declare_use_namespace_cmd)
   ld.add_action(declare_slam_cmd)
-  ld.add_action(declare_map_yaml_file_cmd)
   ld.add_action(declare_params_file_cmd)
   ld.add_action(declare_autostart_cmd)
   ld.add_action(declare_use_composition_cmd)
