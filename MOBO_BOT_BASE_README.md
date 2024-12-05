@@ -32,23 +32,11 @@
   cd ~/<ros_ws>/src/mobo_bot/mobo_bot_sim
   touch COLCON_IGNORE
   ```
-  OR
-
-  ```shell
-  cd ~/<ros_ws>/src/mobo_bot
-  rm -rf mobo_bot_sim
-  ```
 
 - cd into the mobo_bot/mobo_bot_rviz folder and add a `COLCON_IGNORE` file to the mobo_bot_rviz package to prevent running rviz visualization on the Raspberry Pi. *(**NOTE**: You can as well delete the mobo_bot_rviz package if it pleases you)*
   ```shell
   cd ~/<ros_ws>/src/mobo_bot/mobo_bot_rviz
   touch COLCON_IGNORE
-  ```
-  OR
-
-  ```shell
-  cd ~/<ros_ws>/src/mobo_bot
-  rm -rf mobo_bot_rviz
   ```
 
 - go back to the `src` folder of your <ros_ws> and download and setup the `epmc_ros2_control` package for the `L298N EPMC MODULE`
