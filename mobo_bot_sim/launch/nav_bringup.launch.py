@@ -33,7 +33,8 @@ def generate_launch_description():
   rviz_file_path = os.path.join(my_rviz_pkg_path, 'config', rviz_file_name)
  
   # Set the path to the map file
-  map_file_name = 'turtlebot_arena_map.yaml'
+  # map_file_name = 'turtlebot_arena_map.yaml'
+  map_file_name = 'simple_world.yaml'
   map_yaml_path = os.path.join(my_sim_pkg_path, 'maps', map_file_name)
 
   # Set the path to the nav param file

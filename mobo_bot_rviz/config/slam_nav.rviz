@@ -8,7 +8,7 @@ Panels:
         - /Status1
         - /TF1/Frames1
         - /PoseWithCovariance1/Covariance1
-        - /LocalCostMap1
+        - /GlobalCostMap1/Topic1
       Splitter Ratio: 0.4784688949584961
     Tree Height: 140
   - Class: rviz_common/Selection
@@ -297,14 +297,14 @@ Visualization Manager:
       Name: GlobalCostMap
       Topic:
         Depth: 5
-        Durability Policy: Volatile
+        Durability Policy: Transient Local
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /global_costmap/costmap
       Update Topic:
         Depth: 5
-        Durability Policy: Volatile
+        Durability Policy: Transient Local
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /global_costmap/costmap_updates

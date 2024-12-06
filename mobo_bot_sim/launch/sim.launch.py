@@ -23,7 +23,7 @@ def generate_launch_description():
   # robot name
   robot_name = 'mobo_bot'
   # initial robot pose
-  x_pos = 0.0; y_pos = 0.0; yaw = 0.0
+  x_pos = 0.0; y_pos = 0.0; z_pos = 0.0; yaw = 0.0
 
   # Set the path to the world file
   world_file_name = 'empty.sdf'
@@ -166,6 +166,7 @@ def generate_launch_description():
           '-allow_renaming', 'true',
           '-x', str(x_pos),
           '-y', str(y_pos),
+          '-z', str(z_pos),
           '-Y', str(yaw),
           ],
       parameters=[{"use_sim_time": use_sim_time}]
