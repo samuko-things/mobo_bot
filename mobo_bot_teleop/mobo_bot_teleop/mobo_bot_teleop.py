@@ -25,8 +25,8 @@ def process_args_vel():
     print(msg)
     return v, w
   except Exception as e:
-    v = 0.3
-    w = 0.9
+    v = 0.1
+    w = 0.5
     msg = f'using v={v} and w={w}'
     print(msg)
     print(arg_msg)
