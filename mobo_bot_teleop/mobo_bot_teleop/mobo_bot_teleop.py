@@ -54,6 +54,13 @@ drive around with arrow keys:
 
 stops when no arrow key is pressed
 
+R - reset to default speed
+
+Q - increase v by +0.05
+Z - reduce v by -0.05
+
+W - increase w by +0.1
+X - reduce w by -0.1
 ----------------------------------------------------
 """
 
@@ -107,8 +114,7 @@ class MoboBotTeleop(Node):
       self.prev_w = self.w
   
   def reset_speed(self):
-    self.default_v = 0.3
-    self.default_w = 0.9
+    self.default_v, self.default_w = process_args_vel()
     print('reset_speed:\tv(m/s)=%f\tw(rad/s)=%f' % (self.default_v, self.default_w))
 
 
@@ -197,8 +203,8 @@ class MoboBotTeleop(Node):
 
       elif key.char == 'Q' or key.char == 'q':
         self.default_v += 0.05
-        if self.default_v > 2.0:
-          self.default_v = 2.0    
+        if self.default_v > 1.0:
+          self.default_v = 1.0    
         print('new_speed:\tv(m/s)=%f\tw(rad/s)=%f' % (self.default_v, self.default_w))
 
       elif key.char == 'Z' or key.char == 'z':
@@ -209,8 +215,8 @@ class MoboBotTeleop(Node):
 
       elif key.char == 'W' or key.char == 'w':
         self.default_w += 0.1
-        if self.default_w > 4.0:
-          self.default_w = 4.0
+        if self.default_w > 3.0:
+          self.default_w = 3.0
         print('new_speed:\tv(m/s)=%f\tw(rad/s)=%f' % (self.default_v, self.default_w))
 
       elif key.char == 'X' or key.char == 'x':

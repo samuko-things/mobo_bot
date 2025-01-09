@@ -15,7 +15,7 @@ epmc_diff_drive_controller:
     right_wheel_names: ["right_wheel_joint"]
 
     wheel_separation: 0.24
-    wheel_radius: 0.0335 # 
+    wheel_radius: 0.0335 
 
     # wheels_per_side: Number of wheels on each side of the robot. 
     # This is important to take the wheels slip into account when multiple wheels on each side are present.

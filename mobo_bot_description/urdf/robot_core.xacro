@@ -65,8 +65,8 @@
             <geometry>
                 <cylinder radius="0.005" length="${chassis_height}"/>
             </geometry>
-            <material name="DarkBlue">
-              <color rgba="0.09 0.30 0.46 1.0"/>
+            <material name="orange">
+                <color rgba="1 0.55 0 1"/>
             </material>
         </visual>
         <visual>
@@ -74,8 +74,8 @@
             <geometry>
                 <cylinder radius="0.005" length="${chassis_height}"/>
             </geometry>
-            <material name="DarkBlue">
-              <color rgba="0.09 0.30 0.46 1.0"/>
+            <material name="orange">
+                <color rgba="1 0.55 0 1"/>
             </material>
         </visual>
 
@@ -84,8 +84,8 @@
             <geometry>
                 <cylinder radius="0.005" length="${chassis_height}"/>
             </geometry>
-            <material name="DarkBlue">
-              <color rgba="0.09 0.30 0.46 1.0"/>
+            <material name="orange">
+                <color rgba="1 0.55 0 1"/>
             </material>
         </visual>
         <visual>
@@ -93,8 +93,8 @@
             <geometry>
                 <cylinder radius="0.005" length="${chassis_height}"/>
             </geometry>
-            <material name="DarkBlue">
-              <color rgba="0.09 0.30 0.46 1.0"/>
+            <material name="orange">
+                <color rgba="1 0.55 0 1"/>
             </material>
         </visual>
 

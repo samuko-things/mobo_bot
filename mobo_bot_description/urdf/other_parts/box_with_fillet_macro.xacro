@@ -8,8 +8,8 @@
                 <geometry>
                     <box size="${size_x} ${size_y-(2*fillet_radius)} ${size_z}"/>
                 </geometry>
-                <material name="DarkBlue">
-                  <color rgba="0.09 0.30 0.46 1.0"/>
+                <material name="orange">
+                  <color rgba="1 0.55 0 1"/>
                 </material>
             </visual>
             <!-- lateral box -->
@@ -18,8 +18,8 @@
                 <geometry>
                     <box size="${size_x-(2*fillet_radius)} ${size_y} ${size_z}"/>
                 </geometry>
-                <material name="DarkBlue">
-                  <color rgba="0.09 0.30 0.46 1.0"/>
+                <material name="orange">
+                  <color rgba="1 0.55 0 1"/>
                 </material>
             </visual>
             <!-- cylinder1 -->
@@ -28,8 +28,8 @@
                 <geometry>
                     <cylinder length="${size_z}" radius="${fillet_radius}"/>
                 </geometry>
-                <material name="DarkBlue">
-                  <color rgba="0.09 0.30 0.46 1.0"/>
+                <material name="orange">
+                  <color rgba="1 0.55 0 1"/>
                 </material>
             </visual>
             <!-- cylinder2 -->
@@ -38,8 +38,8 @@
                 <geometry>
                     <cylinder length="${size_z}" radius="${fillet_radius}"/>
                 </geometry>
-                <material name="DarkBlue">
-                  <color rgba="0.09 0.30 0.46 1.0"/>
+                <material name="orange">
+                  <color rgba="1 0.55 0 1"/>
                 </material>
             </visual>
             <!-- cylinder3 -->
@@ -48,8 +48,8 @@
                 <geometry>
                     <cylinder length="${size_z}" radius="${fillet_radius}"/>
                 </geometry>
-                <material name="DarkBlue">
-                  <color rgba="0.09 0.30 0.46 1.0"/>
+                <material name="orange">
+                  <color rgba="1 0.55 0 1"/>
                 </material>
             </visual>
             <!-- cylinder4 -->
@@ -58,8 +58,8 @@
                 <geometry>
                     <cylinder length="${size_z}" radius="${fillet_radius}"/>
                 </geometry>
-                <material name="DarkBlue">
-                  <color rgba="0.09 0.30 0.46 1.0"/>
+                <material name="orange">
+                  <color rgba="1 0.55 0 1"/>
                 </material>
             </visual>
     </xacro:macro>
