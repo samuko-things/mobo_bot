@@ -20,36 +20,29 @@ from nav2_common.launch import RewrittenYaml, ReplaceString
  
 def generate_launch_description():
   # Set the path to this package.
-  my_rviz_pkg_path = get_package_share_directory('mobo_bot_rviz')
-  my_sim_pkg_path = get_package_share_directory('mobo_bot_sim')
-  my_nav_pkg_path = get_package_share_directory('mobo_bot_nav2d') 
-
-  # Set the path to the world file
-  world_file_name = 'empty.sdf'
-  world_file_path = os.path.join(my_sim_pkg_path, 'world', world_file_name)
-
-  # Set rviz config file
-  rviz_file_name = 'navigation.rviz'
-  rviz_file_path = os.path.join(my_rviz_pkg_path, 'config', rviz_file_name)
- 
-  # Set the path to the map file
-  # map_file_name = 'turtlebot_arena_map.yaml'
-  map_file_name = 'simple_world.yaml'
-  map_yaml_path = os.path.join(my_nav_pkg_path, 'maps', map_file_name)
+  my_base_pkg_path = get_package_share_directory('mobo_bot_base')
+  my_nav_pkg_path = get_package_share_directory('mobo_bot_nav2d')
+  # my_rviz_pkg_path = get_package_share_directory('mobo_bot_rviz') 
 
   # Set the path to the nav param file
-  nav_param_file_name = 'my_nav2_bringup_sim_params.yaml'
+  nav_param_file_name = 'my_nav2_bringup_robot_params.yaml'
   nav_param_file_path = os.path.join(my_nav_pkg_path, 'config', nav_param_file_name)
- 
 
+  map_file_name = 'my_map.yaml'
+  map_yaml_path = os.path.join(my_nav_pkg_path, 'maps', map_file_name)
+
+  # # Set rviz config file
+  # rviz_file_name = 'amcl.rviz'
+  # rviz_file_path = os.path.join(my_rviz_pkg_path, 'config', rviz_file_name)
+ 
   # Launch configuration variables specific to simulation
-  headless = LaunchConfiguration('headless')
   use_sim_time = LaunchConfiguration('use_sim_time')
-  world_path = LaunchConfiguration('world_path')
-  rviz_path = LaunchConfiguration('rviz_path')
-  use_rviz = LaunchConfiguration('use_rviz')
   use_ekf = LaunchConfiguration('use_ekf')
-  launch_sim = LaunchConfiguration('launch_sim')
+  use_lidar = LaunchConfiguration('use_lidar')
+  launch_robot = LaunchConfiguration('launch_robot')
+
+  # rviz_path = LaunchConfiguration('rviz_path')
+  # use_rviz = LaunchConfiguration('use_rviz')
 
   namespace = LaunchConfiguration('namespace')
   use_namespace = LaunchConfiguration('use_namespace')
@@ -61,41 +54,37 @@ def generate_launch_description():
   use_respawn = LaunchConfiguration('use_respawn')
   log_level = LaunchConfiguration('log_level')
  
-  declare_headless_cmd = DeclareLaunchArgument(
-    name='headless',
-    default_value='False',
-    description='Whether to run only gzserver')
      
   declare_use_sim_time_cmd = DeclareLaunchArgument(
     name='use_sim_time',
-    default_value='True',
+    default_value='False',
     description='Use simulation (Gazebo) clock if true')
- 
-  declare_world_path_cmd = DeclareLaunchArgument(
-    name='world_path',
-    default_value=world_file_path,
-    description='Full path to the world model file to load')
   
-  declare_launch_sim_cmd = DeclareLaunchArgument(
-    'launch_sim',
-    default_value= 'True',
+  declare_launch_robot_cmd = DeclareLaunchArgument(
+    'launch_robot',
+    default_value= 'False',
     description='whether to run simulation or not')
-  
-  declare_rviz_path_cmd = DeclareLaunchArgument(
-    name='rviz_path',
-    default_value=rviz_file_path,
-    description='Full path to the world model file to load')
-  
-  declare_use_rviz_cmd = DeclareLaunchArgument(
-    'use_rviz',
-    default_value= 'True',
-    description='whether to run sim with rviz or not')
   
   declare_use_ekf_cmd = DeclareLaunchArgument(
       name='use_ekf',
-      default_value='True',
-      # default_value='False',
+      default_value='False',
       description='fuse odometry and imu data if true')
+  
+  declare_use_lidar_cmd = DeclareLaunchArgument(
+      name='use_lidar',
+      default_value='True',
+      description='use rplidar if true')
+  
+
+  # declare_rviz_path_cmd = DeclareLaunchArgument(
+  #   name='rviz_path',
+  #   default_value=rviz_file_path,
+  #   description='Full path to the world model file to load')
+  
+  # declare_use_rviz_cmd = DeclareLaunchArgument(
+  #   'use_rviz',
+  #   default_value= 'True',
+  #   description='whether to run robot with rviz or not')
   
   
 
@@ -177,26 +166,30 @@ def generate_launch_description():
 
 
   
-  sim_launch = IncludeLaunchDescription(
+  robot_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                [os.path.join(my_sim_pkg_path,'launch','sim.launch.py')]
+                [os.path.join(my_base_pkg_path,'launch','robot.launch.py')]
             ), 
             launch_arguments={
-              'use_sim_time': use_sim_time,
-              'headless': headless,
-              'world_path': world_path,
-              'use_rviz': use_rviz,
-              'rviz_path': rviz_path,
+              'use_lidar': use_lidar,
               'use_ekf': use_ekf,
             }.items(),
-            condition=IfCondition(launch_sim)
+            condition=IfCondition(launch_robot)
   )
+
+  # rviz_node = Node(
+  #       package='rviz2',
+  #       executable='rviz2',
+  #       arguments=['-d', rviz_path],
+  #       output='screen'
+  #   )
 
   # navigation bringup
   nav_bringup_cmd_group = GroupAction([
       PushRosNamespace(
           condition=IfCondition(use_namespace),
-          namespace=namespace),
+          namespace=namespace
+      ),
 
       Node(
           condition=IfCondition(use_composition),
@@ -206,16 +199,8 @@ def generate_launch_description():
           parameters=[configured_params, {'autostart': autostart}],
           arguments=['--ros-args', '--log-level', log_level],
           remappings=remappings,
-          output='screen'),
-
-      IncludeLaunchDescription(
-          PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'slam.launch.py')),
-          condition=IfCondition(slam),
-          launch_arguments={'namespace': namespace,
-                            'use_sim_time': use_sim_time,
-                            'autostart': autostart,
-                            'use_respawn': use_respawn,
-                            'params_file': params_file}.items()),
+          output='screen'
+      ),
 
       IncludeLaunchDescription(
           PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'amcl.launch.py')),
@@ -227,17 +212,8 @@ def generate_launch_description():
                             'params_file': params_file,
                             'use_composition': use_composition,
                             'use_respawn': use_respawn,
-                            'container_name': 'nav2_container'}.items()),
-
-      IncludeLaunchDescription(
-          PythonLaunchDescriptionSource(os.path.join(my_nav_pkg_path, 'launch', 'navigation.launch.py')),
-          launch_arguments={'namespace': namespace,
-                            'use_sim_time': use_sim_time,
-                            'autostart': autostart,
-                            'params_file': params_file,
-                            'use_composition': use_composition,
-                            'use_respawn': use_respawn,
-                            'container_name': 'nav2_container'}.items()),
+                            'container_name': 'nav2_container'}.items()
+      )
   ])
 
 
@@ -245,13 +221,12 @@ def generate_launch_description():
   ld = LaunchDescription()
  
   # add the necessary declared launch arguments to the launch description
-  ld.add_action(declare_headless_cmd)
   ld.add_action(declare_use_sim_time_cmd)
-  ld.add_action(declare_world_path_cmd)
-  ld.add_action(declare_rviz_path_cmd)
-  ld.add_action(declare_use_rviz_cmd)
+  # ld.add_action(declare_rviz_path_cmd)
+  # ld.add_action(declare_use_rviz_cmd)
   ld.add_action(declare_use_ekf_cmd)
-  ld.add_action(declare_launch_sim_cmd)
+  ld.add_action(declare_use_lidar_cmd)
+  ld.add_action(declare_launch_robot_cmd)
   
   ld.add_action(declare_namespace_cmd)
   ld.add_action(declare_use_namespace_cmd)
@@ -264,7 +239,7 @@ def generate_launch_description():
   ld.add_action(declare_log_level_cmd)
  
   # Add the nodes to the launch description
-  ld.add_action(sim_launch)
+  ld.add_action(robot_launch)
   ld.add_action(nav_bringup_cmd_group)
 
  

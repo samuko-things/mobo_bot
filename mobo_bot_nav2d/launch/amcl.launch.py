@@ -71,12 +71,12 @@ def generate_launch_description():
 
     declare_map_yaml_file_cmd = DeclareLaunchArgument(
         'map_yaml_file',
-        default_value=os.path.join(my_nav_pkg_path, 'maps', 'my_test_map.yaml'),
+        default_value="",
         description='Full path to map file to load')
 
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(my_nav_pkg_path, 'config', 'my_nav2_bringup_params.yaml'),
+        default_value="",
         description='Full path to the ROS2 parameters file to use for all launched nodes')
 
     declare_autostart_cmd = DeclareLaunchArgument(

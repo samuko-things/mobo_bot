@@ -68,16 +68,10 @@
   ros2 run mobo_bot_teleop mobo_bot_teleop <v in m/s> <w in rad/sec>
   ```
 
-- to tryout the 2D navigation with simulation (using the existing world and map):
+- to just build map of the world with slam run:
   ```shell
   source ~/<ros_ws>/install/setup.bash
-  ros2 launch mobo_bot_sim nav_bringup.launch.py
-  ```
-
-- to tryout the 2D navigation with simulation with slam:
-  ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 launch mobo_bot_sim slam_nav_bringup.launch.py
+  ros2 launch mobo_bot_sim slam.launch.py
   ```
 
 - to tryout only the amcl localization so see how it works:
@@ -86,20 +80,23 @@
   ros2 launch mobo_bot_sim amcl.launch.py
   ```
 
-- to build map of the world with slam run:
+- to tryout the 2D navigation with simulation (using the existing world and map):
   ```shell
   source ~/<ros_ws>/install/setup.bash
-  ros2 launch mobo_bot_sim slam_mapping.launch.py
+  ros2 launch mobo_bot_sim nav_bringup.launch.py
   ```
+> NOTE: change use_slam parameter to perfor 2D navigation with slam
+
 
 
 ## Drive your robot with teleop
-
-
-
-NOTE that the package publishes to the /cmd_vel topic. It requires you to set the linear velocity (v) and angular velocity (w), you want your robot to move at, as argument to run the package. Below is an example of how to run the package to drive your robot.
-
+- in a differnt terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
   ```shell
-  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive 0.2 1.0
+  source ~/<ros_ws>/install/setup.bash
+  ros2 run mobo_bot_teleop mobo_bot_teleop
   ```
-drive the robot easily using the arrow keys
+  OR
+  ```shell
+  source ~/<ros_ws>/install/setup.bash
+  ros2 run mobo_bot_teleop mobo_bot_teleop <v in m/s> <w in rad/sec>
+  ```

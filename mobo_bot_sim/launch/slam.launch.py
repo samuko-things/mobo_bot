@@ -33,7 +33,7 @@ def generate_launch_description():
   rviz_file_path = os.path.join(my_rviz_pkg_path, 'config', rviz_file_name)
 
   # Set the path to the nav param file
-  nav_param_file_name = 'my_nav2_slam_map_bringup_params.yaml'
+  nav_param_file_name = 'my_nav2_bringup_sim_params.yaml'
   nav_param_file_path = os.path.join(my_nav_pkg_path, 'config', nav_param_file_name)
  
 
@@ -44,6 +44,7 @@ def generate_launch_description():
   rviz_path = LaunchConfiguration('rviz_path')
   use_rviz = LaunchConfiguration('use_rviz')
   use_ekf = LaunchConfiguration('use_ekf')
+  launch_sim = LaunchConfiguration('launch_sim')
 
   namespace = LaunchConfiguration('namespace')
   use_namespace = LaunchConfiguration('use_namespace')
@@ -84,6 +85,11 @@ def generate_launch_description():
       default_value='True',
       # default_value='False',
       description='fuse odometry and imu data if true')
+  
+  declare_launch_sim_cmd = DeclareLaunchArgument(
+    'launch_sim',
+    default_value= 'True',
+    description='whether to run simulation or not')
   
   
 
@@ -167,7 +173,8 @@ def generate_launch_description():
               'use_rviz': use_rviz,
               'rviz_path': rviz_path,
               'use_ekf': use_ekf,
-            }.items()
+            }.items(),
+            condition=IfCondition(launch_sim)
   )
 
   # navigation bringup
@@ -208,6 +215,7 @@ def generate_launch_description():
   ld.add_action(declare_rviz_path_cmd)
   ld.add_action(declare_use_rviz_cmd)
   ld.add_action(declare_use_ekf_cmd)
+  ld.add_action(declare_launch_sim_cmd)
   
   ld.add_action(declare_namespace_cmd)
   ld.add_action(declare_use_namespace_cmd)

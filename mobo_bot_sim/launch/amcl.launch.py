@@ -35,10 +35,10 @@ def generate_launch_description():
   # Set the path to the map file
   # map_file_name = 'turtlebot_arena_map.yaml'
   map_file_name = 'simple_world.yaml'
-  map_yaml_path = os.path.join(my_sim_pkg_path, 'maps', map_file_name)
+  map_yaml_path = os.path.join(my_nav_pkg_path, 'maps', map_file_name)
 
   # Set the path to the nav param file
-  nav_param_file_name = 'my_nav2_bringup_params.yaml'
+  nav_param_file_name = 'my_nav2_bringup_sim_params.yaml'
   nav_param_file_path = os.path.join(my_nav_pkg_path, 'config', nav_param_file_name)
  
 
@@ -49,6 +49,7 @@ def generate_launch_description():
   rviz_path = LaunchConfiguration('rviz_path')
   use_rviz = LaunchConfiguration('use_rviz')
   use_ekf = LaunchConfiguration('use_ekf')
+  launch_sim = LaunchConfiguration('launch_sim')
 
   namespace = LaunchConfiguration('namespace')
   use_namespace = LaunchConfiguration('use_namespace')
@@ -79,6 +80,11 @@ def generate_launch_description():
     name='rviz_path',
     default_value=rviz_file_path,
     description='Full path to the world model file to load')
+  
+  declare_launch_sim_cmd = DeclareLaunchArgument(
+    'launch_sim',
+    default_value= 'True',
+    description='whether to run simulation or not')
   
   declare_use_rviz_cmd = DeclareLaunchArgument(
     'use_rviz',
@@ -182,7 +188,8 @@ def generate_launch_description():
               'use_rviz': use_rviz,
               'rviz_path': rviz_path,
               'use_ekf': use_ekf,
-            }.items()
+            }.items(),
+            condition=IfCondition(launch_sim)
   )
 
   # navigation bringup
@@ -228,6 +235,7 @@ def generate_launch_description():
   ld.add_action(declare_rviz_path_cmd)
   ld.add_action(declare_use_rviz_cmd)
   ld.add_action(declare_use_ekf_cmd)
+  ld.add_action(declare_launch_sim_cmd)
   
   ld.add_action(declare_namespace_cmd)
   ld.add_action(declare_use_namespace_cmd)
