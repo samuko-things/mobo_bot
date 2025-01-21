@@ -133,7 +133,7 @@ def generate_launch_description():
   
   declare_slam_cmd = DeclareLaunchArgument(
         'slam',
-        default_value='False',
+        default_value='True',
         description='Whether run a SLAM')
 
   declare_map_yaml_file_cmd = DeclareLaunchArgument(
@@ -181,6 +181,7 @@ def generate_launch_description():
   #       executable='rviz2',
   #       arguments=['-d', rviz_path],
   #       output='screen'
+  #       condition=IfCondition(use_rviz)
   #   )
 
   # navigation bringup

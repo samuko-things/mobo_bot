@@ -182,6 +182,7 @@ def generate_launch_description():
   #       executable='rviz2',
   #       arguments=['-d', rviz_path],
   #       output='screen'
+  #       condition=IfCondition(use_rviz)
   #   )
 
   # navigation bringup

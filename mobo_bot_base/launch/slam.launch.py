@@ -166,9 +166,10 @@ def generate_launch_description():
 
   # rviz_node = Node(
   #       package='rviz2',
-  #       executable='rviz2',
+  #       executable='rviz2',z
   #       arguments=['-d', rviz_path],
   #       output='screen'
+  #       condition=IfCondition(use_rviz)
   #   )
 
   # navigation bringup

@@ -1,11 +1,11 @@
-
+qq
 <?xml version="1.0" ?>
 
 <sdf version="1.8">
   <world name="collision_test">
     <physics name='1ms' type='ignored'>
       <max_step_size>0.001</max_step_size>
-      <real_time_factor>1</real_time_factor>
+      <real_time_faczzztor>1</real_time_factor>
       <real_time_update_rate>1000</real_time_update_rate>
     </physics>
     <plugin name='ignition::gazebo::systems::Physics' filename='ignition-gazebo-physics-system'/>
@@ -88,15 +88,15 @@
       </link>
     </model>
 
-    <!-- <include>
+    <include>
         <uri>TurtlebotArena</uri>
         <pose>0.5 0.0 0.0 0 0 0</pose>
-    </include> -->
+    </include>
 
-    <include>
+    <!-- <include>
         <uri>SimpleWorld</uri>
         <pose>0.0 0.0 0.0 0 0 0</pose>
-    </include>
+    </include> -->
 
   </world>
 </sdf>
