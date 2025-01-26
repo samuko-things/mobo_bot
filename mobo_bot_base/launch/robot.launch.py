@@ -94,61 +94,47 @@ def generate_launch_description():
     )
 
 
-    eimu_ros2_config_file = os.path.join(base_pkg_path,'config','eimu_params.yaml')
-    eimu_ros2_node = Node(
-        package='eimu_ros2',
-        executable='eimu_ros2',
-        name='eimu_ros2',
+    eimu_ros_config_file = os.path.join(base_pkg_path,'config','eimu_ros_start_params.yaml')
+    eimu_ros_node = Node(
+        package='eimu_ros',
+        executable='eimu_ros',
+        name='eimu_ros',
         output='screen',
         parameters=[
-            eimu_ros2_config_file
+            eimu_ros_config_file
         ],
         condition=IfCondition(use_ekf)
     )
 
-    # start_eimu_ros2_node_after_epmc_diff_drive_controller_spawner = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=epmc_diff_drive_controller_spawner,
-    #         on_exit=[eimu_ros2_node],
-    #     )
-    # )
-
     ekf_config_path = os.path.join(base_pkg_path,'config','ekf.yaml')
     ekf_node = Node(
-            package='robot_localization',
-            executable='ekf_node',
-            name='ekf_filter_node',
-            output='screen',
-            parameters=[
-                ekf_config_path
-            ],
-            condition=IfCondition(use_ekf),
-            remappings=[("odometry/filtered", odom_topic)]
-
-        )
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[
+            ekf_config_path
+        ],
+        condition=IfCondition(use_ekf),
+        remappings=[("odometry/filtered", odom_topic)]
+    )
     
     lidar_node = Node(
-            package='rplidar_ros',
-            executable='rplidar_node',
-            name='rplidar_node',
-            parameters=[{'channel_type': 'serial',
-                         'serial_port': '/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1.2:1.0-port0',
-                         'serial_baudrate': 115200,
-                         'frame_id': 'lidar',
-                         'inverted': False,
-                         'angle_compensate': True,
-                         'scan_mode': 'Sensitivity'}
-                         ],
-            condition=IfCondition(use_lidar),
-            remappings=[("/scan", "/lidar/scan")],
-            output='screen')
-
-    # start_ekf_node_after_eimu_ros2_node = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=eimu_ros2_node,
-    #         on_exit=[ekf_node],
-    #     )
-    # )
+        package='rplidar_ros',
+        executable='rplidar_node',
+        name='rplidar_node',
+        parameters=[{'channel_type': 'serial',
+                      'serial_port': '/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1.2:1.0-port0',
+                      'serial_baudrate': 115200,
+                      'frame_id': 'lidar',
+                      'inverted': False,
+                      'angle_compensate': True,
+                      'scan_mode': 'Sensitivity'}
+                      ],
+        condition=IfCondition(use_lidar),
+        remappings=[("/scan", "/lidar/scan")],
+        output='screen'
+    )
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -165,11 +151,8 @@ def generate_launch_description():
     ld.add_action(controller_manager_without_ekf)
     ld.add_action(joint_state_broadcaster_spawner)
     ld.add_action(start_epmc_diff_drive_controller_spawner_after_joint_state_broadcaster_spawner)
-    # ld.add_action(start_eimu_ros2_node_after_epmc_diff_drive_controller_spawner)
-    # ld.add_action(start_ekf_node_after_eimu_ros2_node)
-    ld.add_action(eimu_ros2_node)
+    ld.add_action(eimu_ros_node)
     ld.add_action(ekf_node)
     ld.add_action(lidar_node)
-
 
     return ld      # return (i.e send) the launch description for excecution

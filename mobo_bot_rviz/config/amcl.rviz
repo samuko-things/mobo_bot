@@ -7,7 +7,6 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
-        - /PoseWithCovariance1
         - /PoseWithCovariance1/Covariance1
       Splitter Ratio: 0.5
     Tree Height: 549
@@ -376,5 +375,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 627
-  Y: 197
+  X: 479
+  Y: 73

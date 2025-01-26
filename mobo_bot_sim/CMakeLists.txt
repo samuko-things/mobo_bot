@@ -28,7 +28,8 @@ endif()
 install(DIRECTORY
     config
     launch
-    models
+    map
+    model
     world
     DESTINATION share/${PROJECT_NAME}/
 )
