@@ -1,37 +1,32 @@
-## mobo_bot
-This is an educational differential drive mobile robot created by Samuel Obiagba (samuko-things) for learning mobile robotics in ROS2. It uses the [Easy PID Motor Controller (epmc)](https://github.com/samuko-things-company/epmc_documentation) and the [Easu IMU (eimu)](https://github.com/samuko-things-company/eimu_documentation) for its base control. It also has a simulation in Gazebo Classic.
+## mobo-bot
+This is an an open-source differential drive ROS2-based educational robot (similar to the popular *Turtlebot*, *Andino bot*, *limo robot*, etc.), created by Samuel Obiagba (aka [samuko-things]()) founder of [**robocre8**](),  to learn advanced mobile robotics concepts such as `control`, `sensor-fusion`, `localization`, `navigation`, `perception`, `Artificial Intelligence`, etc. using the **ROS2** framework as well as Arduino also.
+<br/>
+<br/>
+This will ensure the longevity and future of open-source robotics in Nigeria and Africa, as well as the world, by aiding the learning and building of advanced mobile robots, leveraging the use of the ROS2 and Arduino Frameworks.
+<br/>
+- It uses the [EPMC module]() and [EIMU Module]() for its base control.
+- It has a gazebo ign simulation environment where algorithms can be tested before being implemented on the robot.
+- It is both easy to work with and build.
+- Learning robotics has never been more easy.
 
 #
 
-### mobo_bot_base
-This is the base control package for the actual physical **mobo_bot** robot
-the **mobo_bot_base** is meant to run on the Raspberry Pi 4 on the robot.
-
-https://github.com/user-attachments/assets/95a72d3f-a12f-41d0-8aeb-ddb9d6ec3bd2
-
-#
-
-### mobo_bot_rviz
-The visualization repo - **mobo_bot_rviz** - will be run on the Dev PC, which is wirelessly connected to the Pi, for visualizing the robot in RVIZ.
-this package can also be used to visualize the **mobo_bot** simulation. 
-
-#
-
-### mobo_bot_sim
-This is the mobo_bot ROS2 simulation with Gazebo Classic 11. Simulate on your PC and view the robot data in RVIZ with the **mobo_bot_rviz** package.
+### GETTING STARTED WITH SIMULATION (`mobo_bot_sim`)
+**`mobo_bot_sim`** is the **mobo_bot** ROS2 simulation with Gazebo Ignition.
 
 https://github.com/user-attachments/assets/27034f8b-ea77-4454-8616-afe079aae35d
 
-#
-
-### mobo_bot_nav2d
-This package contains 2D navigation code implementation (based on the Nav2 ros package) for the **mobo_bot**. Learn concepts like SLAM mapping, Localization with AMCL, 2D Navigation, etc.
-> [!IMPORTANT]  
-> The **mobo_bot_nav2d** can be used on both the simulation - *mobo_bot_sim* - and the actual robot *mobo_bot_base*
-
-</br></br></br>
-
-## LETS GET STARTED
 - To Simulate the **mobo_bot** on you **dev-PC** follow this [mobo_bot_sim tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/MOBO_BOT_SIM_README.md)
 
-- to run the actual physical **mobo_bot** robot (which uses the Raspberry Pi 4), follow this [mobo_bot_base tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/MOBO_BOT_BASE_README.md)
+#
+
+### WORKING WITH THE ACTUAL ROBOT (`mobo_bot_base` and `mobo_bot_rviz`)
+**`mobo_bot_base`** is the base control package for the actual physical **mobo_bot** robot. it launches all the controls, sensor-fusion, lidar and camera, to get started with working with the robot.
+
+the **mobo_bot_base** package is meant to run on the Raspberry Pi 4 on the robot.
+
+**`mobo_bot_rviz`** is meant to run on your Dev PC which will be connected to the robot via ssh. For visualiging the robot state, sensor data, navigation, etc.
+
+https://github.com/user-attachments/assets/95a72d3f-a12f-41d0-8aeb-ddb9d6ec3bd2
+
+- to get started with the actual physical **mobo_bot** robot (which uses the Raspberry Pi 4), follow this [mobo_bot_base tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/MOBO_BOT_BASE_README.md)

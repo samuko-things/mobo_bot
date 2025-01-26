@@ -7,33 +7,31 @@ from launch.actions import (
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
  
 def generate_launch_description():
   # Set the path to this package.
   base_pkg_path = get_package_share_directory('mobo_bot_base')
-  nav2_bringup_pkg_path = get_package_share_directory('nav2_bringup')
 
   # Set the path to the nav param file
-  nav_param_file_name = 'nav2_bringup_params.yaml'
-  nav_param_file_path = os.path.join(base_pkg_path, 'config', nav_param_file_name)
-
-  map_file_name = 'my_map.yaml'
-  map_yaml_path = os.path.join(base_pkg_path, 'map', map_file_name)
+  slam_mapping_param_file_name = 'slam_mapping_params_online_async.yaml'
+  slam_mapping_param_file_path = os.path.join(base_pkg_path, 'config', slam_mapping_param_file_name)
 
 
   #----------------------------------------------------------------------------------
 
   # Launch configuration variables specific to simulation
-  use_sim_time = LaunchConfiguration('use_sim_time')
+  # use_sim_time = LaunchConfiguration('use_sim_time')
   use_ekf = LaunchConfiguration('use_ekf')
   use_lidar = LaunchConfiguration('use_lidar')
   launch_robot = LaunchConfiguration('launch_robot')
+  params_file = LaunchConfiguration('params_file')
  
      
-  declare_use_sim_time_cmd = DeclareLaunchArgument(
-    name='use_sim_time',
-    default_value='False',
-    description='Use simulation (Gazebo) clock if true')
+  # declare_use_sim_time_cmd = DeclareLaunchArgument(
+  #   name='use_sim_time',
+  #   default_value='False',
+  #   description='Use simulation (Gazebo) clock if true')
   
   declare_launch_robot_cmd = DeclareLaunchArgument(
     'launch_robot',
@@ -67,16 +65,18 @@ def generate_launch_description():
 
   #-----------------------------------------------------------------------------
 
-  localization_launch = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [os.path.join(nav2_bringup_pkg_path,'launch','localization_launch.py')]
-            ), 
-            launch_arguments={
-              'map': map_yaml_path,
-              'use_sim_time': use_sim_time,
-              'params_file': nav_param_file_path
-            }.items()
-  )
+  declare_params_file_cmd = DeclareLaunchArgument(
+      'params_file',
+      default_value=slam_mapping_param_file_path,
+      description='Full path to the ROS2 navigation parameters file to use for all launched nodes')
+  
+  slam_mapping_node = Node(
+      package='slam_toolbox',
+      executable='async_slam_toolbox_node',
+      name='slam_toolbox',
+      output='screen',
+      parameters=[params_file],
+    )
 
   #--------------------------------------------------------------------------------
 
@@ -86,13 +86,14 @@ def generate_launch_description():
   ld = LaunchDescription()
  
   # add the necessary declared launch arguments to the launch description
-  ld.add_action(declare_use_sim_time_cmd)
+  # ld.add_action(declare_use_sim_time_cmd)
   ld.add_action(declare_use_ekf_cmd)
   ld.add_action(declare_use_lidar_cmd)
   ld.add_action(declare_launch_robot_cmd)
+  ld.add_action(declare_params_file_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(robot_launch)
-  ld.add_action(localization_launch)
+  ld.add_action(slam_mapping_node)
  
   return ld

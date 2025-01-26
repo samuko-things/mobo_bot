@@ -1,3 +1,20 @@
-*COLCON_IGNORE
 # Ignore __pycache__ folder
 *__pycache__
+*COLCON_IGNORE
+*.pyc
+*.iml
+*.swp
+.project
+.pydevproject
+.DS_Store
+.idea
+
+.vscode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# colcon/CMake output
+build
+install
+log

@@ -12,6 +12,7 @@
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
 
+  <depend>robot_localization</depend>
   <depend>control_msgs</depend>
   <depend>ros2controlcli</depend>
   <depend>ros2_control</depend>
@@ -23,7 +24,10 @@
   <depend>ign_ros2_control</depend>
 
   <depend>topic_tools</depend>
-  <depend>robot_localization</depend>
+
+  <depend>slam_toolbox</depend>
+  <depend>navigation2</depend>
+  <depend>nav2_bringup</depend>
   
   <buildtool_depend>ament_cmake</buildtool_depend>
 

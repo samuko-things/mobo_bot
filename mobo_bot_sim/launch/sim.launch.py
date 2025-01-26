@@ -16,9 +16,9 @@ from launch.event_handlers import OnProcessExit
  
 def generate_launch_description():
   # Set the path to this package.
-  my_description_pkg_path = get_package_share_directory('mobo_bot_description')
-  my_rviz_pkg_path = get_package_share_directory('mobo_bot_rviz')
-  my_sim_pkg_path = get_package_share_directory('mobo_bot_sim') 
+  description_pkg_path = get_package_share_directory('mobo_bot_description')
+  rviz_pkg_path = get_package_share_directory('mobo_bot_rviz')
+  sim_pkg_path = get_package_share_directory('mobo_bot_sim') 
 
   # robot name
   robot_name = 'mobo_bot'
@@ -27,15 +27,15 @@ def generate_launch_description():
 
   # Set the path to the world file
   world_file_name = 'empty.sdf'
-  world_file_path = os.path.join(my_sim_pkg_path, 'world', world_file_name)
+  world_file_path = os.path.join(sim_pkg_path, 'world', world_file_name)
 
   # Set rviz config file
   rviz_file_name = 'sim.rviz'
-  rviz_file_path = os.path.join(my_rviz_pkg_path, 'config', rviz_file_name)
+  rviz_file_path = os.path.join(rviz_pkg_path, 'config', rviz_file_name)
  
 
   # set some ignition environment variable
-  gz_models_path = os.path.join(my_sim_pkg_path, "models")
+  gz_models_path = os.path.join(sim_pkg_path, "model")
   gz_sim_system_plugin_path = '/opt/ros/humble/lib/'
 
   set_env_ign_resource_cmd = SetEnvironmentVariable(
@@ -97,7 +97,6 @@ def generate_launch_description():
   declare_use_ekf_cmd = DeclareLaunchArgument(
       name='use_ekf',
       default_value='True',
-      # default_value='False',
       description='fuse odometry and imu data if true')
   
   declare_odom_topic_cmd = DeclareLaunchArgument(
@@ -109,11 +108,11 @@ def generate_launch_description():
 
   # Specify the actions
   rsp_launch = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [os.path.join(my_description_pkg_path,'launch','rsp.launch.py')]
-            ), 
-            launch_arguments={'use_sim_time': use_sim_time,
-                              'use_simulation': 'True'}.items()
+      PythonLaunchDescriptionSource(
+          [os.path.join(description_pkg_path,'launch','rsp.launch.py')]
+      ), 
+      launch_arguments={'use_sim_time': use_sim_time,
+                        'use_simulation': 'True'}.items()
   )
 
   rviz_node = Node(
@@ -126,35 +125,35 @@ def generate_launch_description():
 
 
   start_ign_gazebo = ExecuteProcess(
-            condition=UnlessCondition(headless),
-            cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, world_path],
-            output='screen',
-            # shell=False,
-        )
+      condition=UnlessCondition(headless),
+      cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, world_path],
+      output='screen',
+      # shell=False,
+  )
         
   
   start_ign_gazebo_headless = ExecuteProcess(
-            condition=IfCondition(headless),
-            cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, '-s', '--headless-rendering', world_path],
-            output='screen',
-            # shell=False,
-        )
+      condition=IfCondition(headless),
+      cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, '-s', '--headless-rendering', world_path],
+      output='screen',
+      # shell=False,
+  )
         
 
   bridge = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
-        arguments=[
-            "lidar/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan",
-            "/imu/data@sensor_msgs/msg/Imu[ignition.msgs.IMU",
-            "/sky_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
-            # "/camera@sensor_msgs/msg/Image@ignition.msgs.Image",
-            # "/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo",
-            # Clock message is necessary for the diff_drive_controller to accept commands https://github.com/ros-controls/gz_ros2_control/issues/106
-            "/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
-        ],
-        output="screen",
-    )
+      package="ros_gz_bridge",
+      executable="parameter_bridge",
+      arguments=[
+          "lidar/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan",
+          "/imu/data@sensor_msgs/msg/Imu[ignition.msgs.IMU",
+          "/sky_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
+          # "/camera@sensor_msgs/msg/Image@ignition.msgs.Image",
+          # "/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo",
+          # Clock message is necessary for the diff_drive_controller to accept commands https://github.com/ros-controls/gz_ros2_control/issues/106
+          "/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
+      ],
+      output="screen",
+  )
   
   spawn_entity_in_ign = Node(
       package='ros_gz_sim',
@@ -170,15 +169,15 @@ def generate_launch_description():
           '-Y', str(yaw),
           ],
       parameters=[{"use_sim_time": use_sim_time}]
-      )
+  )
 
   
   load_joint_state_broadcaster = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-             'joint_state_broadcaster'],
-        # shell=False,
-        output="screen",
-    )
+      cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+            'joint_state_broadcaster'],
+      # shell=False,
+      output="screen",
+  )
 
   load_diff_drive_base_controller = ExecuteProcess(
       cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
@@ -228,7 +227,7 @@ def generate_launch_description():
   
   # Localize using odometry and IMU data. 
   # It can be turned off because the navigation stack uses AMCL with lidar data for localization
-  ekf_config_path = os.path.join(my_sim_pkg_path,'config','ekf.yaml')
+  ekf_config_path = os.path.join(sim_pkg_path,'config','ekf.yaml')
   ekf_node = Node(
           package='robot_localization',
           executable='ekf_node',
