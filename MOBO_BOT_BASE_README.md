@@ -1,7 +1,9 @@
 ## MANUAL MOBO_BOT_BASE CONTROL SETUP (ON THE RASPBERRY PI 4B)
 > [!NOTE]
 > mobo_bot uses **RaspberryPi 4B** microcomputer running **Ubuntu 22.04** and **ros-humble-base**.
-> You can follow this [tutorial]() to install **ros-humble-base** on **RaspberryPi 4B**
+> You can follow this [tutorial](https://samukothings.com/how-to-install-ros2-humble-on-raspberry-pi-4/) to install **ros-humble-base** on **RaspberryPi 4B**
+
+![mobo_bot_amcl](./docs//mobo_bot_amcl.gif)
 
 #
 
@@ -34,48 +36,39 @@
 - cd into the src folder of your <ros_ws> and download the mobo_bot packages
   ```shell
   cd ~/<ros_ws>/src
-  git clone https://github.com/samuko-things-company/mobo_bot.git
+  git clone -b humble https://github.com/robocre8/mobo_bot.git
   ```
 
-- cd into the mobo_bot/mobo_bot_sim folder and add a `COLCON_IGNORE` file to the mobo_bot_sim package to prevent runnig simulation on the Raspberry Pi. *(**NOTE**: You can as well delete the mobo_bot_sim package if it pleases you)*
+- cd into the mobo_bot/mobo_bot_sim folder and add a `COLCON_IGNORE` file to the mobo_bot_sim package to prevent runnig simulation on the Raspberry Pi. 
   ```shell
   cd ~/<ros_ws>/src/mobo_bot/mobo_bot_sim
   touch COLCON_IGNORE
   ```
 
-- cd into the mobo_bot/mobo_bot_rviz folder and add a `COLCON_IGNORE` file to the mobo_bot_rviz package to prevent running rviz visualization on the Raspberry Pi. *(**NOTE**: You can as well delete the mobo_bot_rviz package if it pleases you)*
+- cd into the mobo_bot/mobo_bot_rviz folder and add a `COLCON_IGNORE` file to the mobo_bot_rviz package to prevent running rviz visualization on the Raspberry Pi.
   ```shell
   cd ~/<ros_ws>/src/mobo_bot/mobo_bot_rviz
   touch COLCON_IGNORE
   ```
-#
 
-- go back to the `src` folder of your <ros_ws> and download and setup the `epmc_ros2_control` package for the `L298N EPMC MODULE`
+- cd into the mobo_bot/mobo_bot_teleop folder and add a `COLCON_IGNORE` file to the mobo_bot_teleop package to prevent running teleop on the Raspberry Pi.
   ```shell
-  cd ~/<ros_ws>/src
-  git clone https://github.com/samuko-things-company/epmc_ros2_control.git
-  ```
-
-- cd into the epmc_ros2_control folder and add a `COLCON_IGNORE` file to the `epmc_demo_bot_bringup` package and the `epmc_demo_bot_description` to prevent running the epmc demo bot on the Raspberry Pi. *(**NOTE**: You can as well delete them mobo_bot_sim package if it pleases you)*
-  ```shell
-  cd ~/<ros_ws>/src/epmc_ros2_control/epmc_demo_bot_description
-  touch COLCON_IGNORE
-  cd ~/<ros_ws>/src/epmc_ros2_control/epmc_demo_bot_bringup
+  cd ~/<ros_ws>/src/mobo_bot/mobo_bot_teleop
   touch COLCON_IGNORE
   ```
-  OR
-
-  ```shell
-  cd ~/<ros_ws>/src/epmc_ros2_control
-  rm -rf epmc_demo_bot_description epmc_demo_bot_bringup
-  ```
-
 #
 
-- go back to the `src` folder of your <ros_ws> and download and setup the `eimu_ros2` package for the `MPU9250 EIMU MODULE`
+- go back to the `src` folder of your <ros_ws> and download and setup the `epmc_harware_interface` ros2 package for the `L298N EPMC MODULE`
   ```shell
   cd ~/<ros_ws>/src
-  git clone https://github.com/samuko-things-company/eimu_ros2.git
+  git clone -b humble https://github.com/robocre8/epmc_hardware_interface.git
+  ```
+
+
+- go back to the `src` folder of your <ros_ws> and download and setup the `eimu_ros` ros2 package for the `MPU9250 EIMU MODULE`
+  ```shell
+  cd ~/<ros_ws>/src
+  git clone -b humble https://github.com/robocre8/eimu_ros.git
   ```
 
 #
@@ -84,10 +77,10 @@
   ```shell
   sudo apt install ros-humble-rplidar-ros
   ```
-- go back to the `src` folder of your <ros_ws> and download rplidar_test launch file from my repo (just for testing the rplidar_A1)
+- go back to the `src` folder of your <ros_ws> and download rplidar_test launch file from robocre8 (just for testing the rplidar_A1)
   ```shell
   cd ~/<ros_ws>/src
-  git clone https://github.com/samuko-things-company/rplidar_test.git
+  git clone -b https://github.com/robocre8/rplidar_test.git
   ```
 #
 
@@ -109,7 +102,7 @@
 
   > for the EPMC (i.e **L298N EPMC MODULE**), go to the mobo_bot/mobo_bot_description/urdf/**`epmc_ros2_control.xacro`** file and change the `port` parameter to the port value gotten
 
-  > for the EIMU (i.e **MPU9250 EIMU MODULE**), go to the mobo_bot/mobo_bot_base/**`eimu_ros2_start_params.yaml`** file and change the `serial_port` parameter to the port value gotten. you can also change the `publish_frequency` to maybe 20Hz
+  > for the EIMU (i.e **MPU9250 EIMU MODULE**), go to the mobo_bot/mobo_bot_base/**`eimu_ros_start_params.yaml`** file and change the `serial_port` parameter to the port value gotten. you can also change the `publish_frequency` to maybe 20Hz
 
   > for the Lidar, go to the mobo_bot/mobo_bot_base/launch/**`robot.launch.py`** file and change the `serial_port` parameter for the lidar Node to the port value gotten.
 
@@ -132,12 +125,13 @@
 
 ### Clone and Build The mobo_bot on your dev-PC connected to the raspberry PI on the mobo_bot robot
 
-- pls follow the mobo_bot [simulation setup tutorial]() for dev-PC
-- as you'll basiclly be using the mobo_bot_rviz package on your dev-PC to vizualize the robot, you can add a **COLCON_IGNORE** file to the following packages - **mobo_bot_sim**, **mobo_bot_base**, **mobo_bot_nav2d** and **mobo_bot_description**
-
+- pls follow the [mobo_bot_sim tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/MOBO_BOT_SIM_README.md) for dev-PC
+- as you'll basiclly be using the mobo_bot_rviz package on your dev-PC to vizualize the robot.
 
 
 ### Run the mobo_bot_base
+
+![mobo_bot_base_drive](./docs//mobo_bot_drive.gif)
 
 - on the Raspberry Pi 4b, open a new terminal and start the mobo_bot_base
   ```shell
@@ -161,3 +155,17 @@
   ros2 launch mobo_bot_rviz robot.launch.py
   ```
 > you should now see the robot visuals on your dev-PC
+
+
+### Drive your robot with teleop
+- on your Dev PC, in a differnt terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
+  ```shell
+  source ~/<ros_ws>/install/setup.bash
+  ros2 run mobo_bot_teleop mobo_bot_teleop
+  ```
+  OR
+  ```shell
+  source ~/<ros_ws>/install/setup.bash
+  ros2 run mobo_bot_teleop mobo_bot_teleop <v in m/s> <w in rad/sec>
+  ```
+
