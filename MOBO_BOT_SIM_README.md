@@ -52,7 +52,7 @@
 #
 
 ### View Robot and Transform Tree
-
+![mobo_bot_tf](./docs/mobo_bot_tf.png)
 - on your dev-PC, open a new terminal and start the robot state publisher node
   ```shell
   source ~/<ros_ws>/install/setup.bash
@@ -71,7 +71,7 @@
 #
 
 ### Run the mobo_bot_sim
-
+![mobo_bot_slam](./docs/mobo_bot_slam_sim.gif)
 - on your dev-PC, open a new terminal and start the mobo_bot_sim 
   ```shell
   source ~/<ros_ws>/install/setup.bash
@@ -91,7 +91,7 @@
 #
 
 ### Run the mobo_bot_sim with navigation
-
+![mobo_bot_nav](./docs/mobo_bot_nav_sim.gif)
 - to just build map of the world with slam run:
   ```shell
   source ~/<ros_ws>/install/setup.bash
