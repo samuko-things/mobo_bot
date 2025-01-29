@@ -5,7 +5,7 @@ This is an an open-source differential drive ROS2-based educational robot (simil
 <br/>
 This will ensure the longevity and future of open-source robotics in Nigeria and Africa, as well as the world, by aiding the learning and building of advanced mobile robots, leveraging the use of the ROS2 and Arduino Frameworks.
 <br/>
-- It uses the [EPMC module]() and [EIMU Module]() for its base control.
+- It uses the [EPMC module](https://github.com/robocre8/epmc_documentation) and [EIMU Module](https://github.com/robocre8/eimu_documentation) for its base control.
 - It has a gazebo ign simulation environment where algorithms can be tested before being implemented on the robot.
 - It is both easy to work with and build.
 - Learning robotics has never been more easy.
