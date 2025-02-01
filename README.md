@@ -17,7 +17,7 @@ This will ensure the longevity and future of open-source robotics in Nigeria and
 
 ![mobo_bot_sim](./docs/mobo_bot_nav_sim.gif)
 
-- To Simulate the **mobo_bot** on you **dev-PC** follow this [mobo_bot_sim tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/MOBO_BOT_SIM_README.md)
+- To Simulate the **mobo_bot** on you **dev-PC** follow this [mobo_bot_sim tutorial](https://github.com/robocre8/mobo_bot/blob/humble/MOBO_BOT_SIM_README.md)
 
 #
 
@@ -30,4 +30,4 @@ the **mobo_bot_base** package is meant to run on the Raspberry Pi 4 on the robot
 
 ![mobo_bot_base](./docs/mobo_bot_slam.gif)
 
-- to get started with the actual physical **mobo_bot** robot (which uses the Raspberry Pi 4), follow this [mobo_bot_base tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/MOBO_BOT_BASE_README.md)
+- to get started with the actual physical **mobo_bot** robot (which uses the Raspberry Pi 4), follow this [mobo_bot_base tutorial](https://github.com/robocre8/mobo_bot/blob/humble/MOBO_BOT_BASE_README.md)
