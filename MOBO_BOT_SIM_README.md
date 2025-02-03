@@ -1,7 +1,7 @@
 ## SETUP MOBO_BOT_SIM ON YOUR DEV PC
 > [!NOTE]
 > Your Dev PC must be running **Ubuntu 22.04** and **ros-humble-desktop** with **gazebo igintion fortress**.
-> You can follow this [tutorial]() to install **ros-humble-desktop** on **PC**
+> You can follow this [tutorial](https://robocre8.gitbook.io/robocre8/tutorials/how-to-install-ros2-humble-desktop-on-pc-full-install) to install **ros-humble-desktop** on **PC**
 > Ignition gazebo would be installed as you follow the installation process below.
 
 #
@@ -23,7 +23,7 @@
 - cd into the src folder of your <ros_ws> and download the mobo_bot packages
   ```shell
   cd ~/<ros_ws>/src
-  git clone https://github.com/robocre8/mobo_bot.git
+  git clone -b humble https://github.com/robocre8/mobo_bot.git
   ```
 
 - cd into the mobo_bot/mobo_bot_base folder and add a `COLCON_IGNORE` file to the mobo_bot_base package to prevent the running of mobo_bot_base
@@ -97,6 +97,7 @@
   source ~/<ros_ws>/install/setup.bash
   ros2 launch mobo_bot_sim slam_mapping.launch.py
   ```
+  then drive the robot around with teleop
   >NOTE: whenever you build a new map you can save it using the command below:
   >```shell
   >   ros2 run nav2_map_server map_saver_cli -f /path/to/save/<map_name>  # Saves the current map to the specified path and file name
@@ -113,12 +114,14 @@
   source ~/<ros_ws>/install/setup.bash
   ros2 launch mobo_bot_sim amcl.launch.py
   ```
+  then drive the robot around with teleop
 
 - to tryout the 2D navigation with simulation (using the existing world and map):
   ```shell
   source ~/<ros_ws>/install/setup.bash
   ros2 launch mobo_bot_sim nav_bringup.launch.py
   ```
+  use the Nav2Goal button to move the robot from point to point.
 > NOTE: change slam parameter in the launch file to 'True' to use 2D navigation with slam mapping
 
 #
