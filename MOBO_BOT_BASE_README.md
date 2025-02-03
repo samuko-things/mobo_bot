@@ -1,7 +1,7 @@
 ## MANUAL MOBO_BOT_BASE CONTROL SETUP (ON THE RASPBERRY PI 4B)
 > [!NOTE]
 > mobo_bot uses **RaspberryPi 4B** microcomputer running **Ubuntu 22.04** and **ros-humble-base**.
-> You can follow this [tutorial](https://samukothings.com/how-to-install-ros2-humble-on-raspberry-pi-4/) to install **ros-humble-base** on **RaspberryPi 4B**
+> You can follow this [tutorial](https://robocre8.gitbook.io/robocre8/tutorials/how-to-install-ros2-humble-base-on-raspberry-pi-4b-full-install) to install **ros-humble-base** on **RaspberryPi 4B** with **colcon** and **rosdep**
 
 ![mobo_bot_amcl](./docs//mobo_bot_amcl.gif)
 
@@ -13,14 +13,6 @@
   ```shell
   sudo apt-get update
   sudo apt install libserial-dev
-  ```
-
-- install `rosdep` so you can install necessary ros related dependencies for the package.
-  ```shell
-  sudo apt-get update
-  sudo apt install python3-rosdep2
-  sudo rosdep init
-  rosdep update
   ```
 
 #
@@ -100,11 +92,29 @@
   ```
   > you should see a <value> (if the module is connected and seen by the computer), your serial port would be -> /dev/serial/by-path/<value>. for more info visit this tutorial from [ArticulatedRobotics](https://www.youtube.com/watch?v=eJZXRncGaGM&list=PLunhqkrRNRhYAffV8JDiFOatQXuU-NnxT&index=8)
 
-  > for the EPMC (i.e **L298N EPMC MODULE**), go to the mobo_bot/mobo_bot_description/urdf/**`epmc_ros2_control.xacro`** file and change the `port` parameter to the port value gotten
+  > **for the EPMC** (i.e **L298N EPMC MODULE**), go to the `mobo_bot/mobo_bot_description/urdf/`**`epmc_ros2_control.xacro`** file and change the `port` parameter to the port value gotten
 
-  > for the EIMU (i.e **MPU9250 EIMU MODULE**), go to the mobo_bot/mobo_bot_base/**`eimu_ros_start_params.yaml`** file and change the `serial_port` parameter to the port value gotten. you can also change the `publish_frequency` to maybe 20Hz
+  > **for the EIMU** (i.e **MPU9250 EIMU MODULE**), go to the `mobo_bot/mobo_bot_base/`**`eimu_ros_start_params.yaml`** file and change the `port` parameter to the port value gotten. you can also change the `publish_frequency` to maybe 20Hz
 
-  > for the Lidar, go to the mobo_bot/mobo_bot_base/launch/**`robot.launch.py`** file and change the `serial_port` parameter for the lidar Node to the port value gotten.
+  > **for the Lidar**, go to the `mobo_bot/mobo_bot_base/launch/`**`robot.launch.py`** file and change the `serial_port` parameter for the lidar Node to the port value gotten.
+  > ````
+  > lidar_node = Node(
+  >     package='rplidar_ros',
+  >     executable='rplidar_node',
+  >     name='rplidar_node',
+  >     parameters=[{'channel_type': 'serial',
+  >                   'serial_port': '/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1.2:1.0-port0',
+  >                   'serial_baudrate': 115200,
+  >                   'frame_id': 'lidar',
+  >                   'inverted': False,
+  >                   'angle_compensate': True,
+  >                   'scan_mode': 'Sensitivity'}
+  >                   ],
+  >     condition=IfCondition(use_lidar),
+  >     remappings=[("/scan", "/lidar/scan")],
+  >     output='screen'
+  > )
+  > ````
 
 - build your <ros_ws>
   ```shell
@@ -118,16 +128,17 @@
   ```
 
 > [!NOTE]
-> You can further edit the parameters of the yaml iles in the mobo_bot_base packge config folders
+> You can further edit the parameters of the .yaml files in the mobo_bot_base package config folders
 
 
 #
 
 ### Clone and Build The mobo_bot on your dev-PC connected to the raspberry PI on the mobo_bot robot
 
-- pls follow the [mobo_bot_sim tutorial](https://github.com/samuko-things-company/mobo_bot/blob/humble/MOBO_BOT_SIM_README.md) for dev-PC
-- as you'll basiclly be using the mobo_bot_rviz package on your dev-PC to vizualize the robot.
+- pls follow the [mobo_bot_sim tutorial](https://github.com/robocre8/mobo_bot/blob/humble/MOBO_BOT_SIM_README.md) for dev-PC
+- as you'll basically be using the mobo_bot_rviz package on your dev-PC to visualize the robot.
 
+#
 
 ### Run the mobo_bot_base
 
