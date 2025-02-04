@@ -72,7 +72,7 @@
 - go back to the `src` folder of your <ros_ws> and download rplidar_test launch file from robocre8 (just for testing the rplidar_A1)
   ```shell
   cd ~/<ros_ws>/src
-  git clone -b https://github.com/robocre8/rplidar_test.git
+  git clone -b humble https://github.com/robocre8/rplidar_test.git
   ```
 #
 
