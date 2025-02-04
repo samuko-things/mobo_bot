@@ -17,7 +17,7 @@ def generate_launch_description():
   nav_param_file_name = 'nav2_bringup_params.yaml'
   nav_param_file_path = os.path.join(base_pkg_path, 'config', nav_param_file_name)
 
-  map_file_name = 'my_map.yaml'
+  map_file_name = 'test_map.yaml'
   map_yaml_path = os.path.join(base_pkg_path, 'map', map_file_name)
 
 

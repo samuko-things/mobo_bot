@@ -14,10 +14,10 @@ def generate_launch_description():
   nav2_bringup_pkg_path = get_package_share_directory('nav2_bringup')
 
   # Set the path to the nav param file
-  nav_param_file_name = 'nav2_bringup_params.yaml'
+  nav_param_file_name = 'nav2_bringup_params_copy.yaml'
   nav_param_file_path = os.path.join(base_pkg_path, 'config', nav_param_file_name)
 
-  map_file_name = 'my_map.yaml'
+  map_file_name = 'test_map.yaml'
   map_yaml_path = os.path.join(base_pkg_path, 'map', map_file_name)
 
 
@@ -37,12 +37,12 @@ def generate_launch_description():
   
   declare_launch_robot_cmd = DeclareLaunchArgument(
     'launch_robot',
-    default_value= 'False',
+    default_value= 'True',
     description='whether to run simulation or not')
   
   declare_use_ekf_cmd = DeclareLaunchArgument(
       name='use_ekf',
-      default_value='False',
+      default_value='True',
       description='fuse odometry and imu data if true')
   
   declare_use_lidar_cmd = DeclareLaunchArgument(
