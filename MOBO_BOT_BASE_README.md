@@ -142,7 +142,7 @@
 
 ### Run the mobo_bot_base
 
-![mobo_bot_base_drive](./docs//mobo_bot_drive.gif)
+![mobo_bot_base_drive](./docs/mobo_bot_drive_test.gif)
 
 - on the Raspberry Pi 4b, open a new terminal and start the mobo_bot_base
   ```shell
