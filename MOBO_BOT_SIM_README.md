@@ -11,7 +11,14 @@
   ```shell
   pip3 install pynput
   ```
-
+  
+- install and setup Cyclone DDS on your PC (if you don't have it installed yet).
+  ```shell
+  sudo apt install ros-humble-rmw-cyclonedds-cpp
+  export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+  echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
+  ```
+  
 - create your <ros_ws> in the home dir. (replace <ros_ws> with your workspace name)
   ```shell
   mkdir -p ~/<ros_ws>/src
