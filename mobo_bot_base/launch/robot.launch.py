@@ -167,7 +167,7 @@ def generate_launch_description():
     )
 
     camera_node = Node(
-        package='opencv_ros_camera_cpp',
+        package='opencv_ros_camera',
         executable='camera_publisher',
         name='camera_publisher',
         output='screen',
