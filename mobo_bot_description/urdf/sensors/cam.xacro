@@ -41,11 +41,11 @@
 
         <joint name="${base_name}_optical_joint" type="fixed">
             <parent link="${base_name}"/>
-            <child link="${base_name}_optical_link"/>
+            <child link="${base_name}_optical"/>
             <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
         </joint>
 
-        <link name="${base_name}_optical_link"/>
+        <link name="${base_name}_optical"/>
 
     </xacro:macro>
         

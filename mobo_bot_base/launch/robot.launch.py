@@ -18,12 +18,32 @@ def generate_launch_description():
 
     # Launch configuration variables specific to simulation
     use_ekf = LaunchConfiguration('use_ekf')
+    use_eimu = LaunchConfiguration('use_eimu')
+    test_eimu = LaunchConfiguration('test_eimu')
+    use_epmc = LaunchConfiguration('use_epmc')
     odom_topic = LaunchConfiguration('odom_topic')
     use_lidar = LaunchConfiguration('use_lidar')
+    use_camera = LaunchConfiguration('use_camera')
 
+
+    declare_use_epmc_cmd = DeclareLaunchArgument(
+      name='use_epmc',
+      default_value='True',
+      description='start EPMC with base control')
+    
+    declare_use_eimu_cmd = DeclareLaunchArgument(
+      name='use_eimu',
+      default_value='True',
+      description='start IMU')
+    
+    declare_test_eimu_cmd = DeclareLaunchArgument(
+      name='test_eimu',
+      default_value='False',
+      description='test IMU by publishing on map frame')
+    
     declare_use_ekf_cmd = DeclareLaunchArgument(
       name='use_ekf',
-      default_value='False',
+      default_value='True',
       description='fuse odometry and imu data if true')
 
     declare_odom_topic_cmd = DeclareLaunchArgument(
@@ -33,14 +53,20 @@ def generate_launch_description():
     
     declare_lidar_cmd = DeclareLaunchArgument(
       name='use_lidar',
-      default_value='False',
+      default_value='True',
       description='use rplidar A1 if true')
+    
+    declare_camera_cmd = DeclareLaunchArgument(
+      name='use_camera',
+      default_value='True',
+      description='use camera if true')
     
     # create needed nodes or launch files
     rsp_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(description_pkg_path,'launch','rsp.launch.py')]), 
         launch_arguments={'use_sim_time': 'False',
-                          'use_simulation': 'False'}.items())
+                          'use_simulation': 'False'}.items(),
+        condition=IfCondition(use_epmc))
     
 
     robot_controllers = os.path.join(base_pkg_path,'config','epmc_diff_drive_controller.yaml')
@@ -52,7 +78,7 @@ def generate_launch_description():
         executable="ros2_control_node",
         parameters=[robot_controllers],
         output="both",
-        condition=IfCondition(use_ekf),
+        condition=IfCondition(PythonExpression([use_epmc, ' and ', use_ekf])),
         remappings=[
             ("~/robot_description", "/robot_description"),
             ("/epmc_diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
@@ -65,7 +91,7 @@ def generate_launch_description():
         executable="ros2_control_node",
         parameters=[robot_controllers],
         output="both",
-        condition=UnlessCondition(use_ekf),
+        condition=IfCondition(PythonExpression([use_epmc, ' and not ', use_ekf])),
         remappings=[
             ("~/robot_description", "/robot_description"),
             ("/epmc_diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
@@ -77,12 +103,14 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster"],
+        condition=IfCondition(use_epmc)
     )
 
     epmc_diff_drive_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["epmc_diff_drive_controller"],
+        condition=IfCondition(use_epmc)
     )    
 
     # Delay start of robot_controller after `joint_state_broadcaster`
@@ -95,15 +123,17 @@ def generate_launch_description():
 
 
     eimu_ros_config_file = os.path.join(base_pkg_path,'config','eimu_ros_start_params.yaml')
+
     eimu_ros_node = Node(
         package='eimu_ros',
         executable='eimu_ros',
         name='eimu_ros',
         output='screen',
         parameters=[
-            eimu_ros_config_file
+            eimu_ros_config_file,
+            {'publish_tf_on_map_frame': test_eimu}
         ],
-        condition=IfCondition(use_ekf)
+        condition=IfCondition(use_eimu)
     )
 
     ekf_config_path = os.path.join(base_pkg_path,'config','ekf.yaml')
@@ -115,7 +145,7 @@ def generate_launch_description():
         parameters=[
             ekf_config_path
         ],
-        condition=IfCondition(use_ekf),
+        condition=IfCondition(PythonExpression([use_eimu, ' and ', use_ekf])),
         remappings=[("odometry/filtered", odom_topic)]
     )
     
@@ -124,7 +154,7 @@ def generate_launch_description():
         executable='rplidar_node',
         name='rplidar_node',
         parameters=[{'channel_type': 'serial',
-                      'serial_port': '/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.1.2:1.0-port0',
+                      'serial_port': '/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.2.2:1.0-port0',
                       'serial_baudrate': 115200,
                       'frame_id': 'lidar',
                       'inverted': False,
@@ -136,13 +166,56 @@ def generate_launch_description():
         output='screen'
     )
 
+    camera_node = Node(
+        package='opencv_ros_camera',
+        executable='camera_publisher',
+        name='camera_publisher',
+        output='screen',
+        parameters=[{'frame_id': "camera_optical",
+                      'port_no': 0,
+                      'frame_width': 320,
+                      'frame_height': 240,
+                      'compression_format': "jpeg", # you can also use "jpeg"
+                      'publish_frequency': 30.0}
+                    ],
+        condition=IfCondition(use_camera),
+    )
+
+    # device_vid_num = 0
+    # camera_link_name = 'camera_optical'
+    # camera_frame_width = 640
+    # camera_frame_height = 480
+
+    # camera_node = Node(
+    #         package='v4l2_camera',
+    #         executable='v4l2_camera_node',
+    #         output='screen',
+    #         parameters=[{
+    #           'video_device': f'/dev/video{device_vid_num}',
+    #           'camera_frame_id': camera_link_name,
+    #           'image_size': [camera_frame_width,camera_frame_height],
+    #         }],
+    #         remappings = [
+    #             ('image_raw', f'{camera_link_name}/image_raw'),
+    #             ('image_raw/compressed', f'{camera_link_name}/image_raw/compressed'),
+    #             ('image_raw/compressedDepth', f'{camera_link_name}/image_raw/compressedDepth'),
+    #             ('image_raw/theora', f'{camera_link_name}/image_raw/theora'),
+    #             ('camera_info', f'{camera_link_name}/camera_info'),
+    #         ],
+    #         condition=IfCondition(use_camera)
+    #     )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
     # add the necessary declared launch arguments to the launch description
     ld.add_action(declare_use_ekf_cmd)
+    ld.add_action(declare_use_eimu_cmd)
+    ld.add_action(declare_test_eimu_cmd)
+    ld.add_action(declare_use_epmc_cmd)
     ld.add_action(declare_odom_topic_cmd)
     ld.add_action(declare_lidar_cmd)
+    ld.add_action(declare_camera_cmd)
     
 
     # Add the nodes to the launch description
@@ -154,5 +227,6 @@ def generate_launch_description():
     ld.add_action(eimu_ros_node)
     ld.add_action(ekf_node)
     ld.add_action(lidar_node)
+    ld.add_action(camera_node)
 
     return ld      # return (i.e send) the launch description for excecution

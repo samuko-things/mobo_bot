@@ -17,7 +17,7 @@ def generate_launch_description():
   nav_param_file_name = 'nav2_bringup_params.yaml'
   nav_param_file_path = os.path.join(base_pkg_path, 'config', nav_param_file_name)
 
-  map_file_name = 'my_map.yaml'
+  map_file_name = 'test_map.yaml'
   map_yaml_path = os.path.join(base_pkg_path, 'map', map_file_name)
 
 
@@ -25,8 +25,6 @@ def generate_launch_description():
 
   # Launch configuration variables specific to simulation
   use_sim_time = LaunchConfiguration('use_sim_time')
-  use_ekf = LaunchConfiguration('use_ekf')
-  use_lidar = LaunchConfiguration('use_lidar')
   launch_robot = LaunchConfiguration('launch_robot')
  
      
@@ -38,27 +36,12 @@ def generate_launch_description():
   declare_launch_robot_cmd = DeclareLaunchArgument(
     'launch_robot',
     default_value= 'False',
-    description='whether to run simulation or not')
-  
-  declare_use_ekf_cmd = DeclareLaunchArgument(
-      name='use_ekf',
-      default_value='False',
-      description='fuse odometry and imu data if true')
-  
-  declare_use_lidar_cmd = DeclareLaunchArgument(
-      name='use_lidar',
-      default_value='True',
-      description='use rplidar if true')
-
+    description='whether to run robot or not')
   
   robot_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 [os.path.join(base_pkg_path,'launch','robot.launch.py')]
-            ), 
-            launch_arguments={
-              'use_lidar': use_lidar,
-              'use_ekf': use_ekf,
-            }.items(),
+            ),
             condition=IfCondition(launch_robot)
   )
 
@@ -87,8 +70,6 @@ def generate_launch_description():
  
   # add the necessary declared launch arguments to the launch description
   ld.add_action(declare_use_sim_time_cmd)
-  ld.add_action(declare_use_ekf_cmd)
-  ld.add_action(declare_use_lidar_cmd)
   ld.add_action(declare_launch_robot_cmd)
  
   # Add the nodes to the launch description
