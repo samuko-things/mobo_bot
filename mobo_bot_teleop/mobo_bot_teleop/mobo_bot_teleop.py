@@ -202,27 +202,27 @@ class MoboBotTeleop(Node):
         self.reset_speed()
 
       elif key.char == 'Q' or key.char == 'q':
-        self.default_v += 0.05
+        self.default_v += 0.025
         if self.default_v > 1.0:
           self.default_v = 1.0    
         print('new_speed:\tv(m/s)=%f\tw(rad/s)=%f' % (self.default_v, self.default_w))
 
       elif key.char == 'Z' or key.char == 'z':
-        self.default_v -= 0.05
+        self.default_v -= 0.025
         if self.default_v < 0.05:
           self.default_v = 0.05
         print('new_speed:\tv(m/s)=%f\tw(rad/s)=%f' % (self.default_v, self.default_w))
 
       elif key.char == 'W' or key.char == 'w':
-        self.default_w += 0.1
+        self.default_w += 0.05
         if self.default_w > 3.0:
           self.default_w = 3.0
         print('new_speed:\tv(m/s)=%f\tw(rad/s)=%f' % (self.default_v, self.default_w))
 
       elif key.char == 'X' or key.char == 'x':
-        self.default_w -= 0.1
-        if self.default_w < 0.1:
-          self.default_w = 0.1
+        self.default_w -= 0.05
+        if self.default_w < 0.2:
+          self.default_w = 0.2
         print('new_speed:\tv(m/s)=%f\tw(rad/s)=%f' % (self.default_v, self.default_w))
 
 
