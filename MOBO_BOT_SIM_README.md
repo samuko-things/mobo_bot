@@ -1,4 +1,4 @@
-## SETUP MOBO_BOT_SIM ON YOUR DEV PC
+## Run MoboBot Ignition Gazebo Simulation on your DevPC
 > [!NOTE]
 > Your Dev PC must be running **Ubuntu 22.04** and **ros-humble-desktop** with **gazebo igintion fortress**.
 > You can follow this [tutorial](https://robocre8.gitbook.io/robocre8/tutorials/how-to-install-ros2-humble-desktop-on-pc-full-install) to install **ros-humble-desktop** on **PC**
@@ -27,15 +27,21 @@
   source ~/<ros_ws>/install/setup.bash
   ```
 
-- cd into the src folder of your <ros_ws> and download the mobo_bot packages
+- cd into the src folder of your <ros_ws> and download the **MoboBot** packages
   ```shell
   cd ~/<ros_ws>/src
   git clone -b humble https://github.com/robocre8/mobo_bot.git
   ```
 
-- cd into the mobo_bot/mobo_bot_base folder and add a `COLCON_IGNORE` file to the mobo_bot_base package to prevent the running of mobo_bot_base
+- cd into the mobo_bot/mobo_bot_base folder and add a `COLCON_IGNORE` file to the mobo_bot_base package to prevent the running of mobo_bot_base (this package is only required for working with the actual **MoboBot** robot)
   ```shell
   cd ~/<ros_ws>/src/mobo_bot/mobo_bot_base
+  touch COLCON_IGNORE
+  ```
+  
+- cd into the mobo_bot/mobo_bot_hw_test folder and add a `COLCON_IGNORE` file to the mobo_bot_hw_test package to prevent the running of mobo_bot_hw_test (this package is only required for working with the actual **MoboBot** robot)
+  ```shell
+  cd ~/<ros_ws>/src/mobo_bot/mobo_bot_hw_test
   touch COLCON_IGNORE
   ```
 
@@ -65,19 +71,19 @@
   source ~/<ros_ws>/install/setup.bash
   ros2 launch mobo_bot_description rsp.launch.py use_joint_state_pub:=true
   ```
-- in a differnt terminal, run the rviz launch file to view the robot
+- in a different terminal, run the rviz launch file to view the robot
   ```shell
   source ~/<ros_ws>/install/setup.bash
   ros2 launch mobo_bot_rviz rsp.launch.py
   ```
-- To view transform tree, in a differnt terminal (while robot state publisher is still runing), run the following
+- To view the transform tree, in a different terminal (while the robot state publisher is still running), run the following
   ```shell
   ros2 run rqt_tf_tree rqt_tf_tree
   ```
 
 #
 
-### Run the mobo_bot_sim
+### Run the mobo_bot_sim package
 ![mobo_bot_slam](./docs/mobo_bot_slam_sim.gif)
 - on your dev-PC, open a new terminal and start the mobo_bot_sim 
   ```shell
@@ -123,7 +129,7 @@
   ```
   then drive the robot around with teleop
 
-- to tryout the 2D navigation with simulation (using the existing world and map):
+- to try the 2D navigation with simulation (using the existing world and map):
   ```shell
   source ~/<ros_ws>/install/setup.bash
   ros2 launch mobo_bot_sim nav_bringup.launch.py
@@ -133,8 +139,8 @@
 
 #
 
-### Drive your robot with teleop
-- in a differnt terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
+### Drive your robot with a special arrow-key teleop
+- in a different terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
   ```shell
   source ~/<ros_ws>/install/setup.bash
   ros2 run mobo_bot_teleop mobo_bot_teleop
