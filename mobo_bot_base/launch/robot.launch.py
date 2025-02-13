@@ -181,30 +181,6 @@ def generate_launch_description():
         condition=IfCondition(use_camera),
     )
 
-    # device_vid_num = 0
-    # camera_link_name = 'camera_optical'
-    # camera_frame_width = 640
-    # camera_frame_height = 480
-
-    # camera_node = Node(
-    #         package='v4l2_camera',
-    #         executable='v4l2_camera_node',
-    #         output='screen',
-    #         parameters=[{
-    #           'video_device': f'/dev/video{device_vid_num}',
-    #           'camera_frame_id': camera_link_name,
-    #           'image_size': [camera_frame_width,camera_frame_height],
-    #         }],
-    #         remappings = [
-    #             ('image_raw', f'{camera_link_name}/image_raw'),
-    #             ('image_raw/compressed', f'{camera_link_name}/image_raw/compressed'),
-    #             ('image_raw/compressedDepth', f'{camera_link_name}/image_raw/compressedDepth'),
-    #             ('image_raw/theora', f'{camera_link_name}/image_raw/theora'),
-    #             ('camera_info', f'{camera_link_name}/camera_info'),
-    #         ],
-    #         condition=IfCondition(use_camera)
-    #     )
-
     # Create the launch description and populate
     ld = LaunchDescription()
 
