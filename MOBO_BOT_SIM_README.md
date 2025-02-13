@@ -139,7 +139,7 @@
 
 #
 
-### Drive your robot with a special arrow-key teleop
+### Drive MoboBot with a special arrow-key teleop
 - in a different terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
   ```shell
   source ~/<ros_ws>/install/setup.bash
