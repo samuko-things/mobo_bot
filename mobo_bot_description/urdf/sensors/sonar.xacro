@@ -1,14 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-
-    <!-- <xacro:arg name="sonar_visual"   default="false"/> -->
-    <!-- <xacro:property name="deg2rad" value="0.017460317"/>
-    <xacro:property name="scan_angle" value="1"/> -->
-
-
     <xacro:macro name="insert_sonar" params="base_name parent_name x y z mass">
-
         <joint name="${base_name}_joint" type="fixed">
             <parent link="${parent_name}"/>
             <child link="${base_name}"/>
@@ -54,7 +47,6 @@
         </link>
     </xacro:macro>
 
-  
 </robot>
 
 

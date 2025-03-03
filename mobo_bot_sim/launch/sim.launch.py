@@ -13,6 +13,9 @@ from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch.event_handlers import OnProcessExit
+
+from nav2_common.launch import ReplaceString
+
  
 def generate_launch_description():
   # Set the path to this package.
@@ -20,10 +23,8 @@ def generate_launch_description():
   rviz_pkg_path = get_package_share_directory('mobo_bot_rviz')
   sim_pkg_path = get_package_share_directory('mobo_bot_sim') 
 
-  # robot name
-  robot_name = 'mobo_bot'
   # initial robot pose
-  x_pos = 0.0; y_pos = 0.0; z_pos = 0.0; yaw = 0.0
+  x_pos = 0.0; y_pos = 0.0; z_pos = 0.5; yaw = 0.0
 
   # Set the path to the world file
   world_file_name = 'empty.sdf'
@@ -63,6 +64,7 @@ def generate_launch_description():
   gz_verbosity = LaunchConfiguration('gz_verbosity')
   use_ekf = LaunchConfiguration('use_ekf')
   odom_topic = LaunchConfiguration('odom_topic')
+  robot_name = LaunchConfiguration('robot_name')
  
   declare_headless_cmd = DeclareLaunchArgument(
     name='headless',
@@ -94,15 +96,10 @@ def generate_launch_description():
     default_value= '3',
     description='Verbosity level for Ignition Gazebo (0~4).')
   
-  declare_use_ekf_cmd = DeclareLaunchArgument(
-      name='use_ekf',
-      default_value='True',
-      description='fuse odometry and imu data if true')
-  
-  declare_odom_topic_cmd = DeclareLaunchArgument(
-      name='odom_topic',
-      default_value='odom',
-      description='topic to remap /odometry/filtered to')
+  declare_robot_name_cmd = DeclareLaunchArgument(
+      name='robot_name',
+      default_value='mobo_bot',
+      description='name of the robot')
   #------------------------------------------------------------
 
 
@@ -112,7 +109,7 @@ def generate_launch_description():
           [os.path.join(description_pkg_path,'launch','rsp.launch.py')]
       ), 
       launch_arguments={'use_sim_time': use_sim_time,
-                        'use_simulation': 'True'}.items()
+                        'run_gz_sim': 'True'}.items()
   )
 
   rviz_node = Node(
@@ -140,19 +137,20 @@ def generate_launch_description():
   )
         
 
-  bridge = Node(
-      package="ros_gz_bridge",
-      executable="parameter_bridge",
-      arguments=[
-          "lidar/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan",
-          "/imu/data@sensor_msgs/msg/Imu[ignition.msgs.IMU",
-          "/sky_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
-          # "/camera@sensor_msgs/msg/Image@ignition.msgs.Image",
-          # "/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo",
-          # Clock message is necessary for the diff_drive_controller to accept commands https://github.com/ros-controls/gz_ros2_control/issues/106
-          "/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
-      ],
-      output="screen",
+  bridge_config_file_path = os.path.join(sim_pkg_path, 'config', 'gz_bridge_config.yaml')
+  # A <entity> placeholder is used in the bridge config file to be replaced by the entity name.
+  bridge_config = ReplaceString(
+      source_file=bridge_config_file_path,
+      replacements={'<entity>': robot_name},
+  )
+
+  bridge_node = Node(
+      package='ros_gz_bridge',
+      executable='parameter_bridge',
+      output='screen',
+      parameters=[{
+          'config_file': bridge_config
+      }],
   )
   
   spawn_entity_in_ign = Node(
@@ -162,7 +160,6 @@ def generate_launch_description():
       arguments=[
           '-topic', 'robot_description', 
           '-name', robot_name,
-          '-allow_renaming', 'true',
           '-x', str(x_pos),
           '-y', str(y_pos),
           '-z', str(z_pos),
@@ -170,76 +167,6 @@ def generate_launch_description():
           ],
       parameters=[{"use_sim_time": use_sim_time}]
   )
-
-  
-  load_joint_state_broadcaster = ExecuteProcess(
-      cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-            'joint_state_broadcaster'],
-      # shell=False,
-      output="screen",
-  )
-
-  load_diff_drive_base_controller = ExecuteProcess(
-      cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-            'diff_drive_base_controller'],
-      # shell=False,
-      output="screen",
-  )
-    
-  start_joint_state_controller_after_spawning_entity = RegisterEventHandler(
-                                      event_handler=OnProcessExit(
-                                          target_action=spawn_entity_in_ign,
-                                          on_exit=[load_joint_state_broadcaster],
-                                      )
-                                  )
-  start_diff_drive_base_control_after_joint_state_Controller = RegisterEventHandler(
-                                      event_handler=OnProcessExit(
-                                          target_action=load_joint_state_broadcaster,
-                                          on_exit=[load_diff_drive_base_controller],
-                                      )
-                                  )
-
-  relay_odom = Node(
-        name="relay_odom",
-        package="topic_tools",
-        executable="relay",
-        parameters=[
-            {
-                "input_topic": "/diff_drive_base_controller/odom",
-                "output_topic": "/wheel/odometry",
-            }
-        ],
-        output="screen",
-    )
-
-  relay_cmd_vel = Node(
-        name="relay_cmd_vel",
-        package="topic_tools",
-        executable="relay",
-        parameters=[
-            {
-                "input_topic": "/cmd_vel",
-                "output_topic": "/diff_drive_base_controller/cmd_vel_unstamped",
-            }
-        ],
-        output="screen",
-    )
-  
-  # Localize using odometry and IMU data. 
-  # It can be turned off because the navigation stack uses AMCL with lidar data for localization
-  ekf_config_path = os.path.join(sim_pkg_path,'config','ekf.yaml')
-  ekf_node = Node(
-          package='robot_localization',
-          executable='ekf_node',
-          name='ekf_filter_node',
-          output='screen',
-          parameters=[
-              ekf_config_path,
-              {"use_sim_time": use_sim_time},
-          ],
-          condition=IfCondition(use_ekf),
-          remappings=[("odometry/filtered", odom_topic)]
-      )
   
   # Create the launch description
   ld = LaunchDescription()
@@ -255,21 +182,15 @@ def generate_launch_description():
   ld.add_action(declare_rviz_path_cmd)
   ld.add_action(declare_use_rviz_cmd)
   ld.add_action(declare_gz_verbosity_cmd)
-  ld.add_action(declare_use_ekf_cmd)
-  ld.add_action(declare_odom_topic_cmd)
+  ld.add_action(declare_robot_name_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(rsp_launch)
   ld.add_action(rviz_node)
   ld.add_action(start_ign_gazebo)
   ld.add_action(start_ign_gazebo_headless)
-  ld.add_action(bridge)
+  ld.add_action(bridge_node)
   ld.add_action(spawn_entity_in_ign)
-  ld.add_action(start_joint_state_controller_after_spawning_entity)
-  ld.add_action(start_diff_drive_base_control_after_joint_state_Controller)
-  ld.add_action(relay_odom)
-  ld.add_action(relay_cmd_vel)
-  ld.add_action(ekf_node)
 
  
   return ld

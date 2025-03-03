@@ -19,7 +19,7 @@ def generate_launch_description():
     xacro_file = os.path.join(description_pkg_path,'urdf','robot_urdf.xacro')
 
     # Check if we're told to use sim time
-    use_simulation = LaunchConfiguration('use_simulation')
+    run_gz_sim = LaunchConfiguration('run_gz_sim')
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_joint_state_pub = LaunchConfiguration('use_joint_state_pub')
     
@@ -30,8 +30,8 @@ def generate_launch_description():
         description='Use sim time if true'
     )
 
-    declare_use_simulation_cmd = DeclareLaunchArgument(
-        'use_simulation',
+    declare_run_gz_sim_cmd = DeclareLaunchArgument(
+        'run_gz_sim',
         default_value='False',
         description='Use simulation if true'
     )
@@ -48,7 +48,7 @@ def generate_launch_description():
     # robot_description_xml = doc.toxml()
 
     robot_description_config= Command(['xacro ', xacro_file,
-                                       ' use_simulation:=', use_simulation])
+                                       ' run_gz_sim:=', run_gz_sim])
     robot_description_xml = ParameterValue(robot_description_config, value_type=str)
 
     params = {'robot_description': robot_description_xml, 'use_sim_time': use_sim_time}
@@ -71,7 +71,7 @@ def generate_launch_description():
 
     # add the necessary declared launch arguments to the launch description
     ld.add_action(declare_use_sim_time_cmd)
-    ld.add_action(declare_use_simulation_cmd)
+    ld.add_action(declare_run_gz_sim_cmd)
     ld.add_action(declare_use_joint_state_pub_cmd)
 
     # Add the nodes to the launch description

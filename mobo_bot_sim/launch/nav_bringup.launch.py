@@ -39,8 +39,8 @@ def generate_launch_description():
   world_path = LaunchConfiguration('world_path')
   rviz_path = LaunchConfiguration('rviz_path')
   use_rviz = LaunchConfiguration('use_rviz')
-  use_ekf = LaunchConfiguration('use_ekf')
   launch_sim = LaunchConfiguration('launch_sim')
+  use_slam = LaunchConfiguration('use_slam')
 
  
   declare_headless_cmd = DeclareLaunchArgument(
@@ -73,11 +73,10 @@ def generate_launch_description():
     default_value= 'True',
     description='whether to run sim with rviz or not')
   
-  declare_use_ekf_cmd = DeclareLaunchArgument(
-      name='use_ekf',
+  declare_use_slam_cmd = DeclareLaunchArgument(
+      name='use_slam',
       default_value='True',
-      # default_value='False',
-      description='fuse odometry and imu data if true')
+      description='perform navigation with slam mapping')
   
   
   
@@ -91,7 +90,6 @@ def generate_launch_description():
               'world_path': world_path,
               'use_rviz': use_rviz,
               'rviz_path': rviz_path,
-              'use_ekf': use_ekf,
             }.items(),
             condition=IfCondition(launch_sim)
   )
@@ -107,7 +105,7 @@ def generate_launch_description():
                 [os.path.join(nav2_bringup_pkg_path,'launch','bringup_launch.py')]
             ), 
             launch_arguments={
-              'slam': 'False',
+              'slam': use_slam,
               'map': map_yaml_path,
               'use_sim_time': use_sim_time,
               'params_file': nav_param_file_path
@@ -126,8 +124,8 @@ def generate_launch_description():
   ld.add_action(declare_world_path_cmd)
   ld.add_action(declare_rviz_path_cmd)
   ld.add_action(declare_use_rviz_cmd)
-  ld.add_action(declare_use_ekf_cmd)
   ld.add_action(declare_launch_sim_cmd)
+  ld.add_action(declare_use_slam_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(sim_launch)
