@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
+        - /Odometry1
         - /Odometry1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 549
@@ -76,7 +77,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_optical_link:
+        camera_optical:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -141,7 +142,7 @@ Visualization Manager:
           Value: true
         camera:
           Value: true
-        camera_optical_link:
+        camera_optical:
           Value: true
         castor_wheel:
           Value: false
@@ -150,7 +151,7 @@ Visualization Manager:
         imu:
           Value: true
         left_rim:
-          Value: false
+          Value: true
         left_wheel:
           Value: true
         lidar:
@@ -158,7 +159,7 @@ Visualization Manager:
         odom:
           Value: true
         right_rim:
-          Value: false
+          Value: true
         right_wheel:
           Value: true
         sonar:
@@ -175,7 +176,7 @@ Visualization Manager:
               {}
             chassis:
               camera:
-                camera_optical_link:
+                camera_optical:
                   {}
               imu:
                 {}
@@ -251,10 +252,10 @@ Visualization Manager:
         Axes Length: 1
         Axes Radius: 0.10000000149011612
         Color: 255; 25; 0
-        Head Length: 0.15000000596046448
-        Head Radius: 0.10000000149011612
-        Shaft Length: 0.4000000059604645
-        Shaft Radius: 0.05000000074505806
+        Head Length: 0.10000000149011612
+        Head Radius: 0.05999999865889549
+        Shaft Length: 0.25
+        Shaft Radius: 0.02500000037252903
         Value: Arrow
       Topic:
         Depth: 5
@@ -309,21 +310,26 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -1.544999599456787
-      Class: rviz_default_plugins/TopDownOrtho
+      Class: rviz_default_plugins/Orbit
+      Distance: 12.981121063232422
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
+      Focal Point:
+        X: 0.7855499982833862
+        Y: 0.4058709144592285
+        Z: 1.7022509574890137
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 115.0595932006836
+      Pitch: 0.7947956919670105
       Target Frame: <Fixed Frame>
-      Value: TopDownOrtho (rviz_default_plugins)
-      X: 0
-      Y: 0
+      Value: Orbit (rviz_default_plugins)
+      Yaw: 3.115560531616211
     Saved: ~
 Window Geometry:
   Displays:
@@ -341,5 +347,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 710
-  Y: 94
+  X: 708
+  Y: 41

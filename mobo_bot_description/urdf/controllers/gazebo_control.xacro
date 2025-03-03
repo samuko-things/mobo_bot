@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
     
-    <ros2_control name="IgnitionSystem" type="system">
+  <ros2_control name="IgnitionSystem" type="system">
     <hardware>
       <plugin>ign_ros2_control/IgnitionSystem</plugin>
     </hardware>

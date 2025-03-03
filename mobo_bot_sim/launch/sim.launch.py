@@ -146,7 +146,7 @@ def generate_launch_description():
       arguments=[
           "lidar/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan",
           "/imu/data@sensor_msgs/msg/Imu[ignition.msgs.IMU",
-          "/sky_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
+          # "/sky_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
           # "/camera@sensor_msgs/msg/Image@ignition.msgs.Image",
           # "/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo",
           # Clock message is necessary for the diff_drive_controller to accept commands https://github.com/ros-controls/gz_ros2_control/issues/106
@@ -199,10 +199,25 @@ def generate_launch_description():
                                       )
                                   )
 
-  relay_odom = Node(
+  relay_odom_without_ekf = Node(
         name="relay_odom",
         package="topic_tools",
         executable="relay",
+        condition=UnlessCondition(use_ekf),
+        parameters=[
+            {
+                "input_topic": "/diff_drive_base_controller/odom",
+                "output_topic": odom_topic,
+            }
+        ],
+        output="screen",
+    )
+  
+  relay_odom_with_ekf = Node(
+        name="relay_odom",
+        package="topic_tools",
+        executable="relay",
+        condition=IfCondition(use_ekf),
         parameters=[
             {
                 "input_topic": "/diff_drive_base_controller/odom",
@@ -267,7 +282,8 @@ def generate_launch_description():
   ld.add_action(spawn_entity_in_ign)
   ld.add_action(start_joint_state_controller_after_spawning_entity)
   ld.add_action(start_diff_drive_base_control_after_joint_state_Controller)
-  ld.add_action(relay_odom)
+  ld.add_action(relay_odom_without_ekf)
+  ld.add_action(relay_odom_with_ekf)
   ld.add_action(relay_cmd_vel)
   ld.add_action(ekf_node)
 
