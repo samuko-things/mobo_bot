@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <sdf version="1.8">
-  <world name="collision_test">
+  <world name="gazebo_world">
     <physics name='1ms' type='ignored'>
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1</real_time_factor>
@@ -59,31 +59,6 @@
             <specular>1 1 1 0</specular>
           </material>
         </visual>
-      </link>
-    </model>
-
-    <!-- A camera sensor that looks straight down on the map. -->
-    <model name="sky_cam">
-      <static>true</static>
-      <link name="camera_link">
-        <pose>0 0 10 1.57 1.57 0</pose>
-        <sensor name="sky_cam" type="camera">
-          <camera>
-            <horizontal_fov>1.047</horizontal_fov>
-            <image>
-              <width>1024</width>
-              <height>768</height>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>100</far>
-            </clip>
-          </camera>
-          <always_on>1</always_on>
-          <update_rate>30</update_rate>
-          <visualize>true</visualize>
-          <topic>sky_cam</topic>
-        </sensor>
       </link>
     </model>
 

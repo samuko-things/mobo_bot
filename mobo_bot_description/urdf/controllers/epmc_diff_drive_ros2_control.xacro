@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <ros2_control name="epmc_ros2_control" type="system">
+    <ros2_control name="epmc_diff_drive_ros2_control" type="system">
 
       <hardware>
         <plugin>epmc_hardware_interface/EPMCHardwareInterface</plugin>
@@ -13,8 +13,8 @@
 
       <joint name="left_wheel_joint">
         <command_interface name="velocity">
-            <param name="min">-8.0</param>
-            <param name="max">8.0</param>
+            <param name="min">-10.0</param>
+            <param name="max">10.0</param>
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
@@ -22,8 +22,8 @@
 
       <joint name="right_wheel_joint">
         <command_interface name="velocity">
-            <param name="min">-8.0</param>
-            <param name="max">8.0</param>
+            <param name="min">-10.0</param>
+            <param name="max">10.0</param>
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>

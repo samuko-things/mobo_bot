@@ -65,7 +65,7 @@ def generate_launch_description():
     rsp_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(description_pkg_path,'launch','rsp.launch.py')]), 
         launch_arguments={'use_sim_time': 'False',
-                          'use_simulation': 'False'}.items(),
+                          'run_gz_sim': 'False'}.items(),
         condition=IfCondition(use_epmc))
     
 

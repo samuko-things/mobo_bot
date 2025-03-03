@@ -1,16 +1,17 @@
 <?xml version="1.0"?>
 <robot name="mobo_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:arg name="use_simulation" default="false"/>
+    <xacro:arg name="run_gz_sim" default="false"/>
 
+    <xacro:include filename="$(find mobo_bot_description)/urdf/color_macros.xacro" />
     <xacro:include filename="$(find mobo_bot_description)/urdf/inertia_macros.xacro" />
     <xacro:include filename="$(find mobo_bot_description)/urdf/robot_core.xacro" />
 
-    <xacro:if value="$(arg use_simulation)">
-        <xacro:include filename="$(find mobo_bot_description)/urdf/controllers/gazebo_control.xacro" />
+    <xacro:if value="$(arg run_gz_sim)">
+        <xacro:include filename="$(find mobo_bot_description)/urdf/controllers/gazebo_diff_drive_control.xacro" />
     </xacro:if>
-    <xacro:unless value="$(arg use_simulation)">
-        <xacro:include filename="$(find mobo_bot_description)/urdf/controllers/epmc_ros2_control.xacro" />
+    <xacro:unless value="$(arg run_gz_sim)">
+        <xacro:include filename="$(find mobo_bot_description)/urdf/controllers/epmc_diff_drive_ros2_control.xacro" />
     </xacro:unless>
     
     

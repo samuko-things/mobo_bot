@@ -52,18 +52,14 @@
             <geometry>
                 <cylinder radius="0.005" length="${chassis_height}"/>
             </geometry>
-            <material name="orange">
-                <color rgba="1 0.55 0 1"/>
-            </material>
+            <material name="orange"/>
         </visual>
         <visual>
             <origin xyz="0.05 -0.08 ${chassis_height/2}" rpy="0 0 0"/>
             <geometry>
                 <cylinder radius="0.005" length="${chassis_height}"/>
             </geometry>
-            <material name="orange">
-                <color rgba="1 0.55 0 1"/>
-            </material>
+            <material name="orange"/>
         </visual>
 
         <visual>
@@ -71,18 +67,14 @@
             <geometry>
                 <cylinder radius="0.005" length="${chassis_height}"/>
             </geometry>
-            <material name="orange">
-                <color rgba="1 0.55 0 1"/>
-            </material>
+            <material name="orange"/>
         </visual>
         <visual>
             <origin xyz="-0.1 -0.08 ${chassis_height/2}" rpy="0 0 0"/>
             <geometry>
                 <cylinder radius="0.005" length="${chassis_height}"/>
             </geometry>
-            <material name="orange">
-                <color rgba="1 0.55 0 1"/>
-            </material>
+            <material name="orange"/>
         </visual>
 
         <collision>
@@ -92,9 +84,17 @@
             </geometry>
         </collision>
         <xacro:inertial_box mass="${chassis_mass}" x="${chassis_length}" y="${chassis_width}" z="${chassis_height}">
-            <origin xyz="-0.04 0 ${chassis_height/2}" rpy="0 0 0"/>
+            <origin xyz="-0.06 0 ${chassis_height/2}" rpy="0 0 0"/>
         </xacro:inertial_box>
     </link>
+
+    <xacro:if value="$(arg run_gz_sim)">
+        <gazebo reference="chassis">
+            <visual>
+              <xacro:gz_material_orange/>
+            </visual>
+        </gazebo>
+    </xacro:if>
     
 
 
@@ -107,8 +107,11 @@
         radius="${wheel_radius}"
         thickness="${wheel_width}"/>
 
-    <xacro:if value="$(arg use_simulation)">
+    <xacro:if value="$(arg run_gz_sim)">
         <gazebo reference="left_wheel">
+            <visual>
+              <xacro:gz_material_black/>
+            </visual>
             <mu1>1.0</mu1>
             <mu2>1.0</mu2>
         </gazebo>
@@ -121,6 +124,14 @@
         radius="${wheel_radius}"
         thickness="${wheel_width}"
         spoke_width="0.005"/>
+    
+    <xacro:if value="$(arg run_gz_sim)">
+        <gazebo reference="left_rim">
+            <visual>
+              <xacro:gz_material_red/>
+            </visual>
+        </gazebo>
+    </xacro:if>
 
 
 
@@ -133,8 +144,11 @@
         radius="${wheel_radius}"
         thickness="${wheel_width}"/>
     
-    <xacro:if value="$(arg use_simulation)">
+    <xacro:if value="$(arg run_gz_sim)">
         <gazebo reference="right_wheel">
+            <visual>
+              <xacro:gz_material_black/>
+            </visual>
             <mu1>1.0</mu1>
             <mu2>1.0</mu2>
         </gazebo>
@@ -147,6 +161,14 @@
         radius="${wheel_radius}"
         thickness="${wheel_width}"
         spoke_width="0.005"/>
+    
+    <xacro:if value="$(arg run_gz_sim)">
+        <gazebo reference="right_rim">
+            <visual>
+              <xacro:gz_material_red/>
+            </visual>
+        </gazebo>
+    </xacro:if>
 
 
 
@@ -179,8 +201,11 @@
         </xacro:inertial_sphere>
     </link>
 
-    <xacro:if value="$(arg use_simulation)">
+    <xacro:if value="$(arg run_gz_sim)">
         <gazebo reference="castor_wheel">
+            <visual>
+              <xacro:gz_material_silver/>
+            </visual>
             <mu1>0.001</mu1>
             <mu2>0.001</mu2>
         </gazebo>
@@ -196,28 +221,36 @@
         x="0.01" y="0" z="${chassis_height+lidar_z_offset}"
         mass="0.1"/>
 
-    <xacro:if value="$(arg use_simulation)">
+    <xacro:if value="$(arg run_gz_sim)">
       <gazebo reference="lidar">
+        <visual>
+          <xacro:gz_material_grey/>
+        </visual>
         <sensor name="lidar" type="gpu_lidar">
-          <pose> 0 0 0 0 0 0 </pose>
-          <ignition_frame_id>lidar</ignition_frame_id>
-          <topic>lidar/scan</topic>
-          <always_on>true</always_on>
-          <visualize>true</visualize>
-          <update_rate>10</update_rate>
+          <gz_frame_id>lidar</gz_frame_id>
           <ray>
             <scan>
-                <horizontal>
-                    <samples>360</samples>
-                    <min_angle>${-pi*2}</min_angle>
-                    <max_angle>${pi*2}</max_angle>
-                </horizontal>
+              <horizontal>
+                <samples>360</samples>
+                <min_angle>${-pi*2}</min_angle>
+                <max_angle>${pi*2}</max_angle>
+                <resolution>1</resolution>
+              </horizontal>
             </scan>
             <range>
-                <min>0.1</min>
-                <max>10.0</max>
+              <min>0.20</min>
+              <max>12.0</max>
+              <resolution>0.01</resolution>
             </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.01</stddev>
+            </noise>
           </ray>
+          <always_on>true</always_on>
+          <visualize>true</visualize>
+          <update_rate>10.0</update_rate>
         </sensor>
       </gazebo>
     </xacro:if>
@@ -230,7 +263,7 @@
         parent_name="chassis" 
         x="0" y="0" z="${chassis_height}"/>
 
-    <xacro:if value="$(arg use_simulation)">
+    <!-- <xacro:if value="$(arg run_gz_sim)">
           <gazebo reference="imu">
             <sensor name="imu" type="imu">
               <ignition_frame_id>imu</ignition_frame_id>
@@ -297,7 +330,7 @@
               </imu>
             </sensor>
         </gazebo>     
-    </xacro:if>
+    </xacro:if> -->
 
 
 
@@ -307,6 +340,14 @@
         parent_name="chassis" 
         x="0.0825" y="0" z="${chassis_height/6}"
         mass="0.005"/>
+
+    <xacro:if value="$(arg run_gz_sim)">
+        <gazebo reference="sonar">
+            <visual>
+              <xacro:gz_material_blue/>
+            </visual>
+        </gazebo>
+    </xacro:if>
 
 
 
@@ -319,15 +360,18 @@
         mass="0.005" tilt_angle="0.00"/> 
 
 
-    <xacro:if value="$(arg use_simulation)">
-        <gazebo reference="camera_optical">
-          <sensor name="camera" type="camera">
-            <ignition_frame_id>camera_optical</ignition_frame_id>
+    <xacro:if value="$(arg run_gz_sim)">
+        <gazebo reference="camera">
+          <visual>
+            <xacro:gz_material_grey/>
+          </visual>
+          <sensor name="camera_optical" type="camera">
+            <gz_frame_id>camera</gz_frame_id>
             <camera>
               <horizontal_fov>1.047</horizontal_fov>
               <image>
-                <width>320</width>
-                <height>240</height>
+                <width>640</width>
+                <height>360</height>
               </image>
               <clip>
                 <near>0.1</near>
@@ -337,7 +381,7 @@
             <always_on>1</always_on>
             <update_rate>30</update_rate>
             <visualize>true</visualize>
-            <topic>camera</topic>
+            <!-- <topic>camera</topic> -->
             <enable_metrics>true</enable_metrics>
           </sensor>
         </gazebo>
