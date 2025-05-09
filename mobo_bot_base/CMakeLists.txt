@@ -7,7 +7,16 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
+add_executable(lidar_angle_filter src/lidar_angle_filter.cpp)
+ament_target_dependencies(lidar_angle_filter rclcpp sensor_msgs)
+
+install(TARGETS
+  lidar_angle_filter
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -21,9 +30,7 @@ endif()
 install(DIRECTORY
     config
     launch
-    map
     DESTINATION share/${PROJECT_NAME}/
 )
-
 
 ament_package()

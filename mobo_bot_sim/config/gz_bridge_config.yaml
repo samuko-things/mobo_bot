@@ -32,7 +32,7 @@
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
 
-- ros_topic_name: "scan"
+- ros_topic_name: "lidar/scan"
   gz_topic_name: "/world/gazebo_world/model/<entity>/link/base_link/sensor/lidar/scan"
   ros_type_name: "sensor_msgs/msg/LaserScan"
   gz_type_name: "gz.msgs.LaserScan"

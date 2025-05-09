@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
+        - /LaserScan1
         - /Odometry1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 355
@@ -221,7 +222,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /scan
+        Value: /lidar/scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -362,5 +363,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 708
-  Y: 41
+  X: 563
+  Y: 49

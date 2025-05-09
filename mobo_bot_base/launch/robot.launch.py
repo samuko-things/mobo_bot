@@ -163,6 +163,26 @@ def generate_launch_description():
         output='screen'
     )
 
+    lidar_angle_filter_node = Node(
+        package='mobo_bot_base',
+        executable='lidar_angle_filter',
+        name='lidar_angle_filter',
+        output='screen',
+        condition=IfCondition(use_lidar),
+        parameters=[{'scan_topic': 'scan',
+                    'min_angle_deg': -150.0,
+                    'max_angle_deg': 150.0}
+                    ],
+        remappings=[("filtered_scan", "lidar/scan")]
+    )
+    
+    start_lidar_angle_filter_node_after_rp_lidar_c1_node = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=rp_lidar_c1_node,
+            on_exit=[lidar_angle_filter_node],
+        )
+    )
+
     #--------------------------------------------------------------------------
 
     camera_node = Node(
@@ -201,6 +221,7 @@ def generate_launch_description():
     ld.add_action(start_eimu_ros_node_after_epmc_diff_drive_controller_spawner)
     ld.add_action(start_ekf_node_after_eimu_ros_node)
     ld.add_action(rp_lidar_c1_node)
+    ld.add_action(lidar_angle_filter_node)
     ld.add_action(camera_node)
 
     return ld      # return (i.e send) the launch description for excecution

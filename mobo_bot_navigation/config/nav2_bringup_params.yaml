@@ -12,7 +12,7 @@ slam_toolbox:
     odom_frame: odom
     map_frame: map
     base_frame: base_link
-    scan_topic: scan
+    scan_topic: lidar/scan
     mode: mapping #localization
 
     # if you'd like to immediately start continuing a map at a given pose
@@ -110,7 +110,7 @@ amcl:
     z_max: 0.05
     z_rand: 0.5
     z_short: 0.05
-    scan_topic: scan
+    scan_topic: lidar/scan
     set_initial_pose: true
     always_reset_initial_pose: false
     first_map_only: false
@@ -283,7 +283,7 @@ local_costmap:
         enabled: true
         observation_sources: scan
         scan:
-          topic: scan
+          topic: lidar/scan
           max_obstacle_height: 2.0
           clearing: true
           marking: true
@@ -303,7 +303,7 @@ local_costmap:
       #   mark_threshold: 0
       #   observation_sources: scan
       #   scan:
-      #     topic: /lidar/scan
+      #     topic: lidar/scan
       #     max_obstacle_height: 2.0
       #     clearing: true
       #     marking: true
@@ -334,7 +334,7 @@ global_costmap:
         enabled: true
         observation_sources: scan
         scan:
-          topic: scan
+          topic: lidar/scan
           max_obstacle_height: 2.0
           clearing: true
           marking: true
