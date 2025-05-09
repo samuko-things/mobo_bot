@@ -10,8 +10,6 @@
   <license>TODO: License declaration</license>
 
   <depend>rclcpp</depend>
-  <depend>std_msgs</depend>
-
   <depend>joint_state_publisher</depend>
   <depend>joint_state_publisher_gui</depend>
   <depend>rqt_tf_tree</depend>
