@@ -1,7 +1,7 @@
 # Example parameters for a UART connection to the Easy IMU module (i.e MPU9250 EIMU Module).
 eimu_ros:
   ros__parameters:
-    port: "/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.2.3:1.0-port0"
+    port: "/dev/serial/by-path/pci-0000:00:14.0-usb-0:3.3:1.0-port0"
     # port: "/dev/ttyUSB0"
     frame_id: "imu"
     publish_frequency: 50.0
