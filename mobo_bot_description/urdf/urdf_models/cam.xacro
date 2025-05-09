@@ -10,18 +10,9 @@
 
         <link name="${base_name}">
             <visual>
-                <origin xyz="-0.005 0 0" rpy="0 ${-pi/2} 0"/>
+                <origin xyz="-0.01 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <cylinder radius="0.007" length="0.01"/>
-                </geometry>
-                <material name="grey">
-                    <color rgba="0.25 0.25 0.25 1"/>
-                </material>
-            </visual>
-            <visual>
-                <origin xyz="-0.01 0 0" rpy="0 ${-pi/2} 0"/>
-                <geometry>
-                    <box size="0.02 0.03 0.01"/>
+                    <box size="0.02 0.06 0.02"/>
                 </geometry>
                 <material name="grey">
                     <color rgba="0.25 0.25 0.25 1"/>
@@ -29,14 +20,14 @@
             </visual>
 
             <collision>
-                <origin xyz="-0.005 0 0" rpy="0 ${-pi/2} 0"/>
+                <origin xyz="-0.01 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <cylinder radius="0.01" length="0.01"/>
+                    <box size="0.02 0.06 0.02"/>
                 </geometry>
             </collision>
-            <xacro:inertial_cylinder mass="${mass}" radius="0.01" length="0.01">
-                <origin xyz="-0.005 0 0" rpy="0 ${-pi/2} 0"/>
-            </xacro:inertial_cylinder>
+            <xacro:inertial_box mass="${mass}" x="0.02" y="0.06" z="0.02">
+                <origin xyz="-0.01 0 0" rpy="0 0 0"/>
+            </xacro:inertial_box>
         </link>
 
         <joint name="${base_name}_optical_joint" type="fixed">
