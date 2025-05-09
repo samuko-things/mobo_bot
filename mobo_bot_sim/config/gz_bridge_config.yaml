@@ -7,7 +7,7 @@
   gz_type_name: "gz.msgs.Clock"
   direction: GZ_TO_ROS
 
-- ros_topic_name: "/odom"
+- ros_topic_name: "odom"
   gz_topic_name: "/model/<entity>/odometry"
   ros_type_name: "nav_msgs/msg/Odometry"
   gz_type_name: "gz.msgs.Odometry"
@@ -32,16 +32,10 @@
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
 
-- ros_topic_name: "lidar/scan"
+- ros_topic_name: "scan"
   gz_topic_name: "/world/gazebo_world/model/<entity>/link/base_link/sensor/lidar/scan"
   ros_type_name: "sensor_msgs/msg/LaserScan"
   gz_type_name: "gz.msgs.LaserScan"
-  direction: GZ_TO_ROS
-
-- ros_topic_name: "lidar/scan/points"
-  gz_topic_name: "/world/gazebo_world/model/<entity>/link/base_link/sensor/lidar/scan/points"
-  ros_type_name: "sensor_msgs/msg/PointCloud2"
-  gz_type_name: "gz.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
 
 - ros_topic_name: "camera_optical/camera_info"

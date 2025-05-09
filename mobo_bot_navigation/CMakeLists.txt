@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(mobo_bot_sim)
+project(mobo_bot_rviz)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -28,8 +28,7 @@ endif()
 install(DIRECTORY
     config
     launch
-    model
-    world
+    map
     DESTINATION share/${PROJECT_NAME}/
 )
 
