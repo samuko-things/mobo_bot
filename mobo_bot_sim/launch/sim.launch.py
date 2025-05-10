@@ -29,10 +29,6 @@ def generate_launch_description():
   # Set the path to the world file
   world_file_name = 'empty.sdf'
   world_file_path = os.path.join(sim_pkg_path, 'world', world_file_name)
-
-  # # Set rviz config file
-  # rviz_file_name = 'sim.rviz'
-  # rviz_file_path = os.path.join(rviz_pkg_path, 'config', rviz_file_name)
  
   #--------------------------------------------------------------------------
 
@@ -60,8 +56,6 @@ def generate_launch_description():
   headless = LaunchConfiguration('headless')
   use_sim_time = LaunchConfiguration('use_sim_time')
   world_path = LaunchConfiguration('world_path')
-  rviz_path = LaunchConfiguration('rviz_path')
-  use_rviz = LaunchConfiguration('use_rviz')
   gz_verbosity = LaunchConfiguration('gz_verbosity')
   robot_name = LaunchConfiguration('robot_name')
  
@@ -79,11 +73,6 @@ def generate_launch_description():
     name='world_path',
     default_value=world_file_path,
     description='Full path to the world model file to load')
-  
-  # declare_rviz_path_cmd = DeclareLaunchArgument(
-  #   name='rviz_path',
-  #   default_value=rviz_file_path,
-  #   description='Full path to the world model file to load')
   
   declare_use_rviz_cmd = DeclareLaunchArgument(
     'use_rviz',
@@ -110,14 +99,6 @@ def generate_launch_description():
       launch_arguments={'use_sim_time': use_sim_time,
                         'run_gz_sim': 'True'}.items()
   )
-
-  # rviz_node = Node(
-  #       package='rviz2',
-  #       executable='rviz2',
-  #       arguments=['-d', rviz_path],
-  #       output='screen',
-  #       condition=IfCondition(use_rviz)
-  # )
 
   start_ign_gazebo = ExecuteProcess(
       condition=UnlessCondition(headless),

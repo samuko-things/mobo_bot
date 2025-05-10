@@ -26,16 +26,23 @@ def generate_launch_description():
 
   # Launch configuration variables specific to simulation
   use_sim_time = LaunchConfiguration('use_sim_time')
- 
-  declare_headless_cmd = DeclareLaunchArgument(
-    name='headless',
-    default_value='False',
-    description='Whether to run only gzserver')
+  map_file_path = LaunchConfiguration('map_file_path')
+  param_file_path = LaunchConfiguration('param_file_path')
      
   declare_use_sim_time_cmd = DeclareLaunchArgument(
     name='use_sim_time',
     default_value='True',
     description='Use simulation (Gazebo) clock if true')
+  
+  declare_map_file_path_cmd = DeclareLaunchArgument(
+      name='map_file_path',
+      default_value=map_yaml_path,
+      description='file path to the map needed for navigation')
+  
+  declare_param_file_path_cmd = DeclareLaunchArgument(
+      name='param_file_path',
+      default_value=nav_param_file_path,
+      description='file path to the navigation paramater file needed for navigation')
 
   #-----------------------------------------------------------------------------
 
@@ -44,9 +51,9 @@ def generate_launch_description():
                 [os.path.join(nav2_bringup_pkg_path,'launch','localization_launch.py')]
             ), 
             launch_arguments={
-              'map': map_yaml_path,
+              'map': map_file_path,
               'use_sim_time': use_sim_time,
-              'params_file': nav_param_file_path
+              'params_file': param_file_path
             }.items()
   )
 
@@ -56,8 +63,9 @@ def generate_launch_description():
   ld = LaunchDescription()
  
   # add the necessary declared launch arguments to the launch description
-  ld.add_action(declare_headless_cmd)
   ld.add_action(declare_use_sim_time_cmd)
+  ld.add_action(declare_map_file_path_cmd)
+  ld.add_action(declare_param_file_path_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(localization_launch)

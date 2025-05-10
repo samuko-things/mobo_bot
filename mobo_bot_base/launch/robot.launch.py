@@ -18,6 +18,7 @@ def generate_launch_description():
 
     robot_controllers = os.path.join(base_pkg_path,'config','epmc_diff_drive_controller.yaml')
     eimu_ros_config_file = os.path.join(base_pkg_path,'config','eimu_ros_start_params.yaml')
+    ekf_config_path = os.path.join(base_pkg_path,'config','ekf.yaml')
 
     #--------------------------------------------------------------------------
 
@@ -118,7 +119,6 @@ def generate_launch_description():
         condition=IfCondition(use_ekf)
     )
 
-    ekf_config_path = os.path.join(base_pkg_path,'config','ekf.yaml')
     ekf_node = Node(
         package='robot_localization',
         executable='ekf_node',
@@ -129,20 +129,6 @@ def generate_launch_description():
         ],
         condition=IfCondition(use_ekf),
         remappings=[("odometry/filtered", odom_topic)]
-    )
-
-    start_eimu_ros_node_after_epmc_diff_drive_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=epmc_diff_drive_controller_spawner,
-            on_exit=[eimu_ros_node],
-        )
-    )
-
-    start_ekf_node_after_eimu_ros_node = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=eimu_ros_node,
-            on_exit=[ekf_node],
-        )
     )
 
     #--------------------------------------------------------------------------
@@ -174,13 +160,6 @@ def generate_launch_description():
                     'max_angle_deg': 150.0}
                     ],
         remappings=[("filtered_scan", "lidar/scan")]
-    )
-    
-    start_lidar_angle_filter_node_after_rp_lidar_c1_node = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=rp_lidar_c1_node,
-            on_exit=[lidar_angle_filter_node],
-        )
     )
 
     #--------------------------------------------------------------------------
@@ -218,8 +197,8 @@ def generate_launch_description():
     ld.add_action(controller_manager_without_ekf)
     ld.add_action(joint_state_broadcaster_spawner)
     ld.add_action(start_epmc_diff_drive_controller_spawner_after_joint_state_broadcaster_spawner)
-    ld.add_action(start_eimu_ros_node_after_epmc_diff_drive_controller_spawner)
-    ld.add_action(start_ekf_node_after_eimu_ros_node)
+    ld.add_action(eimu_ros_node)
+    ld.add_action(ekf_node)
     ld.add_action(rp_lidar_c1_node)
     ld.add_action(lidar_angle_filter_node)
     ld.add_action(camera_node)

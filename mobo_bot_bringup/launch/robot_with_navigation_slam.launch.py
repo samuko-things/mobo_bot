@@ -1,0 +1,71 @@
+import os
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import (
+  DeclareLaunchArgument,
+  IncludeLaunchDescription)
+from launch.conditions import IfCondition, UnlessCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
+
+
+def generate_launch_description():
+  # Set the path to this package.
+  base_pkg_path = get_package_share_directory('mobo_bot_base')
+  navigation_pkg_path = get_package_share_directory('mobo_bot_navigation')
+
+  #--------------------------------------------------------------------------
+
+  # Launch configuration variables specific to simulation
+  param_name = LaunchConfiguration('param_name')
+
+  declare_param_name_cmd = DeclareLaunchArgument(
+    name='param_name',
+    default_value='nav2_bringup_params',
+    description='name of the slam toolbox parameter file')
+  
+  param_path = PathJoinSubstitution([
+          navigation_pkg_path,
+          "config",
+          PythonExpression(expression=["'", param_name, "'", " + '.yaml'"])
+      ]
+  )
+ 
+  #-----------------------------------------------------------------------------
+
+  robot_launch = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                [os.path.join(base_pkg_path,'launch','robot.launch.py')]
+            ),
+            launch_arguments={
+              'use_sim_time': 'false',
+              'use_ekf': 'true',
+              'use_lidar': 'true',
+              'use_camera': 'true',
+            }.items(),
+  )
+
+  nav_launch = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                [os.path.join(navigation_pkg_path,'launch','nav_bringup.launch.py')]
+            ), 
+            launch_arguments={
+              'slam': 'true',
+              'use_sim_time': 'true',
+              'params_file': param_path
+            }.items()
+  )
+
+  #--------------------------------------------------------------------------------
+
+  # Create the launch description
+  ld = LaunchDescription()
+ 
+  # add the necessary declared launch arguments to the launch description
+  ld.add_action(declare_param_name_cmd)
+ 
+  # Add the nodes to the launch description
+  ld.add_action(robot_launch)
+  ld.add_action(nav_launch)
+
+  return ld

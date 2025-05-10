@@ -26,6 +26,8 @@ def generate_launch_description():
   # Launch configuration variables specific to simulation
   use_sim_time = LaunchConfiguration('use_sim_time')
   use_slam = LaunchConfiguration('use_slam')
+  map_file_path = LaunchConfiguration('map_file_path')
+  param_file_path = LaunchConfiguration('param_file_path')
      
   declare_use_sim_time_cmd = DeclareLaunchArgument(
     name='use_sim_time',
@@ -34,8 +36,18 @@ def generate_launch_description():
   
   declare_use_slam_cmd = DeclareLaunchArgument(
       name='use_slam',
-      default_value='True',
+      default_value='False',
       description='perform navigation with slam mapping')
+  
+  declare_map_file_path_cmd = DeclareLaunchArgument(
+      name='map_file_path',
+      default_value=map_yaml_path,
+      description='file path to the map needed for navigation')
+  
+  declare_param_file_path_cmd = DeclareLaunchArgument(
+      name='param_file_path',
+      default_value=nav_param_file_path,
+      description='file path to the navigation paramater file needed for navigation')
 
   #-----------------------------------------------------------------------------
   
@@ -45,9 +57,9 @@ def generate_launch_description():
             ), 
             launch_arguments={
               'slam': use_slam,
-              'map': map_yaml_path,
+              'map': map_file_path,
               'use_sim_time': use_sim_time,
-              'params_file': nav_param_file_path
+              'params_file': param_file_path
             }.items()
   )
 
@@ -59,6 +71,8 @@ def generate_launch_description():
   # add the necessary declared launch arguments to the launch description
   ld.add_action(declare_use_sim_time_cmd)
   ld.add_action(declare_use_slam_cmd)
+  ld.add_action(declare_map_file_path_cmd)
+  ld.add_action(declare_param_file_path_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(nav_bringup_launch)
