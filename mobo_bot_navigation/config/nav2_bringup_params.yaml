@@ -1,6 +1,5 @@
 slam_toolbox:
   ros__parameters:
-
     # Plugin params
     solver_plugin: solver_plugins::CeresSolver
     ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
@@ -13,15 +12,14 @@ slam_toolbox:
     odom_frame: odom
     map_frame: map
     base_frame: base_link
-    scan_topic: /lidar/scan
-    mode: mapping
-    # mode: localization
+    scan_topic: lidar/scan
+    mode: mapping #localization
 
     # if you'd like to immediately start continuing a map at a given pose
     # or at the dock, but they are mutually exclusive, if pose is given
     # will use pose
     #map_file_name: test_steve
-    map_start_pose: [0.0, 0.0, 0.0]
+    # map_start_pose: [0.0, 0.0, 0.0]
     #map_start_at_dock: true
 
     debug_logging: false
@@ -112,7 +110,7 @@ amcl:
     z_max: 0.05
     z_rand: 0.5
     z_short: 0.05
-    scan_topic: /lidar/scan
+    scan_topic: lidar/scan
     set_initial_pose: true
     always_reset_initial_pose: false
     first_map_only: false
@@ -127,7 +125,7 @@ bt_navigator:
     use_sim_time: true
     global_frame: map
     robot_base_frame: base_link
-    odom_topic: /odom
+    odom_topic: odom
     bt_loop_duration: 10
     default_server_timeout: 20
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
@@ -196,7 +194,7 @@ controller_server:
     use_sim_time: true
     controller_frequency: 20.0
     min_x_velocity_threshold: 0.001
-    min_y_velocity_threshold: 0.5
+    min_y_velocity_threshold: 0.001
     min_theta_velocity_threshold: 0.001
     failure_tolerance: 0.3
     progress_checker_plugin: "progress_checker"
@@ -209,7 +207,7 @@ controller_server:
       required_movement_radius: 0.5
       movement_time_allowance: 10.0
     # Goal checker parameters
-    #precise_goal_checker:
+    # precise_goal_checker:
     #  plugin: "nav2_controller::SimpleGoalChecker"
     #  xy_goal_tolerance: 0.25
     #  yaw_goal_tolerance: 0.25
@@ -225,12 +223,12 @@ controller_server:
       debug_trajectory_details: true
       min_vel_x: 0.0
       min_vel_y: 0.0
-      max_vel_x: 0.15
+      max_vel_x: 0.3
       max_vel_y: 0.0
-      max_vel_theta: 1.0
+      max_vel_theta: 3.0
       min_speed_xy: 0.0
-      max_speed_xy: 0.15
-      min_speed_theta: -1.0
+      max_speed_xy: 0.3
+      min_speed_theta: 0.0
       # Add high threshold velocity for turtlebot 3 issue.
       # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75
       acc_lim_x: 2.5
@@ -266,7 +264,7 @@ local_costmap:
   local_costmap:
     ros__parameters:
       update_frequency: 10.0
-      publish_frequency: 8.0
+      publish_frequency: 5.0
       global_frame: odom
       robot_base_frame: base_link
       use_sim_time: true
@@ -278,14 +276,14 @@ local_costmap:
       plugins: ["inflation_layer", "obstacle_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 1.0
-        inflation_radius: 0.1
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.2
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
         observation_sources: scan
         scan:
-          topic: /lidar/scan
+          topic: lidar/scan
           max_obstacle_height: 2.0
           clearing: true
           marking: true
@@ -305,7 +303,7 @@ local_costmap:
       #   mark_threshold: 0
       #   observation_sources: scan
       #   scan:
-      #     topic: /lidar/scan
+      #     topic: lidar/scan
       #     max_obstacle_height: 2.0
       #     clearing: true
       #     marking: true
@@ -336,7 +334,7 @@ global_costmap:
         enabled: true
         observation_sources: scan
         scan:
-          topic: /lidar/scan
+          topic: lidar/scan
           max_obstacle_height: 2.0
           clearing: true
           marking: true
@@ -350,8 +348,8 @@ global_costmap:
         map_subscribe_transient_local: true
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 1.0
-        inflation_radius: 0.1
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.4
       always_send_full_costmap: true
 
 map_server:
@@ -409,11 +407,11 @@ behavior_server:
     global_frame: odom
     robot_base_frame: base_link
     transform_tolerance: 0.1
-    use_sim_time: false
+    use_sim_time: true
     simulate_ahead_time: 2.0
-    max_rotational_vel: 1.0
-    min_rotational_vel: 0.4
-    rotational_acc_lim: 3.2
+    max_rotational_vel: 0.8
+    min_rotational_vel: -0.8
+    rotational_acc_lim: 2.0
 
 robot_state_publisher:
   ros__parameters:
@@ -436,8 +434,8 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: false
     feedback: "OPEN_LOOP"
-    max_velocity: [0.15, 0.0, 1.0]
-    min_velocity: [-0.15, 0.0, -1.0]
+    max_velocity: [0.3, 0.0, 3.0]
+    min_velocity: [-0.3, 0.0, -3.0]
     max_accel: [2.5, 0.0, 3.2]
     max_decel: [-2.5, 0.0, -3.2]
     odom_topic: "odom"

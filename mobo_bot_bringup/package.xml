@@ -1,19 +1,11 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-
 <package format="3">
-
-  <name>mobo_bot_sim</name>
-  <version>1.0.0</version>
+  <name>mobo_bot_bringup</name>
+  <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="samuel.c.agba@gmail.com">Samuel Obiagba</maintainer>
+  <maintainer email="samuel.c.agba@gmail.com">samuko-things</maintainer>
   <license>TODO: License declaration</license>
-
-  <depend>rclcpp</depend>
-  <depend>ros_ign_gazebo</depend>
-  <depend>ros_gz_bridge</depend>
-  <depend>ign_ros2_control</depend>
-  <depend>nav2_common</depend>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

@@ -7,35 +7,32 @@ from launch.actions import (
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
- 
+
+
 def generate_launch_description():
   # Set the path to this package.
   base_pkg_path = get_package_share_directory('mobo_bot_base')
+ 
+  #-----------------------------------------------------------------------------
 
-
-  #----------------------------------------------------------------------------------
-
-  
   robot_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 [os.path.join(base_pkg_path,'launch','robot.launch.py')]
-            ), 
+            ),
             launch_arguments={
-              'use_epmc': 'True',
-              'use_eimu': 'False',
-              'use_lidar': 'False',
-              'use_camera': 'True',
-              'use_ekf': 'False',
+              'use_sim_time': 'False',
+              'use_ekf': 'Frue',
+              'use_lidar': 'Frue',
+              'use_camera': 'Frue',
             }.items(),
   )
 
-  #-------------------------------------------------------------------------------
-
+  #--------------------------------------------------------------------------------
 
   # Create the launch description
   ld = LaunchDescription()
  
   # Add the nodes to the launch description
   ld.add_action(robot_launch)
- 
+
   return ld

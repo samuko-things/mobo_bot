@@ -20,20 +20,17 @@ from nav2_common.launch import ReplaceString
 def generate_launch_description():
   # Set the path to this package.
   description_pkg_path = get_package_share_directory('mobo_bot_description')
-  rviz_pkg_path = get_package_share_directory('mobo_bot_rviz')
+  # rviz_pkg_path = get_package_share_directory('mobo_bot_rviz')
   sim_pkg_path = get_package_share_directory('mobo_bot_sim') 
 
   # initial robot pose
-  x_pos = 0.0; y_pos = 0.0; z_pos = 0.5; yaw = 0.0
+  x_pos = 0.0; y_pos = 0.0; z_pos = 0.2; yaw = 0.0
 
   # Set the path to the world file
   world_file_name = 'empty.sdf'
   world_file_path = os.path.join(sim_pkg_path, 'world', world_file_name)
-
-  # Set rviz config file
-  rviz_file_name = 'sim.rviz'
-  rviz_file_path = os.path.join(rviz_pkg_path, 'config', rviz_file_name)
  
+  #--------------------------------------------------------------------------
 
   # set some ignition environment variable
   gz_models_path = os.path.join(sim_pkg_path, "model")
@@ -52,18 +49,14 @@ def generate_launch_description():
           name="GZ_SIM_SYSTEM_PLUGIN_PATH",
           value=gz_sim_system_plugin_path,
       )
-  #---------------------------------------------------
- 
 
+  #--------------------------------------------------------------------------
+ 
   # Launch configuration variables specific to simulation
   headless = LaunchConfiguration('headless')
   use_sim_time = LaunchConfiguration('use_sim_time')
   world_path = LaunchConfiguration('world_path')
-  rviz_path = LaunchConfiguration('rviz_path')
-  use_rviz = LaunchConfiguration('use_rviz')
   gz_verbosity = LaunchConfiguration('gz_verbosity')
-  use_ekf = LaunchConfiguration('use_ekf')
-  odom_topic = LaunchConfiguration('odom_topic')
   robot_name = LaunchConfiguration('robot_name')
  
   declare_headless_cmd = DeclareLaunchArgument(
@@ -81,11 +74,6 @@ def generate_launch_description():
     default_value=world_file_path,
     description='Full path to the world model file to load')
   
-  declare_rviz_path_cmd = DeclareLaunchArgument(
-    name='rviz_path',
-    default_value=rviz_file_path,
-    description='Full path to the world model file to load')
-  
   declare_use_rviz_cmd = DeclareLaunchArgument(
     'use_rviz',
     default_value= 'True',
@@ -100,8 +88,8 @@ def generate_launch_description():
       name='robot_name',
       default_value='mobo_bot',
       description='name of the robot')
-  #------------------------------------------------------------
 
+  #--------------------------------------------------------------------------
 
   # Specify the actions
   rsp_launch = IncludeLaunchDescription(
@@ -112,15 +100,6 @@ def generate_launch_description():
                         'run_gz_sim': 'True'}.items()
   )
 
-  rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        arguments=['-d', rviz_path],
-        output='screen',
-        condition=IfCondition(use_rviz)
-  )
-
-
   start_ign_gazebo = ExecuteProcess(
       condition=UnlessCondition(headless),
       cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, world_path],
@@ -128,7 +107,6 @@ def generate_launch_description():
       # shell=False,
   )
         
-  
   start_ign_gazebo_headless = ExecuteProcess(
       condition=IfCondition(headless),
       cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, '-s', '--headless-rendering', world_path],
@@ -136,7 +114,6 @@ def generate_launch_description():
       # shell=False,
   )
         
-
   bridge_config_file_path = os.path.join(sim_pkg_path, 'config', 'gz_bridge_config.yaml')
   # A <entity> placeholder is used in the bridge config file to be replaced by the entity name.
   bridge_config = ReplaceString(
@@ -167,6 +144,8 @@ def generate_launch_description():
           ],
       parameters=[{"use_sim_time": use_sim_time}]
   )
+
+  #--------------------------------------------------------------------------
   
   # Create the launch description
   ld = LaunchDescription()
@@ -179,14 +158,14 @@ def generate_launch_description():
   ld.add_action(declare_headless_cmd)
   ld.add_action(declare_use_sim_time_cmd)
   ld.add_action(declare_world_path_cmd)
-  ld.add_action(declare_rviz_path_cmd)
+  # ld.add_action(declare_rviz_path_cmd)
   ld.add_action(declare_use_rviz_cmd)
   ld.add_action(declare_gz_verbosity_cmd)
   ld.add_action(declare_robot_name_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(rsp_launch)
-  ld.add_action(rviz_node)
+  # ld.add_action(rviz_node)
   ld.add_action(start_ign_gazebo)
   ld.add_action(start_ign_gazebo_headless)
   ld.add_action(bridge_node)
