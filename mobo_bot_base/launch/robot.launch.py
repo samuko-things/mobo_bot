@@ -162,6 +162,13 @@ def generate_launch_description():
         remappings=[("filtered_scan", "lidar/scan")]
     )
 
+    start_rp_lidar_c1_node_after_epmc_diff_drive_controller_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=epmc_diff_drive_controller_spawner,
+            on_exit=[rp_lidar_c1_node],
+        )
+    )
+
     #--------------------------------------------------------------------------
 
     camera_node = Node(
@@ -199,7 +206,8 @@ def generate_launch_description():
     ld.add_action(start_epmc_diff_drive_controller_spawner_after_joint_state_broadcaster_spawner)
     ld.add_action(eimu_ros_node)
     ld.add_action(ekf_node)
-    ld.add_action(rp_lidar_c1_node)
+    # ld.add_action(rp_lidar_c1_node)
+    ld.add_action(start_rp_lidar_c1_node_after_epmc_diff_drive_controller_spawner)
     ld.add_action(lidar_angle_filter_node)
     ld.add_action(camera_node)
 

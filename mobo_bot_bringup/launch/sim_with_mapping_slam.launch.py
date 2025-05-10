@@ -19,7 +19,7 @@ def generate_launch_description():
 
   # Launch configuration variables specific to simulation
   world_name = LaunchConfiguration('world_name')
-  param_name = LaunchConfiguration('param_name')
+  params_name = LaunchConfiguration('params_name')
  
   declare_world_name_cmd = DeclareLaunchArgument(
     name='world_name',
@@ -33,15 +33,15 @@ def generate_launch_description():
       ]
   )
 
-  declare_param_name_cmd = DeclareLaunchArgument(
-    name='param_name',
+  declare_params_name_cmd = DeclareLaunchArgument(
+    name='params_name',
     default_value='nav2_bringup_params',
     description='name of the slam toolbox parameter file')
   
-  param_path = PathJoinSubstitution([
+  params_file = PathJoinSubstitution([
           navigation_pkg_path,
           "config",
-          PythonExpression(expression=["'", param_name, "'", " + '.yaml'"])
+          PythonExpression(expression=["'", params_name, "'", " + '.yaml'"])
       ]
   )
 
@@ -52,8 +52,8 @@ def generate_launch_description():
                 [os.path.join(sim_pkg_path,'launch','sim.launch.py')]
             ), 
             launch_arguments={
-              'use_sim_time': 'true',
-              'headless': 'false',
+              'use_sim_time': 'Frue',
+              'headless': 'False',
               'world_path': world_path,
             }.items(),
   )
@@ -69,7 +69,7 @@ def generate_launch_description():
                 [os.path.join(navigation_pkg_path,'launch','slam_mapping.launch.py')]
             ), 
             launch_arguments={
-              'params_file': param_path
+              'params_file': params_file
             }.items()
   )
 
@@ -80,7 +80,7 @@ def generate_launch_description():
  
   # add the necessary declared launch arguments to the launch description
   ld.add_action(declare_world_name_cmd)
-  ld.add_action(declare_param_name_cmd)
+  ld.add_action(declare_params_name_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(sim_launch)

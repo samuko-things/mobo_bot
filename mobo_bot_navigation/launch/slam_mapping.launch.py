@@ -13,9 +13,9 @@ def generate_launch_description():
   # Set the path to this package.
   navigation_pkg_path = get_package_share_directory('mobo_bot_navigation')
  
-  # Set the path to the nav param file
-  slam_mapping_param_file_name = 'slam_mapping_params_online_async.yaml'
-  slam_mapping_param_file_path = os.path.join(navigation_pkg_path, 'config', slam_mapping_param_file_name)
+  # Set the path to the nav params file
+  slam_mapping_params_file_name = 'slam_mapping_params_online_async.yaml'
+  slam_mapping_params_file = os.path.join(navigation_pkg_path, 'config', slam_mapping_params_file_name)
  
 
   #--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ def generate_launch_description():
 
   declare_params_file_cmd = DeclareLaunchArgument(
       'params_file',
-      default_value=slam_mapping_param_file_path,
+      default_value=slam_mapping_params_file,
       description='Full path to the ROS2 navigation parameters file to use for all launched nodes')
 
   #-----------------------------------------------------------------------------

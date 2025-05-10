@@ -17,17 +17,17 @@ def generate_launch_description():
   #--------------------------------------------------------------------------
 
   # Launch configuration variables specific to simulation
-  param_name = LaunchConfiguration('param_name')
+  params_name = LaunchConfiguration('params_name')
 
-  declare_param_name_cmd = DeclareLaunchArgument(
-    name='param_name',
+  declare_params_name_cmd = DeclareLaunchArgument(
+    name='params_name',
     default_value='nav2_bringup_params',
     description='name of the slam toolbox parameter file')
   
-  param_path = PathJoinSubstitution([
+  params_file = PathJoinSubstitution([
           navigation_pkg_path,
           "config",
-          PythonExpression(expression=["'", param_name, "'", " + '.yaml'"])
+          PythonExpression(expression=["'", params_name, "'", " + '.yaml'"])
       ]
   )
  
@@ -38,10 +38,10 @@ def generate_launch_description():
                 [os.path.join(base_pkg_path,'launch','robot.launch.py')]
             ),
             launch_arguments={
-              'use_sim_time': 'false',
-              'use_ekf': 'true',
-              'use_lidar': 'true',
-              'use_camera': 'true',
+              'use_sim_time': 'False',
+              'use_ekf': 'True',
+              'use_lidar': 'True',
+              'use_camera': 'True',
             }.items(),
   )
 
@@ -50,9 +50,9 @@ def generate_launch_description():
                 [os.path.join(navigation_pkg_path,'launch','nav_bringup.launch.py')]
             ), 
             launch_arguments={
-              'slam': 'true',
-              'use_sim_time': 'true',
-              'params_file': param_path
+              'slam': 'True',
+              'use_sim_time': 'False',
+              'params_file': params_file
             }.items()
   )
 
@@ -62,7 +62,7 @@ def generate_launch_description():
   ld = LaunchDescription()
  
   # add the necessary declared launch arguments to the launch description
-  ld.add_action(declare_param_name_cmd)
+  ld.add_action(declare_params_name_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(robot_launch)

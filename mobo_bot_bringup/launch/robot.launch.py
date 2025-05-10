@@ -20,10 +20,10 @@ def generate_launch_description():
                 [os.path.join(base_pkg_path,'launch','robot.launch.py')]
             ),
             launch_arguments={
-              'use_sim_time': 'false',
-              'use_ekf': 'true',
-              'use_lidar': 'true',
-              'use_camera': 'true',
+              'use_sim_time': 'False',
+              'use_ekf': 'Frue',
+              'use_lidar': 'Frue',
+              'use_camera': 'Frue',
             }.items(),
   )
 

@@ -18,30 +18,30 @@ def generate_launch_description():
   map_file_name = 'simple_world_map.yaml'
   map_yaml_path = os.path.join(navigation_pkg_path, 'map', map_file_name)
 
-  # Set the path to the nav param file
-  nav_param_file_name = 'nav2_bringup_params.yaml'
-  nav_param_file_path = os.path.join(navigation_pkg_path, 'config', nav_param_file_name)
+  # Set the path to the nav params file
+  nav_params_file_name = 'nav2_bringup_params.yaml'
+  nav_params_file = os.path.join(navigation_pkg_path, 'config', nav_params_file_name)
  
   #--------------------------------------------------------------------------
 
   # Launch configuration variables specific to simulation
   use_sim_time = LaunchConfiguration('use_sim_time')
-  map_file_path = LaunchConfiguration('map_file_path')
-  param_file_path = LaunchConfiguration('param_file_path')
+  map = LaunchConfiguration('map')
+  params_file = LaunchConfiguration('params_file')
      
   declare_use_sim_time_cmd = DeclareLaunchArgument(
     name='use_sim_time',
     default_value='True',
     description='Use simulation (Gazebo) clock if true')
   
-  declare_map_file_path_cmd = DeclareLaunchArgument(
-      name='map_file_path',
+  declare_map_cmd = DeclareLaunchArgument(
+      name='map',
       default_value=map_yaml_path,
       description='file path to the map needed for navigation')
   
-  declare_param_file_path_cmd = DeclareLaunchArgument(
-      name='param_file_path',
-      default_value=nav_param_file_path,
+  declare_params_file_cmd = DeclareLaunchArgument(
+      name='params_file',
+      default_value=nav_params_file,
       description='file path to the navigation paramater file needed for navigation')
 
   #-----------------------------------------------------------------------------
@@ -51,9 +51,9 @@ def generate_launch_description():
                 [os.path.join(nav2_bringup_pkg_path,'launch','localization_launch.py')]
             ), 
             launch_arguments={
-              'map': map_file_path,
+              'map': map,
               'use_sim_time': use_sim_time,
-              'params_file': param_file_path
+              'params_file': params_file
             }.items()
   )
 
@@ -64,8 +64,8 @@ def generate_launch_description():
  
   # add the necessary declared launch arguments to the launch description
   ld.add_action(declare_use_sim_time_cmd)
-  ld.add_action(declare_map_file_path_cmd)
-  ld.add_action(declare_param_file_path_cmd)
+  ld.add_action(declare_map_cmd)
+  ld.add_action(declare_params_file_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(localization_launch)
