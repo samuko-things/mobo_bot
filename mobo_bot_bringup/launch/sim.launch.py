@@ -37,7 +37,7 @@ def generate_launch_description():
                 [os.path.join(sim_pkg_path,'launch','sim.launch.py')]
             ), 
             launch_arguments={
-              'use_sim_time': 'Frue',
+              'use_sim_time': 'True',
               'headless': 'False',
               'world_path': world_path,
             }.items(),
