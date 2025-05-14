@@ -1,4 +1,7 @@
 ## MoboBot Gazebo Simulation
+
+![mobo_bot_slam](./docs/mobo_bot_slam_sim.gif)
+
 > [!NOTE]
 > Your Dev PC must be running **Ubuntu 22.04** and **ros-humble-desktop** with **gazebo igintion fortress**.
 > </br>
@@ -94,22 +97,21 @@
 
 #
 
-### Run the mobo_bot_sim package
-![mobo_bot_slam](./docs/mobo_bot_slam_sim.gif)
-- on your dev-PC, open a new terminal and start the mobo_bot_sim 
+### Run the MoboBot simulation
+- On your dev-PC, open a new terminal and start the mobo_bot_sim 
   ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 launch mobo_bot_sim sim.launch.py
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 launch mobo_bot_bringup sim.launch.py
   ```
-- in a differnt terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
+- In a different terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
   ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 run mobo_bot_teleop mobo_bot_teleop
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 run arrow_key_teleop_drive arrow_key_telop_drive
   ```
   OR
   ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 run mobo_bot_teleop mobo_bot_teleop <v in m/s> <w in rad/sec>
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 run arrow_key_teleop_drive arrow_key_telop_drive 0.2 0.8
   ```
   
 #
@@ -118,46 +120,41 @@
 ![mobo_bot_nav](./docs/mobo_bot_nav_sim.gif)
 - to just build map of the world with slam run:
   ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 launch mobo_bot_sim slam_mapping.launch.py
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 launch mobo_bot_bringup sim_with_mapping_slam.launch.py
   ```
-  then drive the robot around with teleop
-  >NOTE: whenever you build a new map you can save it using the command below:
+  Then drive the robot around with teleop
+  >NOTE: Whenever you build a new map you can save it using the command below:
   >```shell
   >   ros2 run nav2_map_server map_saver_cli -f /path/to/save/<map_name>  # Saves the current map to the specified path and file name
   >```
   > example:
   >```shell
-  >   ros2 run nav2_map_server map_saver_cli -f ~/<ros_ws>/src/mobo_bot/mobo_bot_sim/map/<map_name>  # Saves the current map to the mobo_bot_sim map folder
+  >   ros2 run nav2_map_server map_saver_cli -f ~/mobo_bot_ws/src/mobo_bot/mobo_bot_navigation/map/<map_name>  # Saves the current map to the mobo_bot map folder
   >```
-
-
-- to try out only the amcl localization so see how it works, using the existing map:
-  > NOTE: you can also change the map path in the amcl launch file
-  ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 launch mobo_bot_sim amcl.launch.py
-  ```
-  then drive the robot around with teleop
 
 - to try the 2D navigation with simulation (using the existing world and map):
   ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 launch mobo_bot_sim nav_bringup.launch.py
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 launch mobo_bot_bringup sim_with_navigation_amcl.launch.py
+  ```
+  OR
+  ```shell
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 launch mobo_bot_bringup sim_with_navigation_slam.launch.py
   ```
   use the Nav2Goal button to move the robot from point to point.
-> NOTE: change slam parameter in the launch file to 'True' to use 2D navigation with slam mapping
 
 #
 
 ### Drive MoboBot with a special arrow-key teleop
 - in a different terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
   ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 run mobo_bot_teleop mobo_bot_teleop
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 run arrow_key_teleop_drive arrow_key_telop_drive
   ```
   OR
   ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 run mobo_bot_teleop mobo_bot_teleop <v in m/s> <w in rad/sec>
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 run arrow_key_teleop_drive arrow_key_telop_drive <v in m/s> <w in rad/sec>
   ```
