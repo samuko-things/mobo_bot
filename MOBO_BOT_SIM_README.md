@@ -1,65 +1,76 @@
-## Run MoboBot Ignition Gazebo Simulation on your DevPC
+## MoboBot Gazebo Simulation
 > [!NOTE]
 > Your Dev PC must be running **Ubuntu 22.04** and **ros-humble-desktop** with **gazebo igintion fortress**.
-> You can follow this [tutorial](https://robocre8.gitbook.io/robocre8/tutorials/how-to-install-ros2-humble-desktop-on-pc-full-install) to install **ros-humble-desktop** on **PC**
-> Ignition gazebo would be installed as you follow the installation process below.
+> </br>
+> You can follow this [**tutorial**](https://robocre8.gitbook.io/robocre8/tutorials/how-to-install-ros2-humble-desktop-on-pc-full-install) to install **ros-humble-desktop** on **PC**
+> </br>
+> The **ignition gazebo** would be installed as you follow the installation process below.
 
 #
 
-### Create ROS Workspace And Download and Setup mobo_bot Packages
-- install python pynput library for the mobo_bot_teleop
-  ```shell
-  pip3 install pynput
-  ```
-  
-- install and setup Cyclone DDS on your PC (if you don't have it installed yet).
+### Some Prerequisites
+
+- Install and set up Cyclone DDS on your PC (if you don't have it installed yet).
   ```shell
   sudo apt install ros-humble-rmw-cyclonedds-cpp
   export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
   echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
   ```
   
-- create your <ros_ws> in the home dir. (replace <ros_ws> with your workspace name)
+- Create your MoboBot ROS Workspace
   ```shell
-  mkdir -p ~/<ros_ws>/src
-  cd ~/<ros_ws>
+  mkdir -p ~/mobo_bot_ws/src
+  cd ~/mobo_bot_ws
   colcon build
-  source ~/<ros_ws>/install/setup.bash
+  source ~/mobo_bot_ws/install/setup.bash
   ```
 
-- cd into the src folder of your <ros_ws> and download the **MoboBot** packages
+- Clone the **arrow_key_telop_drive** package on your MoboBot ROS Workspace. This is the package that would be used for driving the MoboBot using the arrow keys of your keyboard
   ```shell
-  cd ~/<ros_ws>/src
-  git clone -b humble https://github.com/robocre8/mobo_bot.git
+  sudo apt install python3-pip
+  pip3 install pynput
+  pip3 install setuptools==58.2.0
+  cd ~/mobo_bot_ws/src
+  git clone https://github.com/samuko-things/arrow_key_teleop_drive.git
   ```
+  Learn more about the [**arrow_key_teleop_drive**](https://github.com/samuko-things/arrow_key_teleop_drive)
 
-- cd into the mobo_bot/mobo_bot_base folder and add a `COLCON_IGNORE` file to the mobo_bot_base package to prevent the running of mobo_bot_base (this package is only required for working with the actual **MoboBot** robot)
+- Build your workspace
   ```shell
-  cd ~/<ros_ws>/src/mobo_bot/mobo_bot_base
-  touch COLCON_IGNORE
-  ```
-  
-- cd into the mobo_bot/mobo_bot_hw_test folder and add a `COLCON_IGNORE` file to the mobo_bot_hw_test package to prevent the running of mobo_bot_hw_test (this package is only required for working with the actual **MoboBot** robot)
-  ```shell
-  cd ~/<ros_ws>/src/mobo_bot/mobo_bot_hw_test
-  touch COLCON_IGNORE
-  ```
-
-- cd into the root directory of your <ros_ws> and run rosdep to install all necessary ros  package dependencies
-  ```shell
-  cd ~/<ros_ws>/
-  rosdep install --from-paths src --ignore-src -r -y
-  ```
-
-- build your <ros_ws>
-  ```shell
-  cd ~/<ros_ws>/
+  cd ~/mobo_bot_ws
   colcon build --symlink-install
   ```
 
-- don't forget to source your <ros_ws> in any new terminal
+### Clone and Build the MoboBot Packages  
+- cd into the src folder of your mobo_bot_ws and download the **MoboBot** packages
   ```shell
-  source ~/<ros_ws>/install/setup.bash
+  cd ~/mobo_bot_ws/src
+  git clone -b humble https://github.com/robocre8/mobo_bot.git
+  ```
+  
+- If you are not interested in running or testing the MoboBot hardware (i.e the actual robot), run the following command below. this will add the COLCON_IGNORE file to it.
+  </br>If not, please go ahead and skip this, then check the [**Working with the Actual MoboBot**]() tutorial.
+  ```shell
+  cd ~/mobo_bot_ws/src/mobo_bot/mobo_bot_base
+  touch COLCON_IGNORE
+  ```
+
+- cd into the root directory of your mobo_bot_ws and run rosdep to install all necessary ROS  package dependencies
+  ```shell
+  cd ~/mobo_bot_ws
+  rosdep update
+  rosdep install --from-paths src --ignore-src -r -y
+  ```
+
+- Build your mobo_bot_ws
+  ```shell
+  cd ~/mobo_bot_ws
+  colcon build --symlink-install
+  ```
+
+- Don't forget to source your <ros_ws> in any new terminal
+  ```shell
+  source ~/mobo_bot_ws/install/setup.bash
   ```
 
 #
