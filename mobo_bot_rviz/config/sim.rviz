@@ -7,7 +7,6 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
-        - /LaserScan1
         - /Odometry1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 355
@@ -363,5 +362,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 563
-  Y: 49
+  X: 80
+  Y: 46

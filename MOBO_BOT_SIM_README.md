@@ -130,7 +130,7 @@
   >```
   > example:
   >```shell
-  >   ros2 run nav2_map_server map_saver_cli -f ~/mobo_bot_ws/src/mobo_bot/mobo_bot_navigation/map/<map_name>  # Saves the current map to the mobo_bot map folder
+  >   ros2 run nav2_map_server map_saver_cli -f ~/mobo_bot_ws/src/mobo_bot/mobo_bot_navigation/maps/<map_name>  # Saves the current map to the mobo_bot map folder
   >```
 
 - to try the 2D navigation with simulation (using the existing world and map):
