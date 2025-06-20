@@ -21,9 +21,9 @@ def generate_launch_description():
             ),
             launch_arguments={
               'use_sim_time': 'False',
-              'use_ekf': 'Frue',
-              'use_lidar': 'Frue',
-              'use_camera': 'Frue',
+              'use_ekf': 'True',
+              'use_lidar': 'True',
+              'use_camera': 'True',
             }.items(),
   )
 

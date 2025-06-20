@@ -24,12 +24,12 @@ def generate_launch_description():
  
   declare_world_name_cmd = DeclareLaunchArgument(
     name='world_name',
-    default_value='empty',
+    default_value='simple_world',
     description='name of the world file')
   
   world_path = PathJoinSubstitution([
           sim_pkg_path,
-          "world",
+          "worlds",
           PythonExpression(expression=["'", world_name, "'", " + '.sdf'"])
       ]
   )
@@ -41,7 +41,7 @@ def generate_launch_description():
   
   map_path = PathJoinSubstitution([
           navigation_pkg_path,
-          "map",
+          "maps",
           PythonExpression(expression=["'", map_name, "'", " + '.yaml'"])
       ]
   )
@@ -65,7 +65,6 @@ def generate_launch_description():
             ), 
             launch_arguments={
               'use_sim_time': 'True',
-              'headless': 'False',
               'world_path': world_path,
             }.items(),
   )

@@ -106,12 +106,12 @@
 - In a different terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 run arrow_key_teleop_drive arrow_key_telop_drive
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive
   ```
   OR
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 run arrow_key_teleop_drive arrow_key_telop_drive 0.2 0.8
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive 0.2 0.8
   ```
   
 #
@@ -151,10 +151,10 @@
 - in a different terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 run arrow_key_teleop_drive arrow_key_telop_drive
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive
   ```
   OR
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 run arrow_key_teleop_drive arrow_key_telop_drive <v in m/s> <w in rad/sec>
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive <v in m/s> <w in rad/sec>
   ```
