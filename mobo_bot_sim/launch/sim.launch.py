@@ -27,11 +27,7 @@ def generate_launch_description():
 
   # Set the path to the world file
   # world_file_name = 'simple_world.sdf'
-  world_file_name = 'empty_room.sdf'
-  # world_file_name = 'turtlebot_arena.sdf'
-#   world_file_name = 'room_with_walls.sdf'
-#   world_file_name = 'room_with_walls_star.sdf'
-#   world_file_name = 'empty.sdf'
+  world_file_name = 'room_with_walls.sdf'
   world_file_path = os.path.join(sim_pkg_path, 'worlds', world_file_name)
  
   #--------------------------------------------------------------------------

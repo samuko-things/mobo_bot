@@ -1,4 +1,4 @@
-image: simple_world_map.pgm
+image: simple_world.pgm
 mode: trinary
 resolution: 0.05
 origin: [-2.42, -2.44, 0]

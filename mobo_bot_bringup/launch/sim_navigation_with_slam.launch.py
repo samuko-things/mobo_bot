@@ -52,7 +52,6 @@ def generate_launch_description():
             ), 
             launch_arguments={
               'use_sim_time': 'True',
-              'headless': 'False',
               'world_path': world_path,
             }.items(),
   )

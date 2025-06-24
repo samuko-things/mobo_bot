@@ -19,12 +19,11 @@ def generate_launch_description():
 
   # Launch configuration variables specific to simulation
   world_name = LaunchConfiguration('world_name')
-  map_name = LaunchConfiguration('map_name')
   params_name = LaunchConfiguration('params_name')
  
   declare_world_name_cmd = DeclareLaunchArgument(
     name='world_name',
-    default_value='simple_world',
+    default_value='room_with_walls',
     description='name of the world file')
   
   world_path = PathJoinSubstitution([
@@ -33,16 +32,11 @@ def generate_launch_description():
           PythonExpression(expression=["'", world_name, "'", " + '.sdf'"])
       ]
   )
-
-  declare_map_name_cmd = DeclareLaunchArgument(
-    name='map_name',
-    default_value='simple_world_map',
-    description='name of the map file')
   
   map_path = PathJoinSubstitution([
           navigation_pkg_path,
           "maps",
-          PythonExpression(expression=["'", map_name, "'", " + '.yaml'"])
+          PythonExpression(expression=["'", world_name, "'", " + '.yaml'"])
       ]
   )
 
@@ -94,7 +88,6 @@ def generate_launch_description():
  
   # add the necessary declared launch arguments to the launch description
   ld.add_action(declare_world_name_cmd)
-  ld.add_action(declare_map_name_cmd)
   ld.add_action(declare_params_name_cmd)
  
   # Add the nodes to the launch description
