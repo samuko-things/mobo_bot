@@ -23,20 +23,27 @@ def generate_launch_description():
  
   declare_world_name_cmd = DeclareLaunchArgument(
     name='world_name',
-    default_value='empty',
+    default_value='room_with_walls',
     description='name of the world file')
   
   world_path = PathJoinSubstitution([
           sim_pkg_path,
-          "world",
+          "worlds",
           PythonExpression(expression=["'", world_name, "'", " + '.sdf'"])
+      ]
+  )
+  
+  map_path = PathJoinSubstitution([
+          navigation_pkg_path,
+          "maps",
+          PythonExpression(expression=["'", world_name, "'", " + '.yaml'"])
       ]
   )
 
   declare_params_name_cmd = DeclareLaunchArgument(
     name='params_name',
     default_value='nav2_bringup_params',
-    description='name of the slam toolbox parameter file')
+    description='name of the navigation parameter file')
   
   params_file = PathJoinSubstitution([
           navigation_pkg_path,
@@ -46,29 +53,30 @@ def generate_launch_description():
   )
 
   #-----------------------------------------------------------------------------
-  
   sim_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 [os.path.join(sim_pkg_path,'launch','sim.launch.py')]
             ), 
             launch_arguments={
               'use_sim_time': 'True',
-              'headless': 'False',
               'world_path': world_path,
             }.items(),
   )
 
   rviz_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                [os.path.join(rviz_pkg_path,'launch','slam_mapping.launch.py')]
+                [os.path.join(rviz_pkg_path,'launch','nav_bringup.launch.py')]
             )
   )
 
-  slam_mapping_launch = IncludeLaunchDescription(
+  nav_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                [os.path.join(navigation_pkg_path,'launch','slam_mapping.launch.py')]
+                [os.path.join(navigation_pkg_path,'launch','nav_bringup.launch.py')]
             ), 
             launch_arguments={
+              'slam': 'False',
+              'map': map_path,
+              'use_sim_time': 'True',
               'params_file': params_file
             }.items()
   )
@@ -85,6 +93,6 @@ def generate_launch_description():
   # Add the nodes to the launch description
   ld.add_action(sim_launch)
   ld.add_action(rviz_launch)
-  ld.add_action(slam_mapping_launch)
+  ld.add_action(nav_launch)
 
   return ld

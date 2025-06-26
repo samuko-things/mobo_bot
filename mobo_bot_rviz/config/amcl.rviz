@@ -8,6 +8,7 @@ Panels:
         - /Status1
         - /TF1/Frames1
         - /PoseWithCovariance1/Covariance1
+        - /ParticleCloud1/Topic1
       Splitter Ratio: 0.5
     Tree Height: 549
   - Class: rviz_common/Selection
@@ -76,7 +77,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_optical_link:
+        camera_optical:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -141,7 +142,7 @@ Visualization Manager:
           Value: true
         camera:
           Value: true
-        camera_optical_link:
+        camera_optical:
           Value: true
         castor_wheel:
           Value: false
@@ -178,7 +179,7 @@ Visualization Manager:
                 {}
               chassis:
                 camera:
-                  camera_optical_link:
+                  camera_optical:
                     {}
                 imu:
                   {}
@@ -298,6 +299,22 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /amcl_pose
       Value: true
+    - Alpha: 1
+      Class: nav2_rviz_plugins/ParticleCloud
+      Color: 255; 25; 0
+      Enabled: true
+      Max Arrow Length: 0.20000000298023224
+      Min Arrow Length: 0.20000000298023224
+      Name: ParticleCloud
+      Shape: Arrow (Flat)
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /particle_cloud
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -375,5 +392,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 479
-  Y: 73
+  X: 95
+  Y: 65

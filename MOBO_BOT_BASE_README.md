@@ -20,15 +20,10 @@
   export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
   echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
   ```
-- install opencv on the Raspberry Pi 4b machine
-  ```shell
-  sudo apt install libopencv-dev python3-opencv
-  pip3 install opencv-python
-  ```
   
 #
 
-### Create ROS Workspace And Download and Setup Necessary Packages
+### Create ROS Workspace And Download the MoboBot packages
 
 - create your <ros_ws> in the home dir. (replace <ros_ws> with your workspace name)
   ```shell
@@ -55,41 +50,54 @@
   cd ~/<ros_ws>/src/mobo_bot/mobo_bot_rviz
   touch COLCON_IGNORE
   ```
-
-- cd into the mobo_bot/mobo_bot_teleop folder and add a `COLCON_IGNORE` file to the mobo_bot_teleop package to prevent running teleop on the Raspberry Pi.
-  ```shell
-  cd ~/<ros_ws>/src/mobo_bot/mobo_bot_teleop
-  touch COLCON_IGNORE
-  ```
   
 #
 
-- go back to the `src` folder of your <ros_ws> and download and setup the `epmc_harware_interface` ros2 package for the `L298N EPMC MODULE`
+### Download the ROS2 packages and Drivers for the Sensor and Actuators Used by MoboBot
+
+- create a folder called **hardware**
   ```shell
   cd ~/<ros_ws>/src
-  git clone -b humble https://github.com/robocre8/epmc_hardware_interface.git
+  mkdir hardware
   ```
 
-- go back to the `src` folder of your <ros_ws> and download and setup the `eimu_ros` ros2 package for the `MPU9250 EIMU MODULE`
+#### EPMC Motor Driver
+- go back to the `src` folder of your <ros_ws> and download and setup the `epmc_ros_hw_plugin` ros2 package
   ```shell
-  cd ~/<ros_ws>/src
+  cd ~/<ros_ws>/src/hardware
+  git clone -b humble https://github.com/robocre8/epmc_ros_hw_plugin.git
+  ```
+
+#### EIMU Module
+- go back to the `src` folder of your <ros_ws> and download and setup the `eimu_ros` ros2 package
+  ```shell
+  cd ~/<ros_ws>/src/hardware
   git clone -b humble https://github.com/robocre8/eimu_ros.git
   ```
 
-#
-
-- install rplidar_ros binary package
+#### RPLIDAR C1
+- go back to the `src` folder of your <ros_ws> and download sllidar ros2 for RPLIDAR C1
   ```shell
-  sudo apt install ros-humble-rplidar-ros
+  cd ~/<ros_ws>/src/hardware
+  git clone https://github.com/Slamtec/sllidar_ros2.git
+  ```
+
+#### CAMERA (with OpenCV)
+- install opencv on the Raspberry Pi 4b machine
+  ```shell
+  sudo apt install libopencv-dev python3-opencv
+  pip3 install opencv-python
   ```
 
 - go back to the `src` folder of your <ros_ws> and download the opencv_ros_camera package, from robocre8, for working with the USB camera
   ```shell
-  cd ~/<ros_ws>/src
-  git clone -b humble https://github.com/robocre8/opencv_ros_camera.git
+  cd ~/<ros_ws>/src/hardware
+  git clone https://github.com/robocre8/opencv_ros_camera.git
   ```
 
 #
+
+### Check EPMC (L298N EPMC MODULE), EIMU (MPU9250 EIMU MODULE), RPLIDAR_A1 AND USB Camera PORTS
 
 - cd into the root directory of your <ros_ws> and run rosdep to install all necessary ros  package dependencies
   ```shell
@@ -212,13 +220,13 @@ Run all these tests to check if any sensor or hardware gives any error.<br/>
 - on the Raspberry Pi 4b, open a new terminal and start the mobo_bot_base
   ```shell
   source ~/<ros_ws>/install/setup.bash
-  ros2 launch mobo_bot_base robot.launch.py
+  ros2 launch mobo_bot_bringup robot.launch.py
   ```
 > [!NOTE]
 > If any error occurs, first unplug the lidar (from the USB HUB) and plug it back
 > then unplug the USB HUB from the Raspberry Pi Port and plug it back.
 > Everything should now work.
-> launch the mobo_bot_base again
+> ros2 launch mobo_bot_bringup robot.launch.py
 
 - on Your dev-PC, open a new terminal and start the mobo_bot_rviz by running
   ```shell
@@ -229,15 +237,14 @@ Run all these tests to check if any sensor or hardware gives any error.<br/>
 
 #
 
-### Drive the MoboBot with a special arrowkey teleop
-- on your Dev PC, in a different terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
+### Drive MoboBot with a special arrow-key teleop form the PC
+- in a different terminal, run the arrow_key_teleop_drive to drive the robot around using the arrow keys on your keyboard
   ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 run mobo_bot_teleop mobo_bot_teleop
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive
   ```
   OR
   ```shell
-  source ~/<ros_ws>/install/setup.bash
-  ros2 run mobo_bot_teleop mobo_bot_teleop <v in m/s> <w in rad/sec>
+  source ~/mobo_bot_ws/install/setup.bash
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive <v in m/s> <w in rad/sec>
   ```
-

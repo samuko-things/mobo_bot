@@ -106,12 +106,12 @@
 - In a different terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 run arrow_key_teleop_drive arrow_key_telop_drive
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive
   ```
   OR
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 run arrow_key_teleop_drive arrow_key_telop_drive 0.2 0.8
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive 0.3 0.9
   ```
   
 #
@@ -121,7 +121,7 @@
 - to just build map of the world with slam run:
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 launch mobo_bot_bringup sim_with_mapping_slam.launch.py
+  ros2 launch mobo_bot_bringup sim_mapping_with_slam.launch.py
   ```
   Then drive the robot around with teleop
   >NOTE: Whenever you build a new map you can save it using the command below:
@@ -130,31 +130,31 @@
   >```
   > example:
   >```shell
-  >   ros2 run nav2_map_server map_saver_cli -f ~/mobo_bot_ws/src/mobo_bot/mobo_bot_navigation/map/<map_name>  # Saves the current map to the mobo_bot map folder
+  >   ros2 run nav2_map_server map_saver_cli -f ~/mobo_bot_ws/src/mobo_bot/mobo_bot_navigation/maps/<map_name>  # Saves the current map to the mobo_bot map folder
   >```
 
 - to try the 2D navigation with simulation (using the existing world and map):
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 launch mobo_bot_bringup sim_with_navigation_amcl.launch.py
+  ros2 launch mobo_bot_bringup sim_navigation_with_amcl.launch.py
   ```
   OR
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 launch mobo_bot_bringup sim_with_navigation_slam.launch.py
+  ros2 launch mobo_bot_bringup sim_navigation_with_slam.launch.py
   ```
   use the Nav2Goal button to move the robot from point to point.
 
 #
 
 ### Drive MoboBot with a special arrow-key teleop
-- in a different terminal, run the mobo_bot_teleop to drive the robot around using the arrow keys on your keyboard
+- in a different terminal, run the arrow_key_teleop_drive to drive the robot around using the arrow keys on your keyboard
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 run arrow_key_teleop_drive arrow_key_telop_drive
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive
   ```
   OR
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
-  ros2 run arrow_key_teleop_drive arrow_key_telop_drive <v in m/s> <w in rad/sec>
+  ros2 run arrow_key_teleop_drive arrow_key_teleop_drive <v in m/s> <w in rad/sec>
   ```

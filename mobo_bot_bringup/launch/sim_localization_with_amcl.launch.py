@@ -19,30 +19,24 @@ def generate_launch_description():
 
   # Launch configuration variables specific to simulation
   world_name = LaunchConfiguration('world_name')
-  map_name = LaunchConfiguration('map_name')
   params_name = LaunchConfiguration('params_name')
  
   declare_world_name_cmd = DeclareLaunchArgument(
     name='world_name',
-    default_value='empty',
+    default_value='room_with_walls',
     description='name of the world file')
   
   world_path = PathJoinSubstitution([
           sim_pkg_path,
-          "world",
+          "worlds",
           PythonExpression(expression=["'", world_name, "'", " + '.sdf'"])
       ]
   )
-
-  declare_map_name_cmd = DeclareLaunchArgument(
-    name='map_name',
-    default_value='simple_world_map',
-    description='name of the map file')
   
   map_path = PathJoinSubstitution([
           navigation_pkg_path,
-          "map",
-          PythonExpression(expression=["'", map_name, "'", " + '.yaml'"])
+          "maps",
+          PythonExpression(expression=["'", world_name, "'", " + '.yaml'"])
       ]
   )
 
@@ -65,23 +59,21 @@ def generate_launch_description():
             ), 
             launch_arguments={
               'use_sim_time': 'True',
-              'headless': 'False',
               'world_path': world_path,
             }.items(),
   )
 
   rviz_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                [os.path.join(rviz_pkg_path,'launch','nav_bringup.launch.py')]
+                [os.path.join(rviz_pkg_path,'launch','amcl.launch.py')]
             )
   )
 
-  nav_launch = IncludeLaunchDescription(
+  amcl_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                [os.path.join(navigation_pkg_path,'launch','nav_bringup.launch.py')]
+                [os.path.join(navigation_pkg_path,'launch','amcl.launch.py')]
             ), 
             launch_arguments={
-              'slam': 'False',
               'map': map_path,
               'use_sim_time': 'True',
               'params_file': params_file
@@ -95,12 +87,11 @@ def generate_launch_description():
  
   # add the necessary declared launch arguments to the launch description
   ld.add_action(declare_world_name_cmd)
-  ld.add_action(declare_map_name_cmd)
   ld.add_action(declare_params_name_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(sim_launch)
   ld.add_action(rviz_launch)
-  ld.add_action(nav_launch)
+  ld.add_action(amcl_launch)
 
   return ld

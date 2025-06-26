@@ -20,28 +20,24 @@ from nav2_common.launch import ReplaceString
 def generate_launch_description():
   # Set the path to this package.
   description_pkg_path = get_package_share_directory('mobo_bot_description')
-  # rviz_pkg_path = get_package_share_directory('mobo_bot_rviz')
   sim_pkg_path = get_package_share_directory('mobo_bot_sim') 
 
   # initial robot pose
-  x_pos = 0.0; y_pos = 0.0; z_pos = 0.2; yaw = 0.0
+  x_pos = 0.0; y_pos = 0.0; z_pos = 1.0; yaw = 0.0
 
   # Set the path to the world file
-  world_file_name = 'empty.sdf'
-  world_file_path = os.path.join(sim_pkg_path, 'world', world_file_name)
+  # world_file_name = 'simple_world.sdf'
+  world_file_name = 'room_with_walls.sdf'
+  world_file_path = os.path.join(sim_pkg_path, 'worlds', world_file_name)
  
   #--------------------------------------------------------------------------
 
   # set some ignition environment variable
-  gz_models_path = os.path.join(sim_pkg_path, "model")
+  gz_models_path = os.path.join(sim_pkg_path, "models")
   gz_sim_system_plugin_path = '/opt/ros/humble/lib/'
 
   set_env_ign_resource_cmd = SetEnvironmentVariable(
-          name="IGN_GAZEBO_RESOURCE_PATH",
-          value=gz_models_path,
-      )
-  set_env_ign_model_cmd = SetEnvironmentVariable(
-          name="IGN_GAZEBO_MODEL_PATH",
+          name="GZ_SIM_RESOURCE_PATH",
           value=gz_models_path,
       )
   
@@ -73,11 +69,6 @@ def generate_launch_description():
     name='world_path',
     default_value=world_file_path,
     description='Full path to the world model file to load')
-  
-  declare_use_rviz_cmd = DeclareLaunchArgument(
-    'use_rviz',
-    default_value= 'True',
-    description='whether to run sim with rviz or not')
   
   declare_gz_verbosity_cmd = DeclareLaunchArgument(
     'gz_verbosity',
@@ -151,21 +142,17 @@ def generate_launch_description():
   ld = LaunchDescription()
 
   ld.add_action(set_env_ign_resource_cmd)
-  ld.add_action(set_env_ign_model_cmd)
   ld.add_action(set_env_ign_path_cmd)
  
   # add the necessary declared launch arguments to the launch description
   ld.add_action(declare_headless_cmd)
   ld.add_action(declare_use_sim_time_cmd)
   ld.add_action(declare_world_path_cmd)
-  # ld.add_action(declare_rviz_path_cmd)
-  ld.add_action(declare_use_rviz_cmd)
   ld.add_action(declare_gz_verbosity_cmd)
   ld.add_action(declare_robot_name_cmd)
  
   # Add the nodes to the launch description
   ld.add_action(rsp_launch)
-  # ld.add_action(rviz_node)
   ld.add_action(start_ign_gazebo)
   ld.add_action(start_ign_gazebo_headless)
   ld.add_action(bridge_node)
