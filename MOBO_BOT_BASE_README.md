@@ -1,7 +1,6 @@
 ## Working with the Physical MoboBot
 > [!NOTE]
-> **MoboBot** uses **RaspberryPi 4B** microcomputer running **Ubuntu 22.04** and **ros-humble-base**.
-> You can follow this [tutorial](https://robocre8.gitbook.io/robocre8/tutorials/how-to-install-ros2-humble-base-on-raspberry-pi-4b-full-install) to install **ros-humble-base** on **RaspberryPi 4B** with **colcon** and **rosdep**
+> **MoboBot** uses **RaspberryPi 4B** microcomputer running **Ubuntu 22.04** and **ros-jazzy-base**.
 
 ![mobo_bot_amcl](./docs//mobo_bot_amcl.gif)
 
@@ -16,7 +15,7 @@
   ```
 - install cyclone DDS (if you have not) on the Raspberry Pi 4b machine
   ```shell
-  sudo apt install ros-humble-rmw-cyclonedds-cpp
+  sudo apt install ros-jazzy-rmw-cyclonedds-cpp
   export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
   echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
   ```
@@ -25,29 +24,29 @@
 
 ### Create ROS Workspace And Download the MoboBot packages
 
-- create your <ros_ws> in the home dir. (replace <ros_ws> with your workspace name)
+- create your mobo_bot_ws in the home dir.
   ```shell
-  mkdir -p ~/<ros_ws>/src
-  cd ~/<ros_ws>
+  mkdir -p ~/mobo_bot_ws/src
+  cd ~/mobo_bot_ws
   colcon build
-  source ~/<ros_ws>/install/setup.bash
+  source ~/mobo_bot_ws/install/setup.bash
   ```
 
-- cd into the src folder of your <ros_ws> and download the mobo_bot packages
+- cd into the src folder of your mobo_bot_ws and download the mobo_bot packages
   ```shell
-  cd ~/<ros_ws>/src
-  git clone -b humble https://github.com/robocre8/mobo_bot.git
+  cd ~/mobo_bot_ws/src
+  git clone -b jazzy https://github.com/robocre8/mobo_bot.git
   ```
 
 - cd into the mobo_bot/mobo_bot_sim folder and add a `COLCON_IGNORE` file to the mobo_bot_sim package to prevent runnig simulation on the Raspberry Pi. 
   ```shell
-  cd ~/<ros_ws>/src/mobo_bot/mobo_bot_sim
+  cd ~/mobo_bot_ws/src/mobo_bot/mobo_bot_sim
   touch COLCON_IGNORE
   ```
 
 - cd into the mobo_bot/mobo_bot_rviz folder and add a `COLCON_IGNORE` file to the mobo_bot_rviz package to prevent running rviz visualization on the Raspberry Pi.
   ```shell
-  cd ~/<ros_ws>/src/mobo_bot/mobo_bot_rviz
+  cd ~/mobo_bot_ws/src/mobo_bot/mobo_bot_rviz
   touch COLCON_IGNORE
   ```
   
@@ -57,28 +56,28 @@
 
 - create a folder called **hardware**
   ```shell
-  cd ~/<ros_ws>/src
+  cd ~/mobo_bot_ws/src
   mkdir hardware
   ```
 
 #### EPMC Motor Driver
-- go back to the `src` folder of your <ros_ws> and download and setup the `epmc_ros_hw_plugin` ros2 package
+- go back to the `src` folder of your mobo_bot_ws and download and setup the `epmc_ros_hw_plugin` ros2 package
   ```shell
-  cd ~/<ros_ws>/src/hardware
-  git clone -b humble https://github.com/robocre8/epmc_ros_hw_plugin.git
+  cd ~/mobo_bot_ws/src/hardware
+  git clone https://github.com/robocre8/epmc_ros_hw_plugin.git
   ```
 
 #### EIMU Module
-- go back to the `src` folder of your <ros_ws> and download and setup the `eimu_ros` ros2 package
+- go back to the `src` folder of your mobo_bot_ws and download and setup the `eimu_ros` ros2 package
   ```shell
-  cd ~/<ros_ws>/src/hardware
-  git clone -b humble https://github.com/robocre8/eimu_ros.git
+  cd ~/mobo_bot_ws/src/hardware
+  git clone https://github.com/robocre8/eimu_ros.git
   ```
 
 #### RPLIDAR C1
-- go back to the `src` folder of your <ros_ws> and download sllidar ros2 for RPLIDAR C1
+- go back to the `src` folder of your mobo_bot_ws and download sllidar ros2 for RPLIDAR C1
   ```shell
-  cd ~/<ros_ws>/src/hardware
+  cd ~/mobo_bot_ws/src/hardware
   git clone https://github.com/Slamtec/sllidar_ros2.git
   ```
 
@@ -89,9 +88,9 @@
   pip3 install opencv-python
   ```
 
-- go back to the `src` folder of your <ros_ws> and download the opencv_ros_camera package, from robocre8, for working with the USB camera
+- go back to the `src` folder of your mobo_bot_ws and download the opencv_ros_camera package, from robocre8, for working with the USB camera
   ```shell
-  cd ~/<ros_ws>/src/hardware
+  cd ~/mobo_bot_ws/src/hardware
   git clone https://github.com/robocre8/opencv_ros_camera.git
   ```
 
@@ -99,9 +98,9 @@
 
 ### Check EPMC (L298N EPMC MODULE), EIMU (MPU9250 EIMU MODULE), RPLIDAR_A1 AND USB Camera PORTS
 
-- cd into the root directory of your <ros_ws> and run rosdep to install all necessary ros  package dependencies
+- cd into the root directory of your mobo_bot_ws and run rosdep to install all necessary ros  package dependencies
   ```shell
-  cd ~/<ros_ws>/
+  cd ~/mobo_bot_ws/
   rosdep install --from-paths src --ignore-src -r -y
   ```
   
@@ -164,15 +163,15 @@
 
 ### Build The MoboBot Packages and the Different Hardware Packages
 
-- build your <ros_ws>
+- build your mobo_bot_ws
   ```shell
-  cd ~/<ros_ws>/
+  cd ~/mobo_bot_ws/
   colcon build --symlink-install
   ```
 
-- don't forget to source your <ros_ws> in any new terminal
+- don't forget to source your mobo_bot_ws in any new terminal
   ```shell
-  source ~/<ros_ws>/install/setup.bash
+  source ~/mobo_bot_ws/install/setup.bash
   ```
 
 > [!NOTE]
@@ -182,33 +181,8 @@
 
 ### Clone and Build The MoboBot packages on your dev-PC connected (via ssh) to the Raspberry PI on the MoboBot robot
 
-- pls follow the [mobo_bot_sim tutorial](https://github.com/robocre8/mobo_bot/blob/humble/MOBO_BOT_SIM_README.md) for dev-PC
+- pls follow the [mobo_bot_sim tutorial](https://github.com/robocre8/mobo_bot/blob/jazzy/MOBO_BOT_SIM_README.md) for dev-PC
 - you'll be using the mobo_bot_rviz package on your dev-PC to visualize the robot.
-
-#
-
-### Test the MoboBot Hardware and Sensors
-Run all these tests to check if any sensor or hardware gives any error.<br/>
-- to test the EPMC Motor Controller (and the rsp with base control), run the following
-  ```shell
-  ros2 launch mobo_bot_hw_test epmc_test.launch.py
-  ```
-- to test the EIMU Module, run the following
-  ```shell
-  ros2 launch mobo_bot_hw_test eimu_test.launch.py
-  ```
-- to test the Lidar, run the following
-  ```shell
-  ros2 launch mobo_bot_hw_test lidar_test.launch.py
-  ```
-- to test the USB Camera, run the following
-  ```shell
-  ros2 launch mobo_bot_hw_test camera_test.launch.py
-  ```
-> [!NOTE]
-> If any error occurs, first unplug the lidar (from the USB HUB) and plug it back
-> then unplug the USB HUB from the Raspberry Pi Port and plug it back.
-> Everything should now work.
 
 
 #
@@ -219,7 +193,7 @@ Run all these tests to check if any sensor or hardware gives any error.<br/>
 
 - on the Raspberry Pi 4b, open a new terminal and start the mobo_bot_base
   ```shell
-  source ~/<ros_ws>/install/setup.bash
+  source ~/mobo_bot_ws/install/setup.bash
   ros2 launch mobo_bot_bringup robot.launch.py
   ```
 > [!NOTE]
@@ -230,15 +204,15 @@ Run all these tests to check if any sensor or hardware gives any error.<br/>
 
 - on Your dev-PC, open a new terminal and start the mobo_bot_rviz by running
   ```shell
-  source ~/<ros_ws>/install/setup.bash
+  source ~/mobo_bot_ws/install/setup.bash
   ros2 launch mobo_bot_rviz robot.launch.py
   ```
 > You should now see the robot visuals on your dev-PC
 
 #
 
-### Drive MoboBot with a special arrow-key teleop form the PC
-- in a different terminal, run the arrow_key_teleop_drive to drive the robot around using the arrow keys on your keyboard
+### Drive MoboBot with a special arrow-key teleop form the DevPC (not on the Pi)
+- in a different terminal on the Dev PC (not on the Pi), run the arrow_key_teleop_drive to drive the robot around using the arrow keys on your keyboard
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
   ros2 run arrow_key_teleop_drive arrow_key_teleop_drive
