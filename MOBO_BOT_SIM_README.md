@@ -3,11 +3,9 @@
 ![mobo_bot_slam](./docs/mobo_bot_slam_sim.gif)
 
 > [!NOTE]
-> Your Dev PC must be running **Ubuntu 22.04** and **ros-humble-desktop** with **gazebo igintion fortress**.
+> Your Dev PC must be running **Ubuntu 24.04** and **ros-jazzy-desktop** with **gazebo harmonic**.
 > </br>
-> You can follow this [**tutorial**](https://robocre8.gitbook.io/robocre8/tutorials/how-to-install-ros2-humble-desktop-on-pc-full-install) to install **ros-humble-desktop** on **PC**
-> </br>
-> The **ignition gazebo** would be installed as you follow the installation process below.
+> **Gazebo** would be installed as you follow the installation process below.
 
 #
 
@@ -15,7 +13,7 @@
 
 - Install and set up Cyclone DDS on your PC (if you don't have it installed yet).
   ```shell
-  sudo apt install ros-humble-rmw-cyclonedds-cpp
+  sudo apt install ros-jazzy-rmw-cyclonedds-cpp
   export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
   echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
   ```
@@ -31,12 +29,11 @@
 - Clone the **arrow_key_telop_drive** package on your MoboBot ROS Workspace. This is the package that would be used for driving the MoboBot using the arrow keys of your keyboard
   ```shell
   sudo apt install python3-pip
-  pip3 install pynput
-  pip3 install setuptools==58.2.0
+  sudo apt install python3-pynput
   cd ~/mobo_bot_ws/src
-  git clone https://github.com/samuko-things/arrow_key_teleop_drive.git
+  git clone https://github.com/robocre8/arrow_key_teleop_drive.git
   ```
-  Learn more about the [**arrow_key_teleop_drive**](https://github.com/samuko-things/arrow_key_teleop_drive)
+  Learn more about the [**arrow_key_teleop_drive**](https://github.com/robocre8/arrow_key_teleop_drive)
 
 - Build your workspace
   ```shell
@@ -48,7 +45,7 @@
 - cd into the src folder of your mobo_bot_ws and download the **MoboBot** packages
   ```shell
   cd ~/mobo_bot_ws/src
-  git clone -b humble https://github.com/robocre8/mobo_bot.git
+  git clone -b jazzy https://github.com/robocre8/mobo_bot.git
   ```
   
 - If you are not interested in running or testing the MoboBot hardware (i.e the actual robot), run the following command below. this will add the COLCON_IGNORE file to it.
@@ -71,7 +68,7 @@
   colcon build --symlink-install
   ```
 
-- Don't forget to source your <ros_ws> in any new terminal
+- Don't forget to source your **mobo_bot_ws** in any new terminal
   ```shell
   source ~/mobo_bot_ws/install/setup.bash
   ```
@@ -82,15 +79,15 @@
 ![mobo_bot_tf](./docs/mobo_bot_tf.png)
 - on your dev-PC, open a new terminal and start the robot state publisher node
   ```shell
-  source ~/<ros_ws>/install/setup.bash
+  source ~/mobo_bot_ws/install/setup.bash
   ros2 launch mobo_bot_description rsp.launch.py use_joint_state_pub:=true
   ```
 - in a different terminal, run the rviz launch file to view the robot
   ```shell
-  source ~/<ros_ws>/install/setup.bash
+  source ~/mobo_bot_ws/install/setup.bash
   ros2 launch mobo_bot_rviz rsp.launch.py
   ```
-- To view the transform tree, in a different terminal (while the robot state publisher is still running), run the following
+- To view the transform tree, in another different terminal (while the robot state publisher is still running), run the following
   ```shell
   ros2 run rqt_tf_tree rqt_tf_tree
   ```
@@ -124,11 +121,8 @@
   ros2 launch mobo_bot_bringup sim_mapping_with_slam.launch.py
   ```
   Then drive the robot around with teleop
-  >NOTE: Whenever you build a new map you can save it using the command below:
-  >```shell
-  >   ros2 run nav2_map_server map_saver_cli -f /path/to/save/<map_name>  # Saves the current map to the specified path and file name
-  >```
-  > example:
+  >NOTE: Whenever you build a new map you can save it using the command below: 
+  >**pls ensure the <map_name> is exactly the same as the name of the world bein used**
   >```shell
   >   ros2 run nav2_map_server map_saver_cli -f ~/mobo_bot_ws/src/mobo_bot/mobo_bot_navigation/maps/<map_name>  # Saves the current map to the mobo_bot map folder
   >```

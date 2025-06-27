@@ -93,14 +93,14 @@ def generate_launch_description():
 
   start_ign_gazebo = ExecuteProcess(
       condition=UnlessCondition(headless),
-      cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, world_path],
+      cmd=['gz', 'sim',  '-r', '-v', gz_verbosity, world_path],
       output='screen',
       # shell=False,
   )
         
   start_ign_gazebo_headless = ExecuteProcess(
       condition=IfCondition(headless),
-      cmd=['ign', 'gazebo',  '-r', '-v', gz_verbosity, '-s', '--headless-rendering', world_path],
+      cmd=['gz', 'sim',  '-r', '-v', gz_verbosity, '-s', '--headless-rendering', world_path],
       output='screen',
       # shell=False,
   )
