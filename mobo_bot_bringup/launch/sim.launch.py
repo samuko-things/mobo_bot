@@ -44,7 +44,7 @@ def generate_launch_description():
 
   rviz_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                [os.path.join(rviz_pkg_path,'launch','sim.launch.py')]
+                [os.path.join(rviz_pkg_path,'launch','amcl.launch.py')]
             )
   )
 
@@ -58,6 +58,6 @@ def generate_launch_description():
  
   # Add the nodes to the launch description
   ld.add_action(sim_launch)
-  ld.add_action(rviz_launch)
+  # ld.add_action(rviz_launch)
 
   return ld
