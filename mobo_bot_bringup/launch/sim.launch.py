@@ -58,6 +58,6 @@ def generate_launch_description():
  
   # Add the nodes to the launch description
   ld.add_action(sim_launch)
-  # ld.add_action(rviz_launch)
+  ld.add_action(rviz_launch)
 
   return ld
